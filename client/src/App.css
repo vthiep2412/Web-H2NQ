@@ -1,4 +1,19 @@
 /* General App Styles & Introduction Page */
+body {}
+
+.ai-page,
+.vertical-navbar,
+.app-header,
+.dropdown-menu,
+.dropdown-item,
+.message-bubble,
+.chat-input-group,
+.chat-input,
+.btn,
+.form-control {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 .intro-page {
   display: flex;
   align-items: center;
@@ -11,7 +26,7 @@
 /* --- Base Layout & Components --- */
 
 .ai-page {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 .app-header {
@@ -232,6 +247,15 @@
   color: #0d6efd;
 }
 
+[data-bs-theme="light"] .attach-btn:hover {
+  background-color: #e9ecef;
+}
+
+[data-bs-theme="light"] .send-btn:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
 [data-bs-theme="light"] .theme-toggle-btn {
     background-color: #fff;
     color: #212529;
@@ -342,6 +366,10 @@
   color: #0d6efd;
 }
 
+[data-bs-theme="dark"] .attach-btn:hover, [data-bs-theme="dark"] .send-btn:hover {
+  background-color: #495057;
+}
+
 .chat-footer {
   margin-bottom: 15px;
 }
@@ -364,16 +392,39 @@
 }
 
 /* Theme-aware buttons */
+.theme-aware-button {
+  transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
 [data-bs-theme="light"] .theme-aware-button {
   background-color: #f8f9fa; /* Light background for light theme */
   color: #212529; /* Dark text for light theme */
 }
 
 [data-bs-theme="dark"] .theme-aware-button {
-  background-color: #343a40; /* Dark background for dark theme */
+  background-color: #1e1e1e; /* Dark background for dark theme */
   color: #e0e0e0; /* Light text for dark theme */
 }
 
-/* .theme-aware-button:hover {
+[data-bs-theme="light"] .theme-aware-button:hover {
   filter: brightness(85%);
-} */
+}
+
+[data-bs-theme="dark"] .theme-aware-button:hover {
+  filter: brightness(150%);
+}
+
+[data-bs-theme="dark"] .theme-aware-button svg {
+  filter: invert(1);
+}
+
+@media (max-width: 576px) {
+  .navbar-container.visible {
+    position: absolute;
+    z-index: 10;
+    width: 100% !important;
+    height: 100%;
+    background-color: var(--bs-body-bg);
+  }
+}
+

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Container, Form, Button, InputGroup } from 'react-bootstrap';
-import { Robot, Paperclip, SendFill, PersonCircle } from 'react-bootstrap-icons';
+import { Robot, Paperclip, SendFill, PersonCircle, Camera } from 'react-bootstrap-icons';
 
 function ChatView({ messages, input, handleInputChange, handleSubmit, messagesEndRef, selectedModel }) {
   const fileInputRef = useRef(null);
@@ -15,6 +15,11 @@ function ChatView({ messages, input, handleInputChange, handleSubmit, messagesEn
       console.log('Selected file:', file.name);
       // Handle file upload logic here
     }
+  };
+
+  const handleCameraClick = () => {
+    // Handle camera logic here
+    console.log('Camera button clicked');
   };
 
   return (
@@ -41,6 +46,9 @@ function ChatView({ messages, input, handleInputChange, handleSubmit, messagesEn
             <InputGroup className="chat-input-group">
               <Button variant="secondary" className="attach-btn" onClick={handleAttachClick}>
                 <Paperclip />
+              </Button>
+              <Button variant="secondary" className="attach-btn d-lg-none" onClick={handleCameraClick}>
+                <Camera />
               </Button>
               <Form.Control
                 type="file"

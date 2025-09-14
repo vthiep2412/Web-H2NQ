@@ -13,6 +13,7 @@ function AIPage() {
   // UI State
   const [theme, setTheme] = useState('light');
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [manualNavClose, setManualNavClose] = useState(false);
   const [activeView, setActiveView] = useState('chat1');
 
   // Workspace State
@@ -45,6 +46,33 @@ function AIPage() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 992) {
+        setIsNavbarVisible(false);
+      } else {
+        if (!manualNavClose) {
+          setIsNavbarVisible(true);
+        }
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, [manualNavClose]);
+
+  useEffect(() => {
+    const setPageHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    window.addEventListener('resize', setPageHeight);
+    setPageHeight();
+
+    return () => window.removeEventListener('resize', setPageHeight);
+  }, []);
+
   // Handlers
   const handleInputChange = (e) => {
     setInput(e.target.value);
@@ -68,7 +96,16 @@ function AIPage() {
   };
 
   const toggleNavbar = () => {
-    setIsNavbarVisible(!isNavbarVisible);
+    const nextState = !isNavbarVisible;
+    setIsNavbarVisible(nextState);
+    if (window.innerWidth >= 992 && nextState === false) {
+      // User is manually closing on desktop
+      setManualNavClose(true);
+    }
+    if (nextState === true) {
+      // User is opening it, so reset the manual flag
+      setManualNavClose(false);
+    }
   };
 
   const handleModelChange = (model) => {
@@ -104,7 +141,7 @@ function AIPage() {
   }
 
   return (
-    <div className="d-flex flex-column vh-100 ai-page">
+    <div className="d-flex flex-column ai-page">
       <Header 
         theme={theme} 
         toggleTheme={toggleTheme} 

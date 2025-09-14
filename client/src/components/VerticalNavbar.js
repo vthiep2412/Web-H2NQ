@@ -65,7 +65,7 @@ function VerticalNavbar({
     <nav className="vertical-navbar">
       <div className="navbar-brand-container d-flex justify-content-between align-items-center mb-2">
         <h4 className="navbar-brand">Workspaces</h4>
-        <Button variant="link" onClick={() => setIsAdding(!isAdding)} className="p-0 text-dark mb-2">
+        <Button variant="link" onClick={() => setIsAdding(!isAdding)} className="p-0 text-dark mb-2 theme-aware-button">
           <PlusLg size={20} />
         </Button>
       </div>
@@ -112,7 +112,7 @@ function VerticalNavbar({
                     <strong>{ws.name}</strong>
                   </Nav.Link>
                   <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
-                    <Button variant="link" onClick={() => startEditing(ws)} className="p-1 text-dark mb-2 theme-aware-button">
+                    <Button variant="link" onClick={() => startEditing(ws)} className="p-1 text-dark mb-2 me-1 theme-aware-button">
                       <Pencil size={16} />
                     </Button>
                   </OverlayTrigger>
