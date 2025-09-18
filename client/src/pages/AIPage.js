@@ -7,7 +7,7 @@ import StoragePage from './StoragePage';
 import AIMemoryPage from './AIMemoryPage';
 import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
-import { ChatDots, Cpu, JournalCode, Hdd } from 'react-bootstrap-icons';
+
 
 function AIPage() {
   // UI State
