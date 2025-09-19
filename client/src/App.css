@@ -153,7 +153,7 @@ body {}
 }
 
 .chat-input-group {
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -341,12 +341,12 @@ body {}
 }
 
 [data-bs-theme="dark"] footer {
-  background-color: #1e1e1e;
+  background-color: #1e1e1e00;
 }
 
 [data-bs-theme="dark"] .chat-input-group {
   background-color: #333;
-  box-shadow: none;
+  box-shadow: 0 4px 15px #ffffff7a;
 }
 
 [data-bs-theme="dark"] .chat-input, [data-bs-theme="dark"] .attach-btn, [data-bs-theme="dark"] .send-btn {
