@@ -15,6 +15,7 @@ function AIPage() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [manualNavClose, setManualNavClose] = useState(false);
   const [activeView, setActiveView] = useState('chat1');
+  const navbarRef = useRef(null);
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
@@ -96,6 +97,14 @@ function AIPage() {
   };
 
   const toggleNavbar = () => {
+    const isClosing = isNavbarVisible;
+    if (isClosing && navbarRef.current) {
+      const width = navbarRef.current.offsetWidth;
+      navbarRef.current.style.setProperty('margin-left', -width + 'px');
+    }else{
+      navbarRef.current.style.setProperty('margin-left', 0);
+    }
+
     const nextState = !isNavbarVisible;
     setIsNavbarVisible(nextState);
     if (window.innerWidth >= 992 && nextState === false) {
@@ -114,6 +123,9 @@ function AIPage() {
 
   const handleViewChange = (viewId) => {
     setActiveView(viewId);
+    if (window.innerWidth < 992) {
+      setIsNavbarVisible(false);
+    }
   };
 
   const renderActiveView = () => {
@@ -150,7 +162,7 @@ function AIPage() {
         handleModelChange={handleModelChange}
       />
       <div style={{ display: 'flex', flex: '1 1 auto', overflow: 'hidden' }}>
-        <div className={`navbar-container ${isNavbarVisible ? 'visible' : ''}`}>
+        <div ref={navbarRef} className={`navbar-container ${isNavbarVisible ? 'visible' : ''}`}>
           <VerticalNavbar 
             activeView={activeView} 
             onViewChange={handleViewChange}
