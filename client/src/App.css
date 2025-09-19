@@ -36,7 +36,7 @@ body {}
 }
 
 .navbar-container {
-  width: 260px;
+  /* width: 260px; */
   transition: width 0.3s ease;
   overflow: hidden;
   height: -webkit-fill-available;
@@ -47,7 +47,7 @@ body {}
 }
 
 .vertical-navbar {
-  width: 260px; /* Fixed width */
+  /* width: 260px; */
   height: 100%;
   padding: 15px;
   display: flex;
