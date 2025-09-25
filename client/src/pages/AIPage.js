@@ -21,7 +21,7 @@ function AIPage() {
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
 
   // Model State
-  const [selectedModel, setSelectedModel] = useState('Gemini-Flash');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-pro');
 
   // Chat State
   const [messages, setMessages] = useState([]);
@@ -33,7 +33,7 @@ function AIPage() {
   }, [theme]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/messages')
+    fetch('/api/messages')
       .then(res => res.json())
       .then(data => setMessages(data))
       .catch(err => console.error('Error fetching messages:', err));
@@ -79,16 +79,30 @@ function AIPage() {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
+      console.log("Sending message from client...");
       const newMessage = { text: input, sender: 'user' };
-      setMessages([...messages, newMessage]);
-      // Simulate AI response
-      setTimeout(() => {
-        setMessages(prevMessages => [...prevMessages, { text: `Response from ${selectedModel}.`, sender: 'ai' }]);
-      }, 1000);
+      const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
+      setMessages([...messages, newMessage, loadingMessage]);
       setInput('');
+
+      try {
+        const response = await fetch('/api/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: input, model: selectedModel }),
+        });
+
+        const data = await response.json();
+        setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model }]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+        setMessages(prevMessages => prevMessages.filter(m => m.id !== 'loading'));
+      }
     }
   };
 

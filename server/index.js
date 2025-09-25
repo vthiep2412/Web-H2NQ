@@ -1,3 +1,4 @@
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
@@ -11,6 +12,10 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello from server!');
+});
+
+app.get('/health', (req, res) => {
+  res.sendStatus(200);
 });
 
 app.use('/api/messages', messagesRouter);

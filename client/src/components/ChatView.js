@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Container, Form, Button, InputGroup } from 'react-bootstrap';
 import { Robot, Paperclip, SendFill, PersonCircle, Camera } from 'react-bootstrap-icons';
+import TypingEffect from './TypingEffect';
 
 function ChatView({ messages, input, handleInputChange, handleSubmit, messagesEndRef, selectedModel }) {
   const fileInputRef = useRef(null);
@@ -31,8 +32,16 @@ function ChatView({ messages, input, handleInputChange, handleSubmit, messagesEn
               <div key={index} className={`message-bubble-container ${msg.sender}`}>
                 {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
                 <div className={`message-bubble ${msg.sender}`}>
-                  {msg.text}
+                  {msg.type === 'loading' ? (
+                    <div className="loading-spinner"></div>
+                  ) : msg.sender === 'ai' ? (
+                    <TypingEffect text={msg.text} />
+                  ) : (
+                    msg.text
+                  )}
                 </div>
+                {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
+
                 {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}
               </div>
             ))}

@@ -25,8 +25,11 @@ function Header({
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="Gemini-Flash">Gemini-Flash</Dropdown.Item>
-                    <Dropdown.Item eventKey="Gemini-Pro">Gemini-Pro</Dropdown.Item>
+                    <Dropdown.Item eventKey="gemini-2.5-pro">Gemini 2.5 Pro</Dropdown.Item>
+                    <Dropdown.Item eventKey="gemini-2.5-flash">Gemini 2.5 Flash</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item eventKey="gpt-5">GPT-5</Dropdown.Item>
+                    <Dropdown.Item eventKey="gpt-4.1">GPT-4.1</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
             </Col>
