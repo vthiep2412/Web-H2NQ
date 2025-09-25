@@ -25,7 +25,6 @@ function AIPage() {
 
   // Chat State
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -75,18 +74,12 @@ function AIPage() {
   }, []);
 
   // Handlers
-  const handleInputChange = (e) => {
-    setInput(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (input.trim()) {
+  const handleSubmit = async (message) => {
+    if (message.trim()) {
       console.log("Sending message from client...");
-      const newMessage = { text: input, sender: 'user' };
+      const newMessage = { text: message, sender: 'user' };
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
       setMessages([...messages, newMessage, loadingMessage]);
-      setInput('');
 
       try {
         const response = await fetch('/api/messages', {
@@ -94,7 +87,7 @@ function AIPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: input, model: selectedModel }),
+          body: JSON.stringify({ message, model: selectedModel }),
         });
 
         const data = await response.json();
@@ -157,9 +150,7 @@ function AIPage() {
       default:
         return <ChatView 
                   messages={messages}
-                  input={input}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
+                  onSubmit={handleSubmit}
                   messagesEndRef={messagesEndRef}
                   selectedModel={selectedModel}
                 />;

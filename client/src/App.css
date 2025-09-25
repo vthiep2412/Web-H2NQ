@@ -164,7 +164,7 @@ body {}
 
 .chat-input-group {
   background-color: rgb(224, 224, 224);
-  border-radius: 50px;
+  border-radius: 50px !important;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.332);
 }
 
@@ -172,6 +172,8 @@ body {}
   border: none;
   padding: 15px;
   font-size: 1.1rem;
+  line-height: 1.5;
+
 }
 
 .chat-input:focus {
@@ -184,13 +186,13 @@ body {}
 }
 
 .chat-input-group .attach-btn:first-child {
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
+  border-top-left-radius: 50px !important;
+  border-bottom-left-radius: 50px !important;
 }
 
 .chat-input-group .send-btn:last-child {
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
+  border-top-right-radius: 50px !important;
+  border-bottom-right-radius: 50px !important;
 }
 
 .chat-input {
@@ -487,4 +489,39 @@ body {}
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+/* Markdown Styles */
+.message-bubble pre {
+  background-color: #eee;
+  padding: 10px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+[data-bs-theme="dark"] .message-bubble pre {
+  background-color: #222;
+}
+
+.message-bubble code {
+  font-family: monospace;
+}
+
+.message-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.message-bubble th,
+.message-bubble td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+[data-bs-theme="dark"] .message-bubble th,
+[data-bs-theme="dark"] .message-bubble td {
+  border-color: #555;
 }
