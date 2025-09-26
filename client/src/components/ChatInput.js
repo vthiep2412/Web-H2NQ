@@ -46,7 +46,7 @@ function ChatInput({ selectedModel, onSubmit }) {
   return (
     <Form onSubmit={handleSubmit}>
       <InputGroup className="chat-input-group">
-        <Button variant="secondary" className="attach-btn" onClick={handleAttachClick}>
+        <Button variant="secondary" className="attach-btn" onClick={handleAttachClick} style={{ borderTopLeftRadius: '50px', borderBottomLeftRadius: '50px' }}>
           <Paperclip />
         </Button>
         <Button variant="secondary" className="attach-btn d-lg-none" onClick={handleCameraClick}>
@@ -58,19 +58,17 @@ function ChatInput({ selectedModel, onSubmit }) {
           style={{ display: 'none' }}
           onChange={handleFileChange}
         />
-        <div style={{ flexGrow: 1, display: 'flex' }}>
-          <TextareaAutosize
-            minRows={1}
-            maxRows={3}
-            placeholder={`Message ${selectedModel}...`}
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            className="form-control chat-input"
-            style={{ resize: 'none' }}
-          />
-        </div>
-        <Button variant="primary" type="submit" className="send-btn">
+        <TextareaAutosize
+          minRows={1}
+          maxRows={3}
+          placeholder={`Message ${selectedModel}...`}
+          value={input}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          className="form-control chat-input"
+          style={{ resize: 'none', flexGrow: 1 }}
+        />
+        <Button variant="primary" type="submit" className="send-btn" style={{ borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>
           <SendFill />
         </Button>
       </InputGroup>

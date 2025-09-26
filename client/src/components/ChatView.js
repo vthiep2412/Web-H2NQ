@@ -4,25 +4,48 @@ import { Robot, Paperclip, SendFill, PersonCircle, Camera } from 'react-bootstra
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit }) => {
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const formatTime = (seconds) => {
+  if (seconds < 60) {
+    return `${seconds.toFixed(1)} seconds`;
+  }
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes} minute${minutes > 1 ? 's' : ''} ${remainingSeconds.toFixed(1)} seconds`;
+};
+
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, timer }) => {
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
         <Container>
           <div className="message-list">
             {messages.map((msg, index) => (
-              <div key={`${msg.sender}-${index}-${msg.text.length}`} className={`message-bubble-container ${msg.sender}`}>
+              <div key={`${msg.sender}-${index}-${msg.text?.length ?? 0}`} className={`message-bubble-container ${msg.sender}`}>
                 {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
-                <div className={`message-bubble ${msg.sender}`}>
-                  {msg.type === 'loading' ? (
-                    <div className="loading-spinner"></div>
-                  ) : msg.sender === 'ai' ? (
-                    <TypingEffect text={msg.text} />
-                  ) : (
-                    msg.text
-                  )}
+                <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
+                  {msg.sender === 'ai' && msg.thinkingTime && <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>}
+                  <div className={`message-bubble ${msg.sender} ${msg.type === 'error' ? 'error-bubble' : ''}`}>
+                    {msg.type === 'loading' ? (
+                      <div className="loading-container">
+                        <span className="thinking-text">Thinking</span>
+                        <span className="thinking-dots">
+                          <span>.</span><span>.</span><span>.</span>
+                        </span>
+                        <span>{timer.toFixed(1)}s</span>
+                      </div>
+                    ) : msg.sender === 'ai' ? (
+                      <TypingEffect text={msg.text} />
+                    ) : (
+                      msg.text
+                    )}
+                  </div>
+                  {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
                 </div>
-                {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
 
                 {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}
               </div>

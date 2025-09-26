@@ -21,11 +21,13 @@ function AIPage() {
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
 
   // Model State
-  const [selectedModel, setSelectedModel] = useState('gemini-2.5-pro');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
 
   // Chat State
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const [timer, setTimer] = useState(0);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
@@ -81,6 +83,11 @@ function AIPage() {
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
       setMessages([...messages, newMessage, loadingMessage]);
 
+      const startTime = Date.now();
+      timerRef.current = setInterval(() => {
+        setTimer((Date.now() - startTime) / 1000);
+      }, 100);
+
       try {
         const response = await fetch('/api/messages', {
           method: 'POST',
@@ -90,10 +97,23 @@ function AIPage() {
           body: JSON.stringify({ message, model: selectedModel }),
         });
 
+        clearInterval(timerRef.current);
+        setTimer(0);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          const errorMessage = { text: `Error: ${errorData.error}`, sender: 'ai', type: 'error' };
+          setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), errorMessage]);
+          return;
+        }
+
         const data = await response.json();
-        setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model }]);
+        const thinkingTime = (Date.now() - startTime) / 1000;
+        setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model, thinkingTime }]);
       } catch (error) {
         console.error('Error sending message:', error);
+        clearInterval(timerRef.current);
+        setTimer(0);
         setMessages(prevMessages => prevMessages.filter(m => m.id !== 'loading'));
       }
     }
@@ -153,6 +173,7 @@ function AIPage() {
                   onSubmit={handleSubmit}
                   messagesEndRef={messagesEndRef}
                   selectedModel={selectedModel}
+                  timer={timer}
                 />;
     }
   }
