@@ -4,11 +4,7 @@
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
-      "config": {
-        "installCommand": "npm install",
-        "buildCommand": "npm run build",
-        "outputDir": "build"
-      }
+      "config": { "distDir": "client/build" }
     },
     {
       "src": "server/index.js",
