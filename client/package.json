@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vthiep2412.github.io/Web-H2NQ",
   "proxy": "http://localhost:3001",
   "dependencies": {
     "@react-three/fiber": "^9.3.0",
