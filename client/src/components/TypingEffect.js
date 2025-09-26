@@ -41,7 +41,6 @@ const TypingEffect = React.memo(({ text }) => {
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');
           const codeText = String(children).replace(/\n$/, '');
-          const isComplete = displayedText.endsWith('\n```');
 
           return !inline ? (
             <div className="code-block-container">

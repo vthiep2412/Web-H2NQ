@@ -1,13 +1,10 @@
-import React, { useRef } from 'react';
-import { Container, Form, Button, InputGroup } from 'react-bootstrap';
-import { Robot, Paperclip, SendFill, PersonCircle, Camera } from 'react-bootstrap-icons';
+import React from 'react';
+import { Container } from 'react-bootstrap';
+import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
 
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 
 const formatTime = (seconds) => {
   if (seconds < 60) {
