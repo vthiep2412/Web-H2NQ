@@ -450,6 +450,10 @@ body {}
   filter: invert(1);
 }
 
+th {
+  border-radius: 15px !important;
+}
+
 @media (max-width: 655px) {
   .navbar-container {
     position: absolute;
@@ -494,13 +498,13 @@ body {}
   }
 }
 
-
+h
 /* Markdown Styles */
 .message-bubble table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1em 0;
-  border-radius: 10px;
+  margin: 0.5em 0;
+  /* border-radius: 10px; */
   overflow: hidden;
 }
 
@@ -550,8 +554,7 @@ body {}
 }
 
 .code-block-header .btn {
-  padding: 2px 6px;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .message-bubble.error-bubble {

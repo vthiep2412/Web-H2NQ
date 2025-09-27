@@ -1,11 +1,16 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const OpenAI = require('openai');
-const { GEMINI_API_KEY, OPENAI_API_KEY } = require('../config');
+const axios = require('axios');
+const { InferenceClient } = require('@huggingface/inference');
+const {
+  GEMINI_API_KEY,
+  OPENAI_API_KEYS,
+  OPENROUTER_API_KEY,
+  HUGGINGFACE_API_FINEGRAINED_KEY
+} = require('../config');
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
+const hf = new InferenceClient(HUGGINGFACE_API_FINEGRAINED_KEY);
 
 const messages = [
   { id: 1, text: 'Hi, how can I help you?', sender: 'ai' },
@@ -27,11 +32,54 @@ exports.sendMessage = async (req, res) => {
       const response = await result.response;
       text = response.text();
     } else if (model.startsWith('gpt')) {
-      const completion = await openai.chat.completions.create({
-        messages: [{ role: 'user', content: message }],
-        model,
-      });
-      text = completion.choices[0].message.content;
+      let response = null;
+      const allKeys = [process.env.OPENAI_API_KEY, ...OPENAI_API_KEYS].filter(Boolean);
+
+      for (const key of allKeys) {
+        try {
+          const openai = new OpenAI({ apiKey: key });
+          const completion = await openai.chat.completions.create({
+            messages: [{ role: 'user', content: message }],
+            model,
+          });
+          text = completion.choices[0].message.content;
+          response = { text, model };
+          break; // Success, exit loop
+        } catch (error) {
+          console.error('Error with API key, trying next one...', error.message);
+        }
+      }
+
+      if (response) {
+        return res.json(response);
+      } else {
+        throw new Error('All OpenAI API keys failed.');
+      }
+    } else if (model.startsWith('openrouter/')) {
+      const response = await axios.post(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          model: model.replace('openrouter/', ''),
+          messages: [{ role: 'user', content: message }],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          },
+        }
+      );
+      text = response.data.choices[0].message.content;
+    } else if (model.startsWith('huggingface/')) {
+      try {
+        const chatCompletion = await hf.chatCompletion({
+            model: model.replace('huggingface/', ''),
+            messages: [{ role: 'user', content: message }],
+        });
+        text = chatCompletion.choices[0].message.content;
+      } catch (error) {
+        console.error('HuggingFace API Error:', error);
+        throw error;
+      }
     }
 
     res.json({ text, model });

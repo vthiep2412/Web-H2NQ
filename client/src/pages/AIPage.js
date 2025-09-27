@@ -49,25 +49,26 @@ function AIPage() {
     scrollToBottom();
   }, [messages]);
 
-  useEffect(() => {
+useEffect(() => {
     const handleResize = () => {
-      // console.log('Resizing...', { width: window.innerWidth, isNavbarVisible, manualNavClose });
       if (window.innerWidth < 992) {
-        if (isNavbarVisible) {
-          // console.log('Closing on resize');
-          toggleNavbar();
-        }
+        if (isNavbarVisible) toggleNavbar(false); // Force close on small screens
       } else {
         if (!manualNavClose && !isNavbarVisible) {
-          // console.log('Opening on resize');
-          toggleNavbar();
+          toggleNavbar(true); // Force open on large screens if not manually closed
         }
       }
     };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [manualNavClose, isNavbarVisible]); // Added isNavbarVisible to dependency array
+  }, [manualNavClose, isNavbarVisible]); // Re-add isNavbarVisible to the dependency array
+
+  useEffect(() => {
+    if (window.innerWidth < 992 && isNavbarVisible) {
+      toggleNavbar(false); // Force close on view change on small screens
+    }
+  }, [activeView]);
 
   useEffect(() => {
     const setPageHeight = () => {
@@ -129,24 +130,22 @@ function AIPage() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const toggleNavbar = () => {
-    // console.log('Toggling navbar. Current state:', isNavbarVisible);
-    const isClosing = isNavbarVisible;
-    if (isClosing && navbarRef.current) {
+  const toggleNavbar = (forceState) => {
+    const nextState = typeof forceState === 'boolean' ? forceState : !isNavbarVisible;
+
+    if (isNavbarVisible && !nextState && navbarRef.current) { // Closing
       const width = navbarRef.current.offsetWidth;
       navbarRef.current.style.setProperty('margin-left', -width + 'px');
-    }else{
+    } else if (!isNavbarVisible && nextState && navbarRef.current) { // Opening
       navbarRef.current.style.setProperty('margin-left', 0);
     }
 
-    const nextState = !isNavbarVisible;
     setIsNavbarVisible(nextState);
+
     if (window.innerWidth >= 992 && nextState === false) {
-      // User is manually closing on desktop
       setManualNavClose(true);
     }
     if (nextState === true) {
-      // User is opening it, so reset the manual flag
       setManualNavClose(false);
     }
   };

@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
+import { getLabelForModel } from '../utils/models';
 import '../App.css';
 
 const formatTime = (seconds) => {
@@ -22,7 +23,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
           <div className="message-list">
             {messages.map((msg, index) => {
               const aiMessageBubbleStyle = {
-                maxWidth: isNavbarVisible ? 'calc(64vw - 268px)' : '64vw',
+                maxWidth: isNavbarVisible ? 'calc(72vw - 268px)' : '72vw',
               };
 
               return (
@@ -46,7 +47,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                         msg.text
                       )}
                     </div>
-                    {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
+                    {msg.sender === 'ai' && msg.model && <div className="model-name">{getLabelForModel(msg.model)}</div>}
                   </div>
                   {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}
                 </div>

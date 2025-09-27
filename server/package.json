@@ -13,6 +13,8 @@
   "type": "commonjs",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@huggingface/inference": "^4.9.0",
+    "axios": "^1.12.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",

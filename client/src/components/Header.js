@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
+import { models, getLabelForModel } from '../utils/models';
 
 function Header({ 
   theme, 
@@ -9,6 +10,7 @@ function Header({
   selectedModel, 
   handleModelChange 
 }) {
+
   return (
     <header className="app-header">
         <Row className='d-flex align-items-center'>
@@ -21,15 +23,15 @@ function Header({
             <Col className='d-flex align-items-center justify-content-center'>
                 <Dropdown onSelect={handleModelChange}>
                   <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic" className="model-dropdown">
-                    {selectedModel}
+                    {getLabelForModel(selectedModel)}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="gemini-2.5-pro">Gemini 2.5 Pro</Dropdown.Item>
-                    <Dropdown.Item eventKey="gemini-2.5-flash">Gemini 2.5 Flash</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item eventKey="gpt-4">GPT-5</Dropdown.Item>
-                    <Dropdown.Item eventKey="gpt-3.5-turbo">GPT-4.1</Dropdown.Item>
+                    {models.map((model, index) => (
+                      model.isDivider ? 
+                      <Dropdown.Divider key={index} /> : 
+                      <Dropdown.Item key={model.eventKey} eventKey={model.eventKey}>{model.label}</Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
             </Col>

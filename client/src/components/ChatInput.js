@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { Paperclip, SendFill, Camera } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
+import { getLabelForModel } from '../utils/models';
 
 function ChatInput({ selectedModel, onSubmit }) {
   const [input, setInput] = useState('');
@@ -67,7 +68,7 @@ function ChatInput({ selectedModel, onSubmit }) {
         <TextareaAutosize
           minRows={1}
           maxRows={2}
-          placeholder={`Message ${selectedModel}...`}
+          placeholder={`Message ${getLabelForModel(selectedModel)}...`}
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}

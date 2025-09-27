@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
+import { Clipboard } from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -47,8 +48,8 @@ const TypingEffect = React.memo(({ text }) => {
               {match && (
                 <div className="code-block-header">
                   <span className="code-block-language">{match[1]}</span>
-                  <Button variant="secondary" size="sm" onClick={() => navigator.clipboard.writeText(codeText)}>
-                    <i className="bi bi-clipboard"></i>
+                  <Button variant="secondary" onClick={() => navigator.clipboard.writeText(codeText)}>
+                    <Clipboard />
                   </Button>
                 </div>
               )}

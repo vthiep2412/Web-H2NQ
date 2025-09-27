@@ -1,0 +1,11 @@
+Please generate a response that demonstrates your ability to format text in various ways. Include the following elements:
+
+1.  **A table:** Create a simple table with at least 3 columns and 3 rows.
+2.  **A code block:** Provide a code block with syntax highlighting for a simple "Hello, World!" program in Python.
+3.  **A numbered list:** Create a numbered list with at least 3 items.
+4.  **A bulleted list:** Create a bulleted list with at least 3 items.
+5.  **Text formatting:**
+    *   A sentence with **bold** text.
+    *   A sentence with *italic* text.
+    *   A sentence with a `monospace` font.
+    *   A sentence with a ~~strikethrough~~.
