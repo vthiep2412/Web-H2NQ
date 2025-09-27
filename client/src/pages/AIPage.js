@@ -7,6 +7,7 @@ import StoragePage from './StoragePage';
 import AIMemoryPage from './AIMemoryPage';
 import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
+import '../App.css';
 
 
 function AIPage() {
@@ -50,18 +51,23 @@ function AIPage() {
 
   useEffect(() => {
     const handleResize = () => {
+      // console.log('Resizing...', { width: window.innerWidth, isNavbarVisible, manualNavClose });
       if (window.innerWidth < 992) {
-        setIsNavbarVisible(false);
+        if (isNavbarVisible) {
+          // console.log('Closing on resize');
+          toggleNavbar();
+        }
       } else {
-        if (!manualNavClose) {
-          setIsNavbarVisible(true);
+        if (!manualNavClose && !isNavbarVisible) {
+          // console.log('Opening on resize');
+          toggleNavbar();
         }
       }
     };
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [manualNavClose]);
+  }, [manualNavClose, isNavbarVisible]); // Added isNavbarVisible to dependency array
 
   useEffect(() => {
     const setPageHeight = () => {
@@ -124,6 +130,7 @@ function AIPage() {
   };
 
   const toggleNavbar = () => {
+    // console.log('Toggling navbar. Current state:', isNavbarVisible);
     const isClosing = isNavbarVisible;
     if (isClosing && navbarRef.current) {
       const width = navbarRef.current.offsetWidth;
@@ -150,8 +157,8 @@ function AIPage() {
 
   const handleViewChange = (viewId) => {
     setActiveView(viewId);
-    if (window.innerWidth < 992) {
-      setIsNavbarVisible(false);
+    if (window.innerWidth < 992 && isNavbarVisible) {
+      toggleNavbar();
     }
   };
 
@@ -174,6 +181,7 @@ function AIPage() {
                   messagesEndRef={messagesEndRef}
                   selectedModel={selectedModel}
                   timer={timer}
+                  isNavbarVisible={isNavbarVisible}
                 />;
     }
   }
@@ -198,7 +206,7 @@ function AIPage() {
             deleteWorkspace={deleteWorkspace}
           />
         </div>
-        <div className="d-flex flex-column flex-grow-1" style={{ overflow: 'hidden' }}>
+        <div className="d-flex flex-column flex-grow-1 idk" style={{ overflow: 'hidden' }}>
           {renderActiveView()}
         </div>
       </div>

@@ -104,7 +104,7 @@ function VerticalNavbar({
               ) : (
                 <>
                   <Nav.Link 
-                    onClick={() => toggleWorkspace(ws.id)} 
+                    onClick={() => { toggleWorkspace(ws.id); onViewChange(ws.children[0]?.id || ws.id); }} 
                     aria-expanded={open[ws.id]} 
                     className="workspace-toggle flex-grow-1"
                   >

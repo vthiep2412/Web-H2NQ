@@ -13,7 +13,7 @@ function Header({
     <header className="app-header">
         <Row className='d-flex align-items-center'>
             <Col className="d-flex align-items-center">
-                <Button variant="link" onClick={toggleNavbar} className="p-0 me-3 navbar-toggle-btn">
+                <Button variant="link" onClick={toggleNavbar} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
                     <List size={24} />
                 </Button>
                 <h3 className="ai-name">Web-H2NQ</h3>

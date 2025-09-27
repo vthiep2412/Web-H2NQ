@@ -3,8 +3,7 @@ import { Container } from 'react-bootstrap';
 import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
-
-
+import '../App.css';
 
 const formatTime = (seconds) => {
   if (seconds < 60) {
@@ -15,38 +14,44 @@ const formatTime = (seconds) => {
   return `${minutes} minute${minutes > 1 ? 's' : ''} ${remainingSeconds.toFixed(1)} seconds`;
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, timer }) => {
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, timer, isNavbarVisible }) => {
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
         <Container>
           <div className="message-list">
-            {messages.map((msg, index) => (
-              <div key={`${msg.sender}-${index}-${msg.text?.length ?? 0}`} className={`message-bubble-container ${msg.sender}`}>
-                {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
-                <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
-                  {msg.sender === 'ai' && msg.thinkingTime && <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>}
-                  <div className={`message-bubble ${msg.sender} ${msg.type === 'error' ? 'error-bubble' : ''}`}>
-                    {msg.type === 'loading' ? (
-                      <div className="loading-container">
-                        <span className="thinking-text">Thinking</span>
-                        <span className="thinking-dots">
-                          <span>.</span><span>.</span><span>.</span>
-                        </span>
-                        <span>{timer.toFixed(1)}s</span>
-                      </div>
-                    ) : msg.sender === 'ai' ? (
-                      <TypingEffect text={msg.text} />
-                    ) : (
-                      msg.text
-                    )}
-                  </div>
-                  {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
-                </div>
+            {messages.map((msg, index) => {
+              const aiMessageBubbleStyle = {
+                maxWidth: isNavbarVisible ? 'calc(64vw - 268px)' : '64vw',
+              };
 
-                {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}
-              </div>
-            ))}
+              return (
+                <div key={`${msg.sender}-${index}-${msg.text?.length ?? 0}`} 
+                     className={`message-bubble-container ${msg.sender}`}>
+                  {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
+                  <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
+                    {msg.sender === 'ai' && msg.thinkingTime && <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>}
+                    <div className={`message-bubble ${msg.sender} ${msg.type === 'error' ? 'error-bubble' : ''}`} style={msg.sender === 'ai' ? aiMessageBubbleStyle : {}}>
+                      {msg.type === 'loading' ? (
+                        <div className="loading-container">
+                          <span className="thinking-text">Thinking</span>
+                          <span className="thinking-dots">
+                            <span>.</span><span>.</span><span>.</span>
+                          </span>
+                          <span>{timer.toFixed(1)}s</span>
+                        </div>
+                      ) : msg.sender === 'ai' ? (
+                        <TypingEffect text={msg.text} />
+                      ) : (
+                        msg.text
+                      )}
+                    </div>
+                    {msg.sender === 'ai' && msg.model && <div className="model-name">{msg.model}</div>}
+                  </div>
+                  {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}
+                </div>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
         </Container>

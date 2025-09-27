@@ -43,6 +43,12 @@ function ChatInput({ selectedModel, onSubmit }) {
     }
   };
 
+  const textareaStyle = {
+    resize: 'none',
+    flexGrow: 1,
+    overflow: input ? 'auto' : 'hidden',
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       <InputGroup className="chat-input-group">
@@ -60,14 +66,13 @@ function ChatInput({ selectedModel, onSubmit }) {
         />
         <TextareaAutosize
           minRows={1}
-          maxRows={3}
+          maxRows={2}
           placeholder={`Message ${selectedModel}...`}
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="form-control chat-input"
-          style={{ resize: 'none', flexGrow: 1 }}
-        />
+          className="form-control chat-input chat-textarea"
+          style={textareaStyle} />
         <Button variant="primary" type="submit" className="send-btn" style={{ borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>
           <SendFill />
         </Button>
