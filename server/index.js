@@ -14,12 +14,10 @@ app.get('/', (req, res) => {
   res.send('Hello from server!');
 });
 
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.sendStatus(200);
 });
 
 app.use('/api/messages', messagesRouter);
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
+module.exports = app;

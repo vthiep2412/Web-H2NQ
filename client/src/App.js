@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
-        const response = await fetch('/health');
+        const response = await fetch('/api/health');
         if (response.ok) {
           setIsServerOnline(true);
         }
