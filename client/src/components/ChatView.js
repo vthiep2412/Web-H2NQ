@@ -15,7 +15,7 @@ const formatTime = (seconds) => {
   return `${minutes} minute${minutes > 1 ? 's' : ''} ${remainingSeconds.toFixed(1)} seconds`;
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, timer, isNavbarVisible }) => {
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages }) => {
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -59,7 +59,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
       </main>
       <footer className="p-3 chat-footer">
         <Container>
-          <ChatInput selectedModel={selectedModel} onSubmit={onSubmit} />
+          <ChatInput selectedModel={selectedModel} onSubmit={onSubmit} onLocalChat={onLocalChat} userMessages={userMessages} />
         </Container>
       </footer>
     </>

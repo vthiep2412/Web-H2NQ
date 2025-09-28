@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #007bff;
+  --background-body: #121212;
+}
+
 /* General App Styles & Introduction Page */
 body {}
 
@@ -48,6 +53,18 @@ body {}
   /* max-width: 0; */
   /* margin-left: -268px; */
   overflow: hidden;
+}
+
+.profile-navbar-container {
+  transition: max-width 0.3s ease-in-out, min-width 0.3s ease-in-out;
+  max-width: 300px;
+  min-width: 250px;
+  overflow: hidden;
+}
+
+.profile-navbar-container:not(.visible) {
+  max-width: 0;
+  min-width: 0;
 }
 
 .vertical-navbar {
@@ -149,7 +166,7 @@ body {}
 .user-avatar {
   flex-shrink: 0;
   margin-top: 5px;
-  background-color: #0d6efd;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   width: 40px;
@@ -224,7 +241,7 @@ body {}
 
 [data-bs-theme="light"] .vertical-navbar .nav-link.active {
   background-color: #e7f1ff;
-  color: #0d6efd;
+  color: var(--primary-color);
   font-weight: 500;
 }
 
@@ -257,11 +274,6 @@ body {}
   border-color: #dee2e6;
 }
 
-/* [data-bs-theme="light"] .message-bubble.user {
-  background-color: #7A5CF0;
-  color: white;
-} */
-
 [data-bs-theme="light"] .message-bubble.ai, [data-bs-theme="light"] .message-bubble.user {
   background-color: #f1f3f5;
   color: #212529;
@@ -276,7 +288,7 @@ body {}
 }
 
 [data-bs-theme="light"] .send-btn {
-  color: #0d6efd;
+  color: var(--primary-color);
 }
 
 [data-bs-theme="light"] .attach-btn:hover {
@@ -284,7 +296,7 @@ body {}
 }
 
 [data-bs-theme="light"] .send-btn:hover {
-  background-color: #0d6efd;
+  background-color: var(--primary-color);
   color: white;
 }
 
@@ -318,7 +330,7 @@ body {}
 }
 
 [data-bs-theme="dark"] .vertical-navbar .nav-link.active {
-  background-color: #0d6efd;
+  background-color: var(--primary-color);
   color: white;
   font-weight: 500;
 }
@@ -361,11 +373,6 @@ body {}
   background-color: #495057;
 }
 
-/* [data-bs-theme="dark"] .message-bubble.user {
-  background-color: #7A5CF0;
-  color: white;
-} */
-
 [data-bs-theme="dark"] .message-bubble.ai, [data-bs-theme="dark"] .message-bubble.user {
   background-color: #333;
   color: #e0e0e0;
@@ -377,7 +384,7 @@ body {}
 
 [data-bs-theme="dark"] .chat-input-group {
   background-color: #333;
-  box-shadow: 0 0px 16px #ffffff94;
+  box-shadow: 0 0px 16px var(--primary-color);
 }
 
 [data-bs-theme="dark"] .chat-input, [data-bs-theme="dark"] .attach-btn, [data-bs-theme="dark"] .send-btn {
@@ -395,7 +402,7 @@ body {}
 }
 
 [data-bs-theme="dark"] .send-btn {
-  color: #0d6efd;
+  color: var(--primary-color);
 }
 
 [data-bs-theme="dark"] .attach-btn:hover, [data-bs-theme="dark"] .send-btn:hover {
@@ -592,4 +599,20 @@ h
 
 .idk {
   width: 15%;
+}
+
+#theme-color-picker{
+  transition: all 0.3s ease;
+}
+[data-bs-theme="dark"] #theme-color-picker:hover
+, [data-bs-theme="dark"] #theme-color-picker:focus{
+  background-color: rgb(86, 94, 100);
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem #0d6efd40;
+}
+[data-bs-theme="light"] #theme-color-picker:hover,
+ [data-bs-theme="light"] #theme-color-picker:focus{
+  background-color: rgb(214, 219, 223);
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem #0d6efd40;
 }

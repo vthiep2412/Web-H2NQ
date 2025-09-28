@@ -7,6 +7,7 @@ function Header({
   theme, 
   toggleTheme, 
   toggleNavbar, 
+  toggleProfileNavbar, 
   selectedModel, 
   handleModelChange 
 }) {
@@ -15,7 +16,7 @@ function Header({
     <header className="app-header">
         <Row className='d-flex align-items-center'>
             <Col className="d-flex align-items-center">
-                <Button variant="link" onClick={toggleNavbar} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
+                <Button variant="link" onClick={() => toggleNavbar(null)} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
                     <List size={24} />
                 </Button>
                 <h3 className="ai-name">Web-H2NQ</h3>
@@ -39,7 +40,7 @@ function Header({
                 <Button onClick={toggleTheme} variant="link" className="theme-toggle-btn">
                     {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
                 </Button>
-                <PersonCircle size={30} className="ms-3" />
+                <PersonCircle size={30} className="ms-3" onClick={toggleProfileNavbar} style={{ cursor: 'pointer' }} />
             </Col>
         </Row>
     </header>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header';
 import VerticalNavbar from '../components/VerticalNavbar';
+import ProfileNavbar from '../components/ProfileNavbar'; // New
 import ChatView from '../components/ChatView';
 import IDEPage from './IDEPage';
 import StoragePage from './StoragePage';
@@ -12,11 +13,20 @@ import '../App.css';
 
 function AIPage() {
   // UI State
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark'); // For bootstrap components
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
+  const [manualNavOpen, setManualNavOpen] = useState(false);
   const [manualNavClose, setManualNavClose] = useState(false);
   const [activeView, setActiveView] = useState('chat1');
   const navbarRef = useRef(null);
+  const screenSizeRef = useRef(window.innerWidth < 992 ? 'small' : 'large');
+
+  // New Theme State
+  const [customTheme, setCustomTheme] = useState({
+    primaryColor: '#007bff',
+    background: 'dark' // 'dark', 'light', 'gradient'
+  });
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
@@ -30,9 +40,27 @@ function AIPage() {
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
 
+  // Effect for new custom theme
   useEffect(() => {
-    document.documentElement.setAttribute('data-bs-theme', theme);
-  }, [theme]);
+    const root = document.documentElement;
+    root.style.setProperty('--primary-color', customTheme.primaryColor);
+
+    let newTheme = 'dark'; // Default to dark
+    if (customTheme.background === 'gradient') {
+      root.style.setProperty('--background-body', `linear-gradient(135deg, ${customTheme.primaryColor} 0%, ${theme === 'dark' ? '#212529' : '#f8f9fa'} 100%)`);
+      newTheme = 'dark';
+    } else if (customTheme.background === 'white') {
+        root.style.setProperty('--background-body', '#ffffff');
+        newTheme = 'light';
+    } else if (customTheme.background === 'black') {
+        root.style.setProperty('--background-body', '#000000');
+        newTheme = 'dark';
+    }
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-bs-theme', newTheme);
+
+  }, [customTheme, theme]);
+
 
   useEffect(() => {
     fetch('/api/messages')
@@ -49,26 +77,33 @@ function AIPage() {
     scrollToBottom();
   }, [messages]);
 
-useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 992) {
-        if (isNavbarVisible) toggleNavbar(false); // Force close on small screens
-      } else {
-        if (!manualNavClose && !isNavbarVisible) {
-          toggleNavbar(true); // Force open on large screens if not manually closed
-        }
+      const newScreenSize = window.innerWidth < 992 ? 'small' : 'large';
+      if (newScreenSize !== screenSizeRef.current) {
+        setManualNavOpen(false);
+        setManualNavClose(false);
       }
+
+      if (newScreenSize === 'small') {
+        if (isNavbarVisible && !manualNavOpen) toggleNavbar(false);
+      } else {
+        if (!isNavbarVisible && !manualNavClose) toggleNavbar(true);
+      }
+
+      screenSizeRef.current = newScreenSize;
     };
+
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [manualNavClose, isNavbarVisible]); // Re-add isNavbarVisible to the dependency array
+  }, [isNavbarVisible, manualNavOpen, manualNavClose]);
 
   useEffect(() => {
-    if (window.innerWidth < 992 && isNavbarVisible) {
-      toggleNavbar(false); // Force close on view change on small screens
+    if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
+      toggleNavbar(false);
     }
-  }, [activeView]);
+  }, [activeView, isNavbarVisible, manualNavOpen]);
 
   useEffect(() => {
     const setPageHeight = () => {
@@ -126,28 +161,44 @@ useEffect(() => {
     }
   };
 
+  const handleLocalChat = (message, sender) => {
+    const newMessage = { text: message, sender: sender };
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+  };
+
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    const newBsTheme = theme === 'light' ? 'dark' : 'light';
+    setCustomTheme(prev => ({...prev, background: newBsTheme}));
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setCustomTheme(newTheme);
   };
 
   const toggleNavbar = (forceState) => {
-    const nextState = typeof forceState === 'boolean' ? forceState : !isNavbarVisible;
+    const isManualToggle = forceState === null || forceState === undefined;
+    const nextState = isManualToggle ? !isNavbarVisible : forceState;
 
     if (isNavbarVisible && !nextState && navbarRef.current) { // Closing
       const width = navbarRef.current.offsetWidth;
       navbarRef.current.style.setProperty('margin-left', -width + 'px');
+      if (isManualToggle) {
+        setManualNavOpen(false);
+        setManualNavClose(true);
+      }
     } else if (!isNavbarVisible && nextState && navbarRef.current) { // Opening
       navbarRef.current.style.setProperty('margin-left', 0);
+      if (isManualToggle) {
+        setManualNavOpen(true);
+        setManualNavClose(false);
+      }
     }
 
     setIsNavbarVisible(nextState);
+  };
 
-    if (window.innerWidth >= 992 && nextState === false) {
-      setManualNavClose(true);
-    }
-    if (nextState === true) {
-      setManualNavClose(false);
-    }
+  const toggleProfileNavbar = () => {
+    setIsProfileNavbarVisible(!isProfileNavbarVisible);
   };
 
   const handleModelChange = (model) => {
@@ -156,13 +207,15 @@ useEffect(() => {
 
   const handleViewChange = (viewId) => {
     setActiveView(viewId);
-    if (window.innerWidth < 992 && isNavbarVisible) {
-      toggleNavbar();
+    if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
+      toggleNavbar(false);
     }
   };
 
   const renderActiveView = () => {
     const viewType = activeView.replace(/[0-9]/g, '');
+    const userMessages = messages.filter(msg => msg.sender === 'user').slice(-50);
+
     switch (viewType) {
       case 'ide':
         return <IDEPage />;
@@ -177,10 +230,12 @@ useEffect(() => {
         return <ChatView 
                   messages={messages}
                   onSubmit={handleSubmit}
+                  onLocalChat={handleLocalChat}
                   messagesEndRef={messagesEndRef}
                   selectedModel={selectedModel}
                   timer={timer}
                   isNavbarVisible={isNavbarVisible}
+                  userMessages={userMessages}
                 />;
     }
   }
@@ -191,6 +246,7 @@ useEffect(() => {
         theme={theme} 
         toggleTheme={toggleTheme} 
         toggleNavbar={toggleNavbar}
+        toggleProfileNavbar={toggleProfileNavbar}
         selectedModel={selectedModel}
         handleModelChange={handleModelChange}
       />
@@ -207,6 +263,13 @@ useEffect(() => {
         </div>
         <div className="d-flex flex-column flex-grow-1 idk" style={{ overflow: 'hidden' }}>
           {renderActiveView()}
+        </div>
+        <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
+          <ProfileNavbar
+            theme={customTheme}
+            onThemeChange={handleThemeChange}
+            onLogout={() => alert("Logout functionality not implemented yet.")}
+          />
         </div>
       </div>
     </div>

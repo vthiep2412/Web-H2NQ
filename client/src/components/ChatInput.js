@@ -4,10 +4,11 @@ import { Paperclip, SendFill, Camera } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 import { getLabelForModel } from '../utils/models';
 
-function ChatInput({ selectedModel, onSubmit }) {
+function ChatInput({ selectedModel, onSubmit, onLocalChat, userMessages }) { 
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
-
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [tempInput, setTempInput] = useState(''); 
   const handleAttachClick = () => {
     fileInputRef.current.click();
   };
@@ -31,14 +32,58 @@ function ChatInput({ selectedModel, onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (input.trim()) {
-      onSubmit(input);
+    const trimmedInput = input.trim();
+    if (trimmedInput.startsWith('/chat')) {
+      const regex = /\/chat\s+"(.*?)"\s+"(ai|me)"/;
+      const match = trimmedInput.match(regex);
+
+      if (match) {
+        const message = match[1];
+        const sender = match[2];
+        onLocalChat(message, sender === 'me' ? 'user' : 'ai');
+        setInput('');
+      } else {
+        // Handle invalid command format
+        const errorMessage = 'Invalid /chat command format. Use /chat "[message]" "[ai/me]"';
+        console.error(errorMessage);
+        onLocalChat(errorMessage, 'ai');
+      }
+    } else if (trimmedInput) {
+      onSubmit(trimmedInput);
       setInput('');
+      setHistoryIndex(-1);
+      setTempInput('');
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (userMessages.length > 0) {
+        if (historyIndex === -1) {
+          setTempInput(input);
+          const newIndex = userMessages.length - 1;
+          setHistoryIndex(newIndex);
+          setInput(userMessages[newIndex].text);
+        } else {
+          const newIndex = Math.max(0, historyIndex - 1);
+          setHistoryIndex(newIndex);
+          setInput(userMessages[newIndex].text);
+        }
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex !== -1) {
+        if (historyIndex === userMessages.length - 1) {
+          setHistoryIndex(-1);
+          setInput(tempInput);
+        } else {
+          const newIndex = historyIndex + 1;
+          setHistoryIndex(newIndex);
+          setInput(userMessages[newIndex].text);
+        }
+      }
+    } else if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }

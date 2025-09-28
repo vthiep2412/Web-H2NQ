@@ -1,0 +1,67 @@
+.profile-navbar {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--bs-border-color);
+  background-color: var(--bs-body-bg);
+  transition: margin-right 0.3s ease-in-out;
+  height: -webkit-fill-available;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.profile-info {
+  margin-left: 1rem;
+}
+
+.profile-info h5 {
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.profile-info p {
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  color: var(--bs-secondary-color);
+}
+
+.theme-section {
+  margin-bottom: 2rem;
+}
+
+.theme-section h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.theme-options, .background-options {
+    margin-top: 1rem;
+}
+
+.background-options {
+    display: flex;
+    justify-content: center;
+}
+
+.background-options > button {
+    margin: 0 0.2rem;
+}
+
+.logout-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.logout-section .btn-danger:hover {
+  background-color: white;
+  color: red;
+  border-color: red;
+}
