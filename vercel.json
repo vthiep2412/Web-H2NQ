@@ -11,14 +11,14 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/server/index.js" },
-    { "source": "/static/(.*)", "destination": "/build/static/$1" },
-    { "source": "/favicon.ico", "destination": "/build/favicon.ico" },
-    { "source": "/logo192.png", "destination": "/build/logo192.png" },
-    { "source": "/logo512.png", "destination": "/build/logo512.png" },
-    { "source": "/manifest.json", "destination": "/build/manifest.json" },
-    { "source": "/robots.txt", "destination": "/build/robots.txt" },
-    { "source": "/(.*)", "destination": "/build/index.html" }
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/build/$1"
+    }
   ]
 }
