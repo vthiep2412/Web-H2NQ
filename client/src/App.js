@@ -10,23 +10,6 @@ function App() {
   const [isServerOnline, setIsServerOnline] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Theme state lifted from pages
-  const [theme, setTheme] = useState('dark'); // For bootstrap components
-  const [customTheme, setCustomTheme] = useState({
-    primaryColor: '#007bff',
-  });
-
-  // Effect for bootstrap theme
-  useEffect(() => {
-    document.documentElement.setAttribute('data-bs-theme', theme);
-  }, [theme]);
-
-  // Effect for new custom theme
-  useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty('--primary-color', customTheme.primaryColor);
-  }, [customTheme, theme]);
-
   useEffect(() => {
     const checkServerStatus = async () => {
       try {

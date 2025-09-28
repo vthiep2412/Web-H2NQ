@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Header from '../components/Header';
 import VerticalNavbar from '../components/VerticalNavbar';
 import ProfileNavbar from '../components/ProfileNavbar'; // New
@@ -39,6 +39,28 @@ function AIPage() {
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
+
+  const toggleNavbar = useCallback((forceState) => {
+    const isManualToggle = forceState === null || forceState === undefined;
+    const nextState = isManualToggle ? !isNavbarVisible : forceState;
+
+    if (isNavbarVisible && !nextState && navbarRef.current) { // Closing
+      const width = navbarRef.current.offsetWidth;
+      navbarRef.current.style.setProperty('margin-left', -width + 'px');
+      if (isManualToggle) {
+        setManualNavOpen(false);
+        setManualNavClose(true);
+      }
+    } else if (!isNavbarVisible && nextState && navbarRef.current) { // Opening
+      navbarRef.current.style.setProperty('margin-left', 0);
+      if (isManualToggle) {
+        setManualNavOpen(true);
+        setManualNavClose(false);
+      }
+    }
+
+    setIsNavbarVisible(nextState);
+  }, [isNavbarVisible]);
 
   // Effect for new custom theme
   useEffect(() => {
@@ -97,13 +119,13 @@ function AIPage() {
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [isNavbarVisible, manualNavOpen, manualNavClose]);
+  }, [isNavbarVisible, manualNavOpen, manualNavClose, toggleNavbar]);
 
   useEffect(() => {
     if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
       toggleNavbar(false);
     }
-  }, [activeView, isNavbarVisible, manualNavOpen]);
+  }, [activeView, isNavbarVisible, manualNavOpen, toggleNavbar]);
 
   useEffect(() => {
     const setPageHeight = () => {
@@ -173,28 +195,6 @@ function AIPage() {
 
   const handleThemeChange = (newTheme) => {
     setCustomTheme(newTheme);
-  };
-
-  const toggleNavbar = (forceState) => {
-    const isManualToggle = forceState === null || forceState === undefined;
-    const nextState = isManualToggle ? !isNavbarVisible : forceState;
-
-    if (isNavbarVisible && !nextState && navbarRef.current) { // Closing
-      const width = navbarRef.current.offsetWidth;
-      navbarRef.current.style.setProperty('margin-left', -width + 'px');
-      if (isManualToggle) {
-        setManualNavOpen(false);
-        setManualNavClose(true);
-      }
-    } else if (!isNavbarVisible && nextState && navbarRef.current) { // Opening
-      navbarRef.current.style.setProperty('margin-left', 0);
-      if (isManualToggle) {
-        setManualNavOpen(true);
-        setManualNavClose(false);
-      }
-    }
-
-    setIsNavbarVisible(nextState);
   };
 
   const toggleProfileNavbar = () => {
