@@ -13,12 +13,12 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/server/index.js" },
-    { "source": "/static/(.*)", "destination": "/client/build/static/$1" },
-    { "source": "/favicon.ico", "destination": "/client/build/favicon.ico" },
-    { "source": "/logo192.png", "destination": "/client/build/logo192.png" },
-    { "source": "/logo512.png", "destination": "/client/build/logo512.png" },
-    { "source": "/manifest.json", "destination": "/client/build/manifest.json" },
-    { "source": "/robots.txt", "destination": "/client/build/robots.txt" },
-    { "source": "/(.*)", "destination": "/client/build/index.html" }
+    { "source": "/static/(.*)", "destination": "/build/static/$1" },
+    { "source": "/favicon.ico", "destination": "/build/favicon.ico" },
+    { "source": "/logo192.png", "destination": "/build/logo192.png" },
+    { "source": "/logo512.png", "destination": "/build/logo512.png" },
+    { "source": "/manifest.json", "destination": "/build/manifest.json" },
+    { "source": "/robots.txt", "destination": "/build/robots.txt" },
+    { "source": "/(.*)", "destination": "/build/index.html" }
   ]
 }
