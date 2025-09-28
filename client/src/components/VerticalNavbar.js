@@ -11,14 +11,14 @@ import {
   Trash
 } from 'react-bootstrap-icons';
 
-function VerticalNavbar({ 
+const VerticalNavbar = React.memo(({ 
   activeView, 
   onViewChange, 
   workspaces, 
   addWorkspace, 
   editWorkspace,
   deleteWorkspace
-}) {
+}) => {
   const [open, setOpen] = useState({ ws1: true });
   const [isAdding, setIsAdding] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
@@ -156,6 +156,6 @@ function VerticalNavbar({
       </div>
     </nav>
   );
-}
+});
 
 export default VerticalNavbar;

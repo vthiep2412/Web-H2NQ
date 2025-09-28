@@ -3,14 +3,14 @@ import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
 import { models, getLabelForModel } from '../utils/models';
 
-function Header({ 
+const Header = React.memo(({ 
   theme, 
   toggleTheme, 
   toggleNavbar, 
   toggleProfileNavbar, 
   selectedModel, 
   handleModelChange 
-}) {
+}) => {
 
   return (
     <header className="app-header">
@@ -45,6 +45,6 @@ function Header({
         </Row>
     </header>
   );
-}
+});
 
 export default Header;

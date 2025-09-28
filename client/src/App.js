@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import IntroductionPage from './pages/IntroductionPage';
-import AIPage from './pages/AIPage';
 import WaitingPage from './pages/WaitingPage';
 import './App.css';
+
+const IntroductionPage = React.lazy(() => import('./pages/IntroductionPage'));
+const AIPage = React.lazy(() => import('./pages/AIPage'));
 
 function App() {
   const [isServerOnline, setIsServerOnline] = useState(false);
@@ -56,10 +57,12 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<IntroductionPage />} />
-      <Route path="/ai" element={<AIPage />} />
-    </Routes>
+    <Suspense fallback={<div className="d-flex align-items-center justify-content-center vh-100"><h2>Loading...</h2></div>}>
+      <Routes>
+        <Route path="/" element={<IntroductionPage />} />
+        <Route path="/ai" element={<AIPage />} />
+      </Routes>
+    </Suspense>
   );
 }
 

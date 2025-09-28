@@ -4,7 +4,7 @@ import { Paperclip, SendFill, Camera } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 import { getLabelForModel } from '../utils/models';
 
-function ChatInput({ selectedModel, onSubmit, onLocalChat, userMessages }) { 
+const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages }) => { 
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -125,6 +125,6 @@ function ChatInput({ selectedModel, onSubmit, onLocalChat, userMessages }) {
       </InputGroup>
     </Form>
   );
-}
+});
 
 export default ChatInput;

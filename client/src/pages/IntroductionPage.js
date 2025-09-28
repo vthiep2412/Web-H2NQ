@@ -4,7 +4,7 @@ import IntroHeader from '../components/IntroHeader';
 
 import { Container, Button, Row, Col, Card } from 'react-bootstrap';
 
-const WelcomeTitle = () => {
+const WelcomeTitle = React.memo(() => {
   const text = "Welcome to H2NQ";
   return (
     <h1 className="welcome-title">
@@ -15,9 +15,9 @@ const WelcomeTitle = () => {
       ))}
     </h1>
   );
-};
+});
 
-const HomePageContent = () => (
+const HomePageContent = React.memo(() => (
   <div className="intro-section">
     <h2 className="text-center">Our Mission</h2>
     <p className="lead text-center">We are a team dedicated to building the future of intelligent web applications. Our goal is to create seamless, intuitive, and powerful tools that leverage the latest in AI technology to enhance user experience and productivity.</p>
@@ -37,7 +37,7 @@ const HomePageContent = () => (
       </Col>
     </Row>
   </div>
-);
+));
 
 function IntroductionPage() {
   const [theme, setTheme] = useState('dark');

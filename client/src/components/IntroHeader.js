@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
 import { SunFill, MoonFill, Wrench, CashCoin, InfoCircle } from 'react-bootstrap-icons';
 
-function IntroHeader({ theme, toggleTheme, onNavClick }) {
+const IntroHeader = React.memo(({ theme, toggleTheme, onNavClick }) => {
   const isDark = theme === 'dark';
 
   return (
@@ -27,6 +27,6 @@ function IntroHeader({ theme, toggleTheme, onNavClick }) {
       </Container>
     </Navbar>
   );
-}
+});
 
 export default IntroHeader;

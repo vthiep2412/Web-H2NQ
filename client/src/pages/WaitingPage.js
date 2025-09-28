@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Button, Spinner } from 'react-bootstrap';
 
-function WaitingPage() {
+const WaitingPage = React.memo(() => {
   const handleReload = () => {
     window.location.reload();
   };
@@ -18,6 +18,6 @@ function WaitingPage() {
       </Container>
     </div>
   );
-}
+});
 
 export default WaitingPage;

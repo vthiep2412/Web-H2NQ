@@ -3,7 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import './ProfileNavbar.css';
 
-function ProfileNavbar({ theme, onThemeChange, onLogout }) {
+const ProfileNavbar = React.memo(({ theme, onThemeChange, onLogout }) => {
   const debounceTimeout = useRef(null);
 
   const handleColorChange = (e) => {
@@ -54,6 +54,6 @@ function ProfileNavbar({ theme, onThemeChange, onLogout }) {
       </div>
     </nav>
   );
-}
+});
 
 export default ProfileNavbar;
