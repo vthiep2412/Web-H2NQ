@@ -8,12 +8,34 @@ import StoragePage from './StoragePage';
 import AIMemoryPage from './AIMemoryPage';
 import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
+import LiquidBackground from '../components/LiquidBackground';
 import '../App.css';
+import './AIPage.css';
+import '../gradient.css';
 
+const lightenColor = (hex, percent) => {
+    const f = parseInt(hex.slice(1), 16);
+    const t = percent < 0 ? 0 : 255;
+    const p = percent < 0 ? percent * -1 : percent;
+    const R = f >> 16;
+    const G = (f >> 8) & 0x00ff;
+    const B = f & 0x0000ff;
+    return (
+        "#" +
+        (
+            0x1000000 +
+            (Math.round((t - R) * p) + R) * 0x10000 +
+            (Math.round((t - G) * p) + G) * 0x100 +
+            (Math.round((t - B) * p) + B)
+        )
+            .toString(16)
+            .slice(1)
+    );
+};
 
 function AIPage() {
   // UI State
-  const [theme, setTheme] = useState('dark'); // For bootstrap components
+  const [theme, setTheme] = useState('dark'); // 'light' or 'dark'
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
   const [manualNavOpen, setManualNavOpen] = useState(false);
@@ -25,8 +47,16 @@ function AIPage() {
   // New Theme State
   const [customTheme, setCustomTheme] = useState({
     primaryColor: '#007bff',
-    background: 'dark' // 'dark', 'light', 'gradient'
   });
+  const [selectedGradientType, setSelectedGradientType] = useState('off'); // 'off', 'animated', 'gradient'
+  const [secondaryColor, setSecondaryColor] = useState('#00ff00'); // Default secondary color
+  const [gradientColors, setGradientColors] = useState(['#ff0000', '#0000ff']);
+  const [gradientColor1, setGradientColor1] = useState('#ff0000');
+  const [gradientColor2, setGradientColor2] = useState('#0000ff');
+  const [isGradientNone, setIsGradientNone] = useState(true);
+  const [isGradientColor1Enabled, setIsGradientColor1Enabled] = useState(false);
+  const [isGradientColor2Enabled, setIsGradientColor2Enabled] = useState(false);
+  const [selectedBackground, setSelectedBackground] = useState('none');
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
@@ -67,21 +97,31 @@ function AIPage() {
     const root = document.documentElement;
     root.style.setProperty('--primary-color', customTheme.primaryColor);
 
-    let newTheme = 'dark'; // Default to dark
-    if (customTheme.background === 'gradient') {
-      root.style.setProperty('--background-body', `linear-gradient(135deg, ${customTheme.primaryColor} 0%, ${theme === 'dark' ? '#212529' : '#f8f9fa'} 100%)`);
-      newTheme = 'dark';
-    } else if (customTheme.background === 'white') {
-        root.style.setProperty('--background-body', '#ffffff');
-        newTheme = 'light';
-    } else if (customTheme.background === 'black') {
-        root.style.setProperty('--background-body', '#000000');
-        newTheme = 'dark';
-    }
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-bs-theme', newTheme);
+    const gradientColorsArray = [customTheme.primaryColor];
+    if (isGradientColor1Enabled) gradientColorsArray.push(gradientColor1);
+    if (isGradientColor2Enabled) gradientColorsArray.push(gradientColor2);
 
-  }, [customTheme, theme]);
+    if (gradientColorsArray.length > 1) {
+      root.style.setProperty('--primary-background', `linear-gradient(135deg, ${gradientColorsArray.join(', ')})`);
+    } else {
+      root.style.setProperty('--primary-background', customTheme.primaryColor);
+    }
+
+    root.style.setProperty('--gradient-color-1', gradientColors[0]);
+    root.style.setProperty('--gradient-color-2', gradientColors[1]);
+    document.documentElement.setAttribute('data-bs-theme', theme);
+  }, [customTheme, theme, gradientColors, isGradientColor1Enabled, isGradientColor2Enabled, gradientColor1, gradientColor2]);
+
+  useEffect(() => {
+    const body = document.body;
+    if (selectedGradientType === 'gradient') {
+      body.style.background = `linear-gradient(135deg, ${customTheme.primaryColor} 0%, ${gradientColors[0]} 50%, ${gradientColors[1]} 100%)`;
+    } else if (selectedGradientType === 'animated') {
+      body.style.background = 'transparent';
+    } else { // 'off' or any other case
+      body.style.background = ''; // Revert to default
+    }
+  }, [customTheme, theme, selectedGradientType, gradientColors]);
 
 
   useEffect(() => {
@@ -95,7 +135,7 @@ function AIPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
+useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
@@ -189,12 +229,45 @@ function AIPage() {
   };
 
   const toggleTheme = () => {
-    const newBsTheme = theme === 'light' ? 'dark' : 'light';
-    setCustomTheme(prev => ({...prev, background: newBsTheme}));
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
+  const handleSelectGradient = (type) => {
+    setSelectedGradientType(type);
+  };
+
+  const handleGradientColorChange = (colors) => {
+    setGradientColors(colors);
   };
 
   const handleThemeChange = (newTheme) => {
     setCustomTheme(newTheme);
+  };
+
+  const handleSecondaryColorChange = (color) => {
+    setSecondaryColor(color);
+  };
+
+  const handleGradientColor1Change = (color) => {
+    setGradientColor1(color);
+  };
+
+  const handleGradientColor2Change = (color) => {
+    setGradientColor2(color);
+  };
+
+  const handleGradientToggle = (toggle) => {
+    if (toggle === 'none') {
+      setIsGradientNone(true);
+      setIsGradientColor1Enabled(false);
+      setIsGradientColor2Enabled(false);
+    } else if (toggle === 'color1') {
+      setIsGradientNone(false);
+      setIsGradientColor1Enabled(!isGradientColor1Enabled);
+    } else if (toggle === 'color2') {
+      setIsGradientNone(false);
+      setIsGradientColor2Enabled(!isGradientColor2Enabled);
+    }
   };
 
   const toggleProfileNavbar = () => {
@@ -212,6 +285,9 @@ function AIPage() {
     }
   };
 
+  const handleBackgroundChange = (background) => {
+    setSelectedBackground(background);
+  };
   const renderActiveView = () => {
     const viewType = activeView.replace(/[0-9]/g, '');
     const userMessages = messages.filter(msg => msg.sender === 'user').slice(-50);
@@ -241,7 +317,19 @@ function AIPage() {
   }
 
   return (
-    <div className="d-flex flex-column ai-page">
+    <div 
+      className={`d-flex flex-column ai-page ${selectedGradientType === 'animated' ? 'animated-background-on' : ''} ${selectedGradientType === 'gradient' ? 'gradient-text' : ''}`}
+    >
+      {selectedBackground === 'coloredSnowy' && (
+        <div className="ai-page-background">
+          <LiquidBackground
+            primaryColor={customTheme.primaryColor}
+            gradientColor1={isGradientColor1Enabled ? gradientColor1 : null}
+            gradientColor2={isGradientColor2Enabled ? gradientColor2 : null}
+            theme={theme}
+          />
+        </div>
+      )}
       <Header 
         theme={theme} 
         toggleTheme={toggleTheme} 
@@ -266,14 +354,28 @@ function AIPage() {
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           <ProfileNavbar
-            theme={customTheme}
+            currentTheme={theme}
+            customTheme={customTheme}
             onThemeChange={handleThemeChange}
             onLogout={() => alert("Logout functionality not implemented yet.")}
+            selectedGradientType={selectedGradientType}
+            onSelectGradient={handleSelectGradient}
+            secondaryColor={secondaryColor}
+            onSecondaryColorChange={handleSecondaryColorChange}
+            gradientColor1={gradientColor1}
+            gradientColor2={gradientColor2}
+            onGradientColor1Change={handleGradientColor1Change}
+            onGradientColor2Change={handleGradientColor2Change}
+            isGradientNone={isGradientNone}
+            isGradientColor1Enabled={isGradientColor1Enabled}
+            isGradientColor2Enabled={isGradientColor2Enabled}
+            onGradientToggle={handleGradientToggle}
+            selectedBackground={selectedBackground}
+            onBackgroundChange={handleBackgroundChange}
           />
         </div>
       </div>
     </div>
   );
 }
-
 export default AIPage;

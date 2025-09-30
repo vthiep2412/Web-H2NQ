@@ -21,3 +21,9 @@ app.get('/api/health', (req, res) => {
 app.use('/api/messages', messagesRouter);
 
 module.exports = app;
+
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+  });
+}

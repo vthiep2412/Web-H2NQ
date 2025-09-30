@@ -3,21 +3,74 @@ import { Button, Form } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import './ProfileNavbar.css';
 
-const ProfileNavbar = React.memo(({ theme, onThemeChange, onLogout }) => {
-  const debounceTimeout = useRef(null);
+const lightenColor = (hex, percent) => {
+    const f = parseInt(hex.slice(1), 16);
+    const t = percent < 0 ? 0 : 255;
+    const p = percent < 0 ? percent * -1 : percent;
+    const R = f >> 16;
+    const G = (f >> 8) & 0x00ff;
+    const B = f & 0x0000ff;
+    return (
+        "#" +
+        (
+            0x1000000 +
+            (Math.round((t - R) * p) + R) * 0x10000 +
+            (Math.round((t - G) * p) + G) * 0x100 +
+            (Math.round((t - B) * p) + B)
+        )
+            .toString(16)
+            .slice(1)
+    );
+};
+
+const ProfileNavbar = React.memo(({ 
+  currentTheme, 
+  customTheme = {}, 
+  onThemeChange, 
+  onLogout, 
+  gradientColor1,
+  gradientColor2,
+  onGradientColor1Change,
+  onGradientColor2Change,
+  isGradientNone,
+  isGradientColor1Enabled,
+  isGradientColor2Enabled,
+  onGradientToggle,
+  selectedBackground,
+  onBackgroundChange
+}) => {
+  const primaryDebounceTimeout = useRef(null);
+  const gradient1DebounceTimeout = useRef(null);
+  const gradient2DebounceTimeout = useRef(null);
 
   const handleColorChange = (e) => {
     const newColor = e.target.value;
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+    if (primaryDebounceTimeout.current) {
+      clearTimeout(primaryDebounceTimeout.current);
     }
-    debounceTimeout.current = setTimeout(() => {
-      onThemeChange({ ...theme, primaryColor: newColor });
-    }, 0); // 0ms debounce delay, fix lag
+    primaryDebounceTimeout.current = setTimeout(() => {
+      onThemeChange({ ...customTheme, primaryColor: newColor });
+    }, 0);
   };
 
-  const setBackground = (backgroundType) => {
-    onThemeChange({ ...theme, background: backgroundType });
+  const handleGradientColor1Change = (e) => {
+    const newColor = e.target.value;
+    if (gradient1DebounceTimeout.current) {
+      clearTimeout(gradient1DebounceTimeout.current);
+    }
+    gradient1DebounceTimeout.current = setTimeout(() => {
+      onGradientColor1Change(newColor);
+    }, 0);
+  };
+
+  const handleGradientColor2Change = (e) => {
+    const newColor = e.target.value;
+    if (gradient2DebounceTimeout.current) {
+      clearTimeout(gradient2DebounceTimeout.current);
+    }
+    gradient2DebounceTimeout.current = setTimeout(() => {
+      onGradientColor2Change(newColor);
+    }, 0);
   };
 
   return (
@@ -32,21 +85,71 @@ const ProfileNavbar = React.memo(({ theme, onThemeChange, onLogout }) => {
 
       <div className="theme-section">
         <h6>Theme</h6>
-        <div className="theme-options">
-          <Form.Label htmlFor="theme-color-picker">Primary Color</Form.Label>
-          <Form.Control
-            type="color"
-            id="theme-color-picker"
-            defaultValue="#007bff"
-            title="Choose your color"
-            onChange={handleColorChange}
-          />
+        <div className="theme-and-gradient-container">
+          <div className="theme-options">
+            <Form.Label htmlFor="theme-color-picker">Primary Color</Form.Label>
+            <Form.Control
+              type="color"
+              id="theme-color-picker"
+              defaultValue="#007bff"
+              title="Choose your color"
+              onChange={handleColorChange}
+            />
+          </div>
+          <div className="gradient-section">
+            <Form.Label>Gradient Color</Form.Label>
+            <div className="color-pickers-container">
+              <div className="color-picker-item">
+                <Form.Check 
+                  type="switch"
+                  id="gradient-color1-switch"
+                  checked={isGradientColor1Enabled}
+                  onChange={() => onGradientToggle('color1')}
+                />
+                <Form.Control
+                  type="color"
+                  id="gradient-color1-picker"
+                  value={gradientColor1}
+                  title="Choose your color"
+                  onChange={handleGradientColor1Change}
+                  disabled={!isGradientColor1Enabled}
+                />
+              </div>
+              <div className="color-picker-item">
+                <Form.Check 
+                  type="switch"
+                  id="gradient-color2-switch"
+                  checked={isGradientColor2Enabled}
+                  onChange={() => onGradientToggle('color2')}
+                />
+                <Form.Control
+                  type="color"
+                  id="gradient-color2-picker"
+                  value={gradientColor2}
+                  title="Choose your color"
+                  onChange={handleGradientColor2Change}
+                  disabled={!isGradientColor2Enabled}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="background-options">
-            <Button variant="outline-secondary" onClick={() => setBackground('white')}>White</Button>
-            <Button variant="outline-secondary" onClick={() => setBackground('black')}>Black</Button>
-            <Button variant="outline-secondary" onClick={() => setBackground('gradient')}>Gradient</Button>
-        </div>
+      </div>
+
+      <h6>Animated Background</h6>
+      <div className="background-options">
+        <Button
+          className={`btn-background-option ${selectedBackground === 'none' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('none')}
+        >
+          None
+        </Button>
+        <Button
+          className={`btn-background-option ${selectedBackground === 'coloredSnowy' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('coloredSnowy')}
+        >
+          Colored Snowy
+        </Button>
       </div>
 
       <div className="logout-section">

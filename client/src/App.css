@@ -1,10 +1,12 @@
 :root {
   --primary-color: #007bff;
-  --background-body: #121212;
+  --gradient-color-1: #007bff;
+  --gradient-color-2: #00c6ff;
+  --gradient-color-3: #007bff;
+  --gradient-color-4: #00c6ff;
 }
 
 /* General App Styles & Introduction Page */
-body {}
 
 .ai-page,
 .vertical-navbar,
@@ -17,6 +19,13 @@ body {}
 .btn,
 .form-control {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-bs-theme="light"] .profile-navbar {
+  background-color: #fff;
+}
+[data-bs-theme="dark"] .profile-navbar {
+  background-color: #1e1e1e;
 }
 
 .intro-page {
@@ -166,7 +175,7 @@ body {}
 .user-avatar {
   flex-shrink: 0;
   margin-top: 5px;
-  background-color: var(--primary-color);
+  background: var(--primary-background);
   color: white;
   border-radius: 50%;
   width: 40px;
@@ -222,7 +231,6 @@ body {}
 
 /* --- White Theme --- */
 [data-bs-theme="light"] {
-  background-color: #f8f9fa;
   color: #212529;
 }
 
@@ -296,7 +304,7 @@ body {}
 }
 
 [data-bs-theme="light"] .send-btn:hover {
-  background-color: var(--primary-color);
+  background: var(--primary-background);
   color: white;
 }
 
@@ -308,7 +316,6 @@ body {}
 
 /* --- Black Theme --- */
 [data-bs-theme="dark"] {
-  background-color: #121212;
   color: #e0e0e0;
 }
 
@@ -330,7 +337,7 @@ body {}
 }
 
 [data-bs-theme="dark"] .vertical-navbar .nav-link.active {
-  background-color: var(--primary-color);
+  background: var(--primary-background);
   color: white;
   font-weight: 500;
 }
@@ -405,8 +412,13 @@ body {}
   color: var(--primary-color);
 }
 
-[data-bs-theme="dark"] .attach-btn:hover, [data-bs-theme="dark"] .send-btn:hover {
+[data-bs-theme="dark"] .attach-btn:hover {
   background-color: #495057;
+}
+
+[data-bs-theme="dark"] .send-btn:hover {
+  background: var(--primary-background);
+  color: white;
 }
 
 .chat-footer {
@@ -604,15 +616,26 @@ h
 #theme-color-picker{
   transition: all 0.3s ease;
 }
-[data-bs-theme="dark"] #theme-color-picker:hover
-, [data-bs-theme="dark"] #theme-color-picker:focus{
+[data-bs-theme="dark"] #theme-color-picker:hover,
+[data-bs-theme="dark"] #theme-color-picker:focus {
   background-color: rgb(86, 94, 100);
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 0.2rem #0d6efd40;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--primary-color) 25%, transparent);
 }
+
 [data-bs-theme="light"] #theme-color-picker:hover,
- [data-bs-theme="light"] #theme-color-picker:focus{
+ [data-bs-theme="light"] #theme-color-picker:focus {
   background-color: rgb(214, 219, 223);
-  border-color: var(--bs-primary);
-  box-shadow: 0 0 0 0.2rem #0d6efd40;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--primary-color) 25%, transparent);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 85%, black);
+    border-color: color-mix(in srgb, var(--primary-color) 80%, black);
 }

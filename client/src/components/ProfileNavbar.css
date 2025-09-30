@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--bs-border-color);
-  background-color: var(--bs-body-bg);
+  /* background-color: var(--bs-body-bg); */
   transition: margin-right 0.3s ease-in-out;
   height: -webkit-fill-available;
 }
@@ -42,12 +42,15 @@
 }
 
 .theme-options, .background-options {
-    margin-top: 1rem;
+    margin-top: -2rem;
 }
 
 .background-options {
+    margin-top: 1rem;
     display: flex;
-    justify-content: center;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 10px; /* To prevent scrollbar from overlapping content */
 }
 
 .background-options > button {
@@ -64,4 +67,123 @@
   background-color: white;
   color: red;
   border-color: red;
+}
+
+
+
+.gradient-options-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 10px; /* To prevent scrollbar from overlapping content */
+}
+
+.gradient-option {
+    flex-shrink: 0; /* Prevent items from shrinking */
+    width: 80px; /* Fixed width for each option */
+    height: 80px; /* Fixed height for each option */
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden; /* Hide overflow for the preview */
+}
+
+.gradient-option.active {
+    border-color: var(--bs-primary); /* Highlight active option */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+.gradient-preview {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px; /* Slightly smaller to show border */
+}
+
+.gradient-option small {
+    position: relative; /* Bring text above the preview */
+    z-index: 1;
+    color: white; /* Ensure text is visible on gradient */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7); /* Add shadow for readability */
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 2px;
+}
+
+.gradient-option .form-control[type="color"] {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 5px; /* Add some space */
+}
+
+.gradient-option .form-control[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.gradient-option .form-control[type="color"]::-webkit-color-swatch {
+    border: 1px solid var(--bs-border-color); /* Add a border */
+    border-radius: 3px;
+}
+
+.theme-and-gradient-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.gradient-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 10px; /* To prevent scrollbar from overlapping content */
+    max-width: 200px; 
+}
+
+.color-picker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.color-picker-item .form-check {
+    margin-bottom: 0;
+}
+
+.color-pickers-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.btn-background-option {
+  background-color: transparent;
+  border: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme="light"] .btn-background-option {
+  color: #212529;
+}
+
+[data-bs-theme="dark"] .btn-background-option {
+  color: #e0e0e0;
+}
+
+.btn-background-option.active {
+  background-color: var(--bs-body-color);
+  color: var(--bs-body-bg);
+  border-color: var(--bs-body-color);
 }
