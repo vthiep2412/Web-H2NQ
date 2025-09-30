@@ -16,7 +16,9 @@ import '../gradient.css';
 
 function AIPage() {
   // UI State
-  const [theme, setTheme] = useState('dark'); // 'light' or 'dark'
+  const [theme, setTheme] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  );
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
   const [manualNavOpen, setManualNavOpen] = useState(false);

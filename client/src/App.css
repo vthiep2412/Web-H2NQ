@@ -639,3 +639,11 @@ h
     background-color: color-mix(in srgb, var(--primary-color) 85%, black);
     border-color: color-mix(in srgb, var(--primary-color) 80%, black);
 }
+
+[data-bs-theme="dark"] .theme-aware-image {
+  filter: invert(1);
+}
+
+.theme-aware-image{
+  height: 72px;
+}
