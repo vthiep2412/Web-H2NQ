@@ -31,7 +31,7 @@ function AIPage() {
   });
   const [selectedGradientType, setSelectedGradientType] = useState('off'); // 'off', 'animated', 'gradient'
   const [secondaryColor, setSecondaryColor] = useState('#00ff00'); // Default secondary color
-  const [gradientColors, setGradientColors] = useState(['#ff0000', '#0000ff']);
+  const [gradientColors] = useState(['#ff0000', '#0000ff']);
   const [gradientColor1, setGradientColor1] = useState('#ff0000');
   const [gradientColor2, setGradientColor2] = useState('#0000ff');
   const [isGradientNone, setIsGradientNone] = useState(true);
