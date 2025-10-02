@@ -9,6 +9,7 @@ import AIMemoryPage from './AIMemoryPage';
 import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
 import LiquidBackground from '../components/LiquidBackground';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 import '../App.css';
 import './AIPage.css';
 import '../gradient.css';
@@ -52,6 +53,8 @@ function AIPage() {
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
+
+  const { user, logout } = useAuth(); // Get user and logout from AuthContext
 
   const toggleNavbar = useCallback((forceState) => {
     const isManualToggle = forceState === null || forceState === undefined;
@@ -176,10 +179,12 @@ useEffect(() => {
       }, 100);
 
       try {
+        const token = localStorage.getItem('token'); // Get token from localStorage
         const response = await fetch('/api/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'x-auth-token': token, // Add token to headers
           },
           body: JSON.stringify({ message, model: selectedModel }),
         });
@@ -338,7 +343,7 @@ useEffect(() => {
             currentTheme={theme}
             customTheme={customTheme}
             onThemeChange={handleThemeChange}
-            onLogout={() => alert("Logout functionality not implemented yet.")}
+            onLogout={logout} // Use logout from AuthContext
             selectedGradientType={selectedGradientType}
             onSelectGradient={handleSelectGradient}
             secondaryColor={secondaryColor}
@@ -353,6 +358,7 @@ useEffect(() => {
             onGradientToggle={handleGradientToggle}
             selectedBackground={selectedBackground}
             onBackgroundChange={handleBackgroundChange}
+            user={user} // Pass user object
           />
         </div>
       </div>

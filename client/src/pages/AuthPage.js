@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { SunFill, MoonFill } from 'react-bootstrap-icons';
 import './AuthPage.css';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const AuthPage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState(''); // New state for confirm password
+    const [avatarUrl, setAvatarUrl] = useState(''); // Re-add state for avatar URL
     const [theme, setTheme] = useState(
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
             : 'light'
     );
-    const navigate = useNavigate();
+    const { login } = useAuth(); // Use login from AuthContext
 
     const toggleTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
@@ -29,18 +31,23 @@ const AuthPage = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
         try {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, email, password, avatarUrl }), // Include avatarUrl
             });
             const data = await res.json();
             if (res.ok) {
-                localStorage.setItem('token', data.token);
-                navigate('/ai');
+                login(data.token); // Use login from AuthContext
             } else {
                 console.error('Registration failed:', data);
             }
@@ -61,8 +68,7 @@ const AuthPage = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                localStorage.setItem('token', data.token);
-                navigate('/ai');
+                login(data.token); // Use login from AuthContext
             } else {
                 console.error('Login failed:', data);
             }
@@ -84,6 +90,7 @@ const AuthPage = () => {
                         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                         <button type="submit">Sign Up</button>
                     </form>
                 </div>
@@ -93,7 +100,7 @@ const AuthPage = () => {
                         <h1>Sign In</h1>
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        <button type="button" className="forgot-password-btn">Forgot your password?</button>
+                        <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
                         <button type="submit">Sign In</button>
                     </form>
                 </div>

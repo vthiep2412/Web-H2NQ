@@ -17,9 +17,16 @@
     top: 20px;
     right: 20px;
     background: none;
-    border: none;
+    border: 1px solid #000; /* Black border for light theme */
+    border-radius: 5px;
+    padding: 5px 8px;
     cursor: pointer;
     color: #000;
+}
+
+.auth-body.dark .theme-toggle-btn-auth {
+    color: #fff;
+    border: 1px solid #fff; /* White border for dark theme */
 }
 
 .auth-body.dark .theme-toggle-btn-auth {
@@ -57,6 +64,17 @@ a {
     margin: 15px 0;
 }
 
+.forgot-password-link {
+    color: #007bff; /* Blue color for the link */
+    text-decoration: underline;
+    margin-top: 10px; /* Adjust spacing as needed */
+    margin-bottom: 10px;
+}
+
+.auth-body.dark .forgot-password-link {
+    color: #8ab4f8; /* Lighter blue for dark theme */
+}
+
 .auth-container {
     background: #fff;
     border-radius: 10px;
@@ -82,7 +100,8 @@ a {
 .form-container input {
     background: #eee;
     border: none;
-    padding: 12px 15px;
+    border-radius: 5px; /* Slightly rounded corners */
+    padding: 10px 15px; /* Smaller padding */
     margin: 8px 0;
     width: 100%;
 }

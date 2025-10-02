@@ -26,7 +26,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, avatarUrl } = req.body;
 
     try {
       let user = await User.findOne({ email });
@@ -39,6 +39,7 @@ router.post(
         name,
         email,
         password,
+        avatarUrl: avatarUrl || undefined, // Use provided avatarUrl or let schema default
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -50,6 +51,9 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          tier: user.tier,
+          avatarUrl: user.avatarUrl,
+          tokenLeft: user.tokenLeft,
         },
       };
 
@@ -104,6 +108,9 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          tier: user.tier,
+          avatarUrl: user.avatarUrl,
+          tokenLeft: user.tokenLeft,
         },
       };
 

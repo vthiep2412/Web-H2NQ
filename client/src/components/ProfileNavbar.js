@@ -18,7 +18,8 @@ const ProfileNavbar = React.memo(({
   isGradientColor2Enabled,
   onGradientToggle,
   selectedBackground,
-  onBackgroundChange
+  onBackgroundChange,
+  user // Destructure user prop
 }) => {
   const primaryDebounceTimeout = useRef(null);
   const gradient1DebounceTimeout = useRef(null);
@@ -57,10 +58,14 @@ const ProfileNavbar = React.memo(({
   return (
     <nav className="profile-navbar">
       <div className="profile-section">
-        <PersonCircle size={50} />
+        {user && user.avatarUrl ? (
+          <img src={user.avatarUrl} alt="User Avatar" className="profile-avatar" />
+        ) : (
+          <PersonCircle size={50} />
+        )}
         <div className="profile-info">
-          <h5>User Name</h5>
-          <p>user.email@example.com</p>
+          <h5>{user ? user.name : 'Guest'}</h5>
+          <p>{user ? user.email : 'guest@example.com'}</p>
         </div>
       </div>
 
