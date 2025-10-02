@@ -1,6 +1,6 @@
 import React from 'react';
-import { Container, Button } from 'react-bootstrap';
-import { Robot, PersonCircle, ClockHistory } from 'react-bootstrap-icons';
+import { Container } from 'react-bootstrap';
+import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
 import { getLabelForModel } from '../utils/models';
