@@ -92,7 +92,7 @@ const AuthPage = () => {
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                         <button type="submit">Sign Up</button>
-                        <a href="#" className="mobile-toggle-link" onClick={handleSignInClick}>Already have an account? Sign In</a>
+                        <span className="mobile-toggle-link" onClick={handleSignInClick}>Already have an account? Sign In</span>
                     </form>
                 </div>
                 <div className="form-container sign-in-container">
@@ -103,7 +103,7 @@ const AuthPage = () => {
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
                         <button type="submit">Sign In</button>
-                        <a href="#" className="mobile-toggle-link" onClick={handleSignUpClick}>Don't have an account? Sign Up</a>
+                        <span className="mobile-toggle-link" onClick={handleSignUpClick}>Don't have an account? Sign Up</span>
                     </form>
                 </div>
                 <div className="overlay-container">
