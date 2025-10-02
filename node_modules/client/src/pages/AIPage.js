@@ -339,27 +339,29 @@ useEffect(() => {
           {renderActiveView()}
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
-          <ProfileNavbar
-            currentTheme={theme}
-            customTheme={customTheme}
-            onThemeChange={handleThemeChange}
-            onLogout={logout} // Use logout from AuthContext
-            selectedGradientType={selectedGradientType}
-            onSelectGradient={handleSelectGradient}
-            secondaryColor={secondaryColor}
-            onSecondaryColorChange={handleSecondaryColorChange}
-            gradientColor1={gradientColor1}
-            gradientColor2={gradientColor2}
-            onGradientColor1Change={handleGradientColor1Change}
-            onGradientColor2Change={handleGradientColor2Change}
-            isGradientNone={isGradientNone}
-            isGradientColor1Enabled={isGradientColor1Enabled}
-            isGradientColor2Enabled={isGradientColor2Enabled}
-            onGradientToggle={handleGradientToggle}
-            selectedBackground={selectedBackground}
-            onBackgroundChange={handleBackgroundChange}
-            user={user} // Pass user object
-          />
+          {user && (
+            <ProfileNavbar
+              currentTheme={theme}
+              customTheme={customTheme}
+              onThemeChange={handleThemeChange}
+              onLogout={logout} // Use logout from AuthContext
+              selectedGradientType={selectedGradientType}
+              onSelectGradient={handleSelectGradient}
+              secondaryColor={secondaryColor}
+              onSecondaryColorChange={handleSecondaryColorChange}
+              gradientColor1={gradientColor1}
+              gradientColor2={gradientColor2}
+              onGradientColor1Change={handleGradientColor1Change}
+              onGradientColor2Change={handleGradientColor2Change}
+              isGradientNone={isGradientNone}
+              isGradientColor1Enabled={isGradientColor1Enabled}
+              isGradientColor2Enabled={isGradientColor2Enabled}
+              onGradientToggle={handleGradientToggle}
+              selectedBackground={selectedBackground}
+              onBackgroundChange={handleBackgroundChange}
+              user={user} // Pass user object
+            />
+          )}
         </div>
       </div>
     </div>

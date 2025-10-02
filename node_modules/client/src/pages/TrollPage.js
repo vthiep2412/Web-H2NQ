@@ -9,7 +9,7 @@ const TrollPage = () => {
             <div className="troll-box">
                 <h1>Oops!</h1>
                 <p>Looks like you don't have the secret key.</p>
-                <img src="https://media.tenor.com/v_p_l8pL5-UAAAAC/rick-astley-rick-roll.gif" alt="Troll Meme" />
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTc2ZWhkenFlZnU2eDcxNWF6Njc5bWQwNXFjcTRyZ3ZqZ2drdmh6NiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Ju7l5y9osyymQ/giphy.gif" alt="Troll GIF" className="troll-gif" />
                 <p>You know the rules, and so do I.</p>
                 <Link to="/auth" className="troll-link">Go back to safety</Link>
             </div>

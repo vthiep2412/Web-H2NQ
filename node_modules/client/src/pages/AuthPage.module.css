@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-
-.auth-body {
+.authBody {
     font-family: 'Montserrat', sans-serif;
     background: #fff; /* Changed from #f6f5f7 to full white */
     display: flex;
@@ -12,7 +10,7 @@
     position: relative;
 }
 
-.theme-toggle-btn-auth {
+.themeToggleBtnAuth {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -24,27 +22,23 @@
     color: #000;
 }
 
-.auth-body.dark .theme-toggle-btn-auth {
+.dark .themeToggleBtnAuth {
     color: #fff;
     border: 1px solid #fff; /* White border for dark theme */
 }
 
-.auth-body.dark .theme-toggle-btn-auth {
-    color: #fff;
-}
-
-.form-container h1 {
+.formContainer h1 {
     font-weight: bold;
     margin: 0;
     font-size: 1.8em; /* Reduced font size */
 }
 
-.auth-logo {
+.authLogo {
     max-width: 100px; /* Adjust as needed */
     height: auto;
 }
 
-p {
+.authBody p {
     font-size: 14px;
     font-weight: 100;
     line-height: 20px;
@@ -63,18 +57,18 @@ a {
     margin: 15px 0;
 }
 
-.forgot-password-link {
+.forgotPasswordLink {
     color: #007bff; /* Blue color for the link */
     text-decoration: underline;
     margin-top: 10px; /* Adjust spacing as needed */
     margin-bottom: 10px;
 }
 
-.auth-body.dark .forgot-password-link {
+.dark .forgotPasswordLink {
     color: #8ab4f8; /* Lighter blue for dark theme */
 }
 
-.auth-container {
+.authContainer {
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -85,7 +79,18 @@ a {
     min-height: 480px;
 }
 
-.form-container form {
+.errorMessage {
+    color: red;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.errorMessage p {
+    margin: 5px 0;
+}
+
+.formContainer form {
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -96,7 +101,7 @@ a {
     text-align: center;
 }
 
-.form-container input {
+.formContainer input {
     background: #eee;
     border: none;
     border-radius: 5px; /* Slightly rounded corners */
@@ -131,27 +136,27 @@ button.ghost {
     border-color: #fff;
 }
 
-.form-container {
+.formContainer {
     position: absolute;
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
 
-.sign-in-container {
+.signInContainer {
     left: 0;
     width: 50%;
     z-index: 2;
 }
 
-.sign-up-container {
+.signUpContainer {
     left: 0;
     width: 50%;
     opacity: 0;
     z-index: 1;
 }
 
-.overlay-container {
+.overlayContainer {
     position: absolute;
     top: 0;
     left: 50%;
@@ -178,7 +183,7 @@ button.ghost {
     transition: transform 0.6s ease-in-out;
 }
 
-.overlay-panel {
+.overlayPanel {
     position: absolute;
     top: 0;
     display: flex;
@@ -193,92 +198,92 @@ button.ghost {
     transition: transform 0.6s ease-in-out;
 }
 
-.overlay-right {
+.overlayRight {
     right: 0;
     transform: translateX(0);
 }
 
-.overlay-left {
+.overlayLeft {
     transform: translateX(-20%);
 }
 
 /* Move overlay */
-.auth-container.right-panel-active .sign-in-container {
+.rightPanelActive .signInContainer {
     transform: translateX(100%);
 }
 
-.auth-container.right-panel-active .overlay-container {
+.rightPanelActive .overlayContainer {
     transform: translateX(-100%);
 }
 
-.auth-container.right-panel-active .sign-up-container {
+.rightPanelActive .signUpContainer {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
 }
 
-.auth-container.right-panel-active .overlay {
+.rightPanelActive .overlay {
     transform: translateX(50%);
 }
 
-.auth-container.right-panel-active .overlay-left {
+.rightPanelActive .overlayLeft {
     transform: translateX(0);
 }
 
-.auth-container.right-panel-active .overlay-right {
+.rightPanelActive .overlayRight {
     transform: translateX(20%);
 }
 
 /* Dark Theme Styles */
-.auth-body.dark {
+.dark {
     background-color: #121212; /* Dark background */
 }
 
-.auth-body.dark .auth-container {
+.dark .authContainer {
     background-color: #1e1e1e;
     color: #e0e0e0;
     box-shadow: 0 14px 28px rgba(255,255,255,0.1), 0 10px 10px rgba(255,255,255,0.08);
 }
 
-.auth-body.dark .form-container form {
+.dark .formContainer form {
     background-color: #1e1e1e;
 }
 
-.auth-body.dark h1 {
+.dark h1 {
     color: #ffffff;
 }
 
-.auth-body.dark p,
-.auth-body.dark span,
-.auth-body.dark a {
+.dark p,
+.dark span,
+.dark a {
     color: #a0a0a0;
 }
 
-.auth-body.dark .form-container input {
+.dark .formContainer input {
     background-color: #333;
     border: 1px solid #444;
     color: #e0e0e0;
 }
 
-.auth-body.dark .form-container input::placeholder {
+.dark .formContainer input::placeholder {
     color: #888;
 }
 
-.auth-body.dark button {
+.dark button {
     background-color: #007bff;
     border-color: #007bff;
 }
 
-.auth-body.dark button.ghost {
+.dark button.ghost {
     background-color: transparent;
     border-color: #fff;
 }
 
-.auth-body.dark .auth-logo {
+.dark .authLogo {
     filter: invert(1);
 }
 
-.mobile-toggle-link {
+.mobileToggleLink {
     display: none; /* Hidden by default */
     margin-top: 15px;
     color: #007bff;
@@ -291,44 +296,44 @@ button.ghost {
     cursor: pointer;
 }
 
-.auth-body.dark .mobile-toggle-link {
+.dark .mobileToggleLink {
     color: #8ab4f8;
 }
 
 @media (max-width: 768px) {
-    .overlay-container {
+    .overlayContainer {
         display: none;
     }
 
-    .auth-container {
+    .authContainer {
         background-color: transparent !important;
         box-shadow: none !important;
         border-radius: 0;
     }
 
-    .sign-in-container,
-    .sign-up-container {
+    .signInContainer,
+    .signUpContainer {
         width: 100%;
         transition: all 0.5s ease-in-out;
     }
 
-    .sign-up-container {
+    .signUpContainer {
         opacity: 0;
         transform: translateX(100%);
     }
 
-    .auth-container.right-panel-active .sign-in-container {
+    .rightPanelActive .signInContainer {
         opacity: 0;
         transform: translateX(-100%);
     }
 
-    .auth-container.right-panel-active .sign-up-container {
+    .rightPanelActive .signUpContainer {
         opacity: 1;
         transform: translateX(0);
         z-index: 5;
     }
 
-    .mobile-toggle-link {
+    .mobileToggleLink {
         display: block; /* Visible on mobile */
     }
     form {

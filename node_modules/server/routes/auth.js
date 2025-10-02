@@ -51,6 +51,8 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          name: user.name,
+          email: user.email,
           tier: user.tier,
           avatarUrl: user.avatarUrl,
           tokenLeft: user.tokenLeft,
@@ -81,7 +83,7 @@ router.post(
 router.post(
   '/login',
   [
-    check('email', 'Please include a valid email').isEmail(),
+    check('login', 'Please enter your username or email').not().isEmpty(),
     check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
@@ -90,10 +92,16 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { login, password } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      let user;
+      // Check if login is an email or username
+      if (login.includes('@')) {
+        user = await User.findOne({ email: login });
+      } else {
+        user = await User.findOne({ name: login });
+      }
 
       if (!user) {
         return res.status(400).json({ msg: 'Invalid Credentials' });
@@ -108,6 +116,8 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          name: user.name,
+          email: user.email,
           tier: user.tier,
           avatarUrl: user.avatarUrl,
           tokenLeft: user.tokenLeft,
@@ -133,3 +143,18 @@ router.post(
 );
 
 module.exports = router;
+
+const auth = require('../middleware/auth'); // Import auth middleware
+
+// @route   GET api/auth/me
+// @desc    Get authenticated user profile
+// @access  Private
+router.get('/me', auth, async (req, res) => {
+  try {
+    // req.user is already populated by the auth middleware with the latest user data from DB
+    res.json(req.user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});

@@ -66,6 +66,7 @@ const ProfileNavbar = React.memo(({
         <div className="profile-info">
           <h5>{user ? user.name : 'Guest'}</h5>
           <p>{user ? user.email : 'guest@example.com'}</p>
+          <p>Tier: {user ? user.tier : 'Guest Tier'}</p>
         </div>
       </div>
 
@@ -74,7 +75,7 @@ const ProfileNavbar = React.memo(({
         <div className="token-bar-container">
           <div className="token-bar" style={{ width: `${user ? (user.tokenLeft / 1000) * 100 : 0}%` }}></div>
         </div>
-        <p>{user ? user.tokenLeft : 0} / 1000</p>
+        <p>Tokens Left: {user ? user.tokenLeft : 0} / 1000</p>
       </div>
 
       <div className="theme-section">

@@ -56,6 +56,7 @@ function App() {
         />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/troll" element={<TrollPage />} />
+        <Route path="*" element={<IntroductionPage />} /> {/* Catch-all route */}
       </Routes>
     </Suspense>
   );

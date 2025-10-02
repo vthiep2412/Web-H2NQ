@@ -648,11 +648,32 @@ h
   height: 72px;
 }
 
+.btn{
+  margin: .5rem !important;
+}
+
 @media screen and (max-width: 576px){
   #dropdown-basic{
     text-indent: -3rem;
     white-space: nowrap;
     overflow: hidden;
     width: 4rem;
+  }
+  .navbar-nav .btn {
+    width: 96%;
+  }
+}
+@media (max-width: 992px) {
+  .navbar-collapse {
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-content: stretch;
+    align-items: center;
+  }
+  .navbar-nav .btn {
+    width: 100%;
   }
 }

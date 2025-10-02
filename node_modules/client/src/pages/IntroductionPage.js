@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col } from 'react-bootstrap';
 import IntroHeader from '../components/IntroHeader';
 import FeatureBox from '../components/FeatureBox';
 import BigBox from '../components/BigBox';
 import ContributorBox from '../components/ContributorBox';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 import './IntroductionPage.css';
 
 // --- Data --- //
@@ -86,10 +87,19 @@ const WelcomeTitle = React.memo(() => {
 // --- Main Page Component --- //
 function IntroductionPage() {
   const [theme, setTheme] = useState('dark');
+  const { token } = useAuth(); // Get token from AuthContext
+  const navigate = useNavigate(); // Get navigate function
 
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
   }, [theme]);
+
+  // Redirect if authenticated
+  useEffect(() => {
+    if (token) {
+      navigate('/ai');
+    }
+  }, [token, navigate]);
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
