@@ -8,7 +8,8 @@ import {
   PlusLg,
   Check,
   X,
-  Trash
+  Trash,
+  ClockHistory
 } from 'react-bootstrap-icons';
 
 const VerticalNavbar = React.memo(({ 
@@ -17,7 +18,9 @@ const VerticalNavbar = React.memo(({
   workspaces, 
   addWorkspace, 
   editWorkspace,
-  deleteWorkspace
+  deleteWorkspace,
+  toggleHistoryNavbar,
+  isHistoryNavbarVisible
 }) => {
   const [open, setOpen] = useState({ ws1: true });
   const [isAdding, setIsAdding] = useState(false);
@@ -129,7 +132,6 @@ const VerticalNavbar = React.memo(({
                 {ws.children.map(child => (
                   <Nav.Link 
                     key={child.id} 
-                    href="#" 
                     active={activeView === child.id}
                     onClick={() => onViewChange(child.id)}
                   >
@@ -137,6 +139,12 @@ const VerticalNavbar = React.memo(({
                     {child.name}
                   </Nav.Link>
                 ))}
+                <Nav.Link 
+                  onClick={toggleHistoryNavbar}
+                  active={isHistoryNavbarVisible}
+                >
+                  <ClockHistory className="me-2" /> History
+                </Nav.Link>
               </div>
             </Collapse>
           </div>
@@ -146,7 +154,6 @@ const VerticalNavbar = React.memo(({
       <div className="navbar-bottom">
         <Nav className="flex-column">
           <Nav.Link 
-            href="#"
             active={activeView === 'settings'}
             onClick={() => onViewChange('settings')}
           >

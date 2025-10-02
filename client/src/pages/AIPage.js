@@ -58,7 +58,7 @@ function AIPage() {
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
 
-  const { user, logout } = useAuth(); // Get user and logout from AuthContext
+  const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
 
   const toggleNavbar = useCallback((forceState) => {
     const isManualToggle = forceState === null || forceState === undefined;
@@ -194,8 +194,7 @@ useEffect(() => {
   // Handlers
   const handleSubmit = async (message) => {
     if (message.trim()) {
-      console.log("Sending message from client...");
-      const newMessage = { text: message, sender: 'user' };
+      const userMessage = { text: message, sender: 'user' };
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
 
       const conversationHistory = messages.map(msg => ({
@@ -203,7 +202,7 @@ useEffect(() => {
         content: msg.text,
       }));
 
-      setMessages([...messages, newMessage, loadingMessage]);
+      setMessages([...messages, userMessage, loadingMessage]);
 
       const startTime = Date.now();
       timerRef.current = setInterval(() => {
@@ -233,8 +232,14 @@ useEffect(() => {
 
         const data = await response.json();
         const thinkingTime = (Date.now() - startTime) / 1000;
+        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime };
+
+        if (data.user) {
+          updateUser(data.user);
+        }
 
         if (data.conversation && !activeConversationId) {
+          // New conversation was created
           setConversations(prev => [data.conversation, ...prev]);
           setActiveConversationId(data.conversation._id);
           const mappedMessages = data.conversation.messages.map(msg => ({
@@ -243,7 +248,15 @@ useEffect(() => {
           }));
           setMessages(mappedMessages);
         } else {
-            setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model, thinkingTime }]);
+          // Existing conversation was updated
+          setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), aiMessage]);
+          // Update the conversations state as well
+          setConversations(prevConvos => prevConvos.map(convo => {
+            if (convo._id === activeConversationId) {
+              return { ...convo, messages: [...convo.messages, {role: 'user', content: message}, {role: 'assistant', content: data.text}] };
+            }
+            return convo;
+          }));
         }
       } catch (error) {
         console.error('Error sending message:', error);
@@ -408,10 +421,15 @@ useEffect(() => {
             addWorkspace={addWorkspace}
             editWorkspace={editWorkspace}
             deleteWorkspace={deleteWorkspace}
+            toggleHistoryNavbar={toggleHistoryNavbar}
+            isHistoryNavbarVisible={isHistoryNavbarVisible}
           />
         </div>
         <div className="d-flex flex-column flex-grow-1 idk" style={{ overflow: 'hidden' }}>
           {renderActiveView()}
+        </div>
+        <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
+          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} />
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           {user && (
@@ -437,9 +455,6 @@ useEffect(() => {
               user={user} // Pass user object
             />
           )}
-        </div>
-        <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
-          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} />
         </div>
       </div>
     </div>

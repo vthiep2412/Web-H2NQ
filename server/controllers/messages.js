@@ -4,6 +4,7 @@ const axios = require('axios');
 const { InferenceClient } = require('@huggingface/inference');
 const { GEMINI_API_KEY, OPENAI_API_KEYS, OPENROUTER_API_KEY, HUGGINGFACE_API_FINEGRAINED_KEY } = require('../config');
 const Conversation = require('../models/Conversation');
+const User = require('../models/User');
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const hf = new InferenceClient(HUGGINGFACE_API_FINEGRAINED_KEY);
@@ -32,6 +33,11 @@ exports.sendMessage = async (req, res) => {
   const MAX_CONTEXT_LENGTH = 256 * 1024; // 256k characters
 
   try {
+    const user = await User.findById(userId);
+    if (!user || user.tokenLeft <= 0) {
+      return res.status(403).json({ error: 'You have no tokens left.' });
+    }
+
     const truncatedHistory = truncateHistory(history, MAX_CONTEXT_LENGTH);
 
     let text;
@@ -92,6 +98,9 @@ exports.sendMessage = async (req, res) => {
       text = chatCompletion.choices[0].message.content;
     }
 
+    user.tokenLeft -= 1;
+    await user.save();
+
     let conversation;
     if (conversationId) {
       conversation = await Conversation.findById(conversationId);
@@ -124,7 +133,7 @@ exports.sendMessage = async (req, res) => {
       await conversation.save();
     }
 
-    res.json({ text, model, conversation });
+    res.json({ text, model, conversation, user });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
     res.status(500).json({ error: 'Error communicating with AI' });

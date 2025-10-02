@@ -59,8 +59,12 @@ export const AuthProvider = ({ children }) => {
         window.location.href = '/auth'; // Force full page reload to /auth
     };
 
+    const updateUser = (newUserData) => {
+        setUser(prevUser => ({ ...prevUser, ...newUserData }));
+    };
+
     return (
-        <AuthContext.Provider value={{ token, user, login, logout }}>
+        <AuthContext.Provider value={{ token, user, login, logout, updateUser }}>
             {children}
         </AuthContext.Provider>
     );

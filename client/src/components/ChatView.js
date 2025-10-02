@@ -20,9 +20,6 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
     <>
       <main className="flex-grow-1 chat-main-view">
         <div className="chat-view-header">
-          <Button variant="secondary" className="history-toggle-btn" onClick={toggleHistoryNavbar}>
-            <ClockHistory size={20} />
-          </Button>
         </div>
         <Container>
           <div className="message-list">
