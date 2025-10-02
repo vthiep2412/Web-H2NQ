@@ -69,6 +69,14 @@ const ProfileNavbar = React.memo(({
         </div>
       </div>
 
+      <div className="token-usage-section">
+        <h6>Token Usage</h6>
+        <div className="token-bar-container">
+          <div className="token-bar" style={{ width: `${user ? (user.tokenLeft / 1000) * 100 : 0}%` }}></div>
+        </div>
+        <p>{user ? user.tokenLeft : 0} / 1000</p>
+      </div>
+
       <div className="theme-section">
         <h6>Theme</h6>
         <div className="theme-and-gradient-container">

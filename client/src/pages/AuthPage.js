@@ -87,11 +87,12 @@ const AuthPage = () => {
                     <form onSubmit={handleRegister}>
                         <img src="/H2NQ-LOGO.png" alt="H2NQ Logo" className="auth-logo" />
                         <h1>Create Account</h1>
-                        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+                        <input type="text" placeholder="Username" value={name} onChange={(e) => setName(e.target.value)} required />
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                         <button type="submit">Sign Up</button>
+                        <a href="#" className="mobile-toggle-link" onClick={handleSignInClick}>Already have an account? Sign In</a>
                     </form>
                 </div>
                 <div className="form-container sign-in-container">
@@ -102,6 +103,7 @@ const AuthPage = () => {
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <a href="/forgot-password" className="forgot-password-link">Forgot your password?</a>
                         <button type="submit">Sign In</button>
+                        <a href="#" className="mobile-toggle-link" onClick={handleSignUpClick}>Don't have an account? Sign Up</a>
                     </form>
                 </div>
                 <div className="overlay-container">

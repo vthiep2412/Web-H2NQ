@@ -13,7 +13,7 @@ const User = require('../models/User');
 router.post(
   '/register',
   [
-    check('name', 'Please add name').not().isEmpty(),
+    check('name', 'Please add username').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check(
       'password',

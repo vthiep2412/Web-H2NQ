@@ -39,6 +39,34 @@
   color: var(--bs-secondary-color);
 }
 
+.token-usage-section {
+  margin-bottom: 2rem;
+}
+
+.token-usage-section h6 {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.token-bar-container {
+  width: 100%;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+  height: 10px;
+}
+
+.token-bar {
+  background-color: #007bff;
+  height: 100%;
+  border-radius: 0.25rem;
+}
+
+.token-usage-section p {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 .theme-section {
   margin-bottom: 2rem;
 }

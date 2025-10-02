@@ -42,7 +42,6 @@
 .auth-logo {
     max-width: 100px; /* Adjust as needed */
     height: auto;
-    margin-bottom: 20px;
 }
 
 p {
@@ -277,4 +276,52 @@ button.ghost {
 
 .auth-body.dark .auth-logo {
     filter: invert(1);
+}
+
+.mobile-toggle-link {
+    display: none; /* Hidden by default */
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .overlay-container {
+        display: none;
+    }
+
+    .auth-container {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0;
+    }
+
+    .sign-in-container,
+    .sign-up-container {
+        width: 100%;
+        transition: all 0.5s ease-in-out;
+    }
+
+    .sign-up-container {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    .auth-container.right-panel-active .sign-in-container {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    .auth-container.right-panel-active .sign-up-container {
+        opacity: 1;
+        transform: translateX(0);
+        z-index: 5;
+    }
+
+    .mobile-toggle-link {
+        display: block; /* Visible on mobile */
+    }
+    form {
+        background-color: transparent !important;
+    }
 }
