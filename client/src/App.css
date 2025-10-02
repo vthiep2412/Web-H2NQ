@@ -1,3 +1,23 @@
+.chat-view-header {
+  position: relative;
+  height: 40px; 
+}
+
+.history-toggle-btn {
+  position: absolute;
+  top: -30px;
+  right: -25px;
+  z-index: 10;
+  border-radius: 50%;
+  background-color: #343a40;
+  color: white;
+}
+
+[data-bs-theme="light"] .history-toggle-btn {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
 :root {
   --primary-color: #007bff;
   --gradient-color-1: #007bff;
@@ -72,6 +92,18 @@
 }
 
 .profile-navbar-container:not(.visible) {
+  max-width: 0;
+  min-width: 0;
+}
+
+.history-navbar-container {
+  transition: max-width 0.3s ease-in-out, min-width 0.3s ease-in-out;
+  max-width: 300px;
+  min-width: 250px;
+  overflow: hidden;
+}
+
+.history-navbar-container:not(.visible) {
   max-width: 0;
   min-width: 0;
 }
@@ -190,7 +222,7 @@
 }
 
 .chat-input-group {
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(255, 255, 255);
   border-radius: 50px !important;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.332);
 }
@@ -650,6 +682,7 @@ h
 
 .btn{
   margin: .5rem !important;
+  border-radius: 10px;
 }
 
 @media screen and (max-width: 576px){

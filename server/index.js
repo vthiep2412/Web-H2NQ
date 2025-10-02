@@ -11,6 +11,7 @@ connectDB();
 
 const messagesRouter = require('./routes/messages');
 const authRouter = require('./routes/auth');
+const conversationsRouter = require('./routes/conversations');
 
 app.use(cors());
 app.use(express.json());
@@ -25,6 +26,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/messages', messagesRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/conversations', conversationsRouter);
 
 module.exports = app;
 

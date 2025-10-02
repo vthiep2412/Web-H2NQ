@@ -8,6 +8,12 @@
     z-index: 2;
 }
 
+.intro-logo {
+    max-width: 150px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 20px;
+}
+
 .content-below {
     position: relative;
     z-index: 2;
@@ -18,7 +24,8 @@
 
 .features-section,
 .big-boxes-section,
-.contributors-section {
+.contributors-section,
+.ai-updates-section {
   padding: 5rem 2rem;
 }
 

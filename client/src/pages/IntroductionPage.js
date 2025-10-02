@@ -70,6 +70,13 @@ const ContributorsSection = () => (
     </div>
 );
 
+const AIUpdatesSection = () => (
+  <div className="ai-updates-section">
+    <h2 className="text-center">Upcoming AI Enhancements</h2>
+    <p className="text-center lead">Stay tuned for powerful new AI features and model integrations!</p>
+    {/* Future AI update content will go here */}
+  </div>
+);
 
 const WelcomeTitle = React.memo(() => {
   const text = "Welcome to H2NQ";
@@ -109,6 +116,7 @@ function IntroductionPage() {
     <div className="introduction-page">
       <IntroHeader theme={theme} toggleTheme={toggleTheme} onNavClick={() => {}} />
       <Container className={`d-flex flex-column justify-content-center align-items-start text-start intro-content-main vh-100 position-relative`}>
+        <img src="/H2NQ-LOGO.png" alt="H2NQ Logo" className="intro-logo" />
         <WelcomeTitle />
         <p className="lead my-4">Your intelligent web companion, supercharged.</p>
         <div>
@@ -126,6 +134,8 @@ function IntroductionPage() {
         <BigBoxesSection />
         <hr className="my-5" />
         <ContributorsSection />
+        <hr className="my-5" />
+        <AIUpdatesSection />
       </div>
     </div>
   );

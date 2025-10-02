@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
-import { Paperclip, SendFill, Camera } from 'react-bootstrap-icons';
+import { Paperclip, SendFill, Camera, PlusCircle } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 import { getLabelForModel } from '../utils/models';
 
-const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages }) => { 
+const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation }) => { 
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -98,7 +98,10 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
   return (
     <Form onSubmit={handleSubmit}>
       <InputGroup className="chat-input-group">
-        <Button variant="secondary" className="attach-btn" onClick={handleAttachClick} style={{ borderTopLeftRadius: '50px', borderBottomLeftRadius: '50px' }}>
+        <Button variant="secondary" className="attach-btn" onClick={onNewConversation} style={{ borderTopLeftRadius: '50px', borderBottomLeftRadius: '50px' }}>
+          <PlusCircle />
+        </Button>
+        <Button variant="secondary" className="attach-btn" onClick={handleAttachClick}>
           <Paperclip />
         </Button>
         <Button variant="secondary" className="attach-btn d-lg-none" onClick={handleCameraClick}>

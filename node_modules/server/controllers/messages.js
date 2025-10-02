@@ -2,12 +2,8 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const OpenAI = require('openai');
 const axios = require('axios');
 const { InferenceClient } = require('@huggingface/inference');
-const {
-  GEMINI_API_KEY,
-  OPENAI_API_KEYS,
-  OPENROUTER_API_KEY,
-  HUGGINGFACE_API_FINEGRAINED_KEY
-} = require('../config');
+const { GEMINI_API_KEY, OPENAI_API_KEYS, OPENROUTER_API_KEY, HUGGINGFACE_API_FINEGRAINED_KEY } = require('../config');
+const Conversation = require('../models/Conversation');
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const hf = new InferenceClient(HUGGINGFACE_API_FINEGRAINED_KEY);
@@ -20,26 +16,43 @@ exports.getMessages = (req, res) => {
   res.json(messages);
 };
 
+const truncateHistory = (history, maxLength) => {
+  let totalLength = history.reduce((sum, msg) => sum + msg.content.length, 0);
+  while (totalLength > maxLength && history.length > 0) {
+    const removedMessage = history.shift(); // Remove the oldest message
+    totalLength -= removedMessage.content.length;
+  }
+  return history;
+};
+
 exports.sendMessage = async (req, res) => {
   console.log("Received message, sending to AI...");
-  const { message, model } = req.body;
+  const { message, model, history, conversationId } = req.body;
+  const userId = req.user.id;
+  const MAX_CONTEXT_LENGTH = 256 * 1024; // 256k characters
 
   try {
+    const truncatedHistory = truncateHistory(history, MAX_CONTEXT_LENGTH);
+
     let text;
     if (model.startsWith('gemini')) {
       const geminiModel = genAI.getGenerativeModel({ model });
-      const result = await geminiModel.generateContent(message);
+      const geminiHistory = truncatedHistory.map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : msg.role,
+        parts: [{ text: msg.content }],
+      }));
+      const result = await geminiModel.generateContent({ contents: [...geminiHistory, { role: 'user', parts: [{ text: message }] }] });
       const response = await result.response;
       text = response.text();
     } else if (model.startsWith('gpt')) {
       let response = null;
       const allKeys = [process.env.OPENAI_API_KEY, ...OPENAI_API_KEYS].filter(Boolean);
-
+      const openAIMessages = [...truncatedHistory, { role: 'user', content: message }];
       for (const key of allKeys) {
         try {
           const openai = new OpenAI({ apiKey: key });
           const completion = await openai.chat.completions.create({
-            messages: [{ role: 'user', content: message }],
+            messages: openAIMessages,
             model,
           });
           if (!completion || !completion.choices || completion.choices.length === 0) {
@@ -52,18 +65,16 @@ exports.sendMessage = async (req, res) => {
           console.error('Error with API key, trying next one...', error.message);
         }
       }
-
-      if (response) {
-        return res.json(response);
-      } else {
+      if (!response) {
         throw new Error('All OpenAI API keys failed.');
       }
     } else if (model.startsWith('openrouter/')) {
+      const openRouterMessages = [...truncatedHistory, { role: 'user', content: message }];
       const response = await axios.post(
         'https://openrouter.ai/api/v1/chat/completions',
         {
           model: model.replace('openrouter/', ''),
-          messages: [{ role: 'user', content: message }],
+          messages: openRouterMessages,
         },
         {
           headers: {
@@ -73,19 +84,47 @@ exports.sendMessage = async (req, res) => {
       );
       text = response.data.choices[0].message.content;
     } else if (model.startsWith('huggingface/')) {
-      try {
-        const chatCompletion = await hf.chatCompletion({
-            model: model.replace('huggingface/', ''),
-            messages: [{ role: 'user', content: message }],
-        });
-        text = chatCompletion.choices[0].message.content;
-      } catch (error) {
-        console.error('HuggingFace API Error:', error);
-        throw error;
-      }
+      const hfMessages = [...truncatedHistory, { role: 'user', content: message }];
+      const chatCompletion = await hf.chatCompletion({
+        model: model.replace('huggingface/', ''),
+        messages: hfMessages,
+      });
+      text = chatCompletion.choices[0].message.content;
     }
 
-    res.json({ text, model });
+    let conversation;
+    if (conversationId) {
+      conversation = await Conversation.findById(conversationId);
+      if (conversation) {
+        conversation.messages.push({ role: 'user', content: message });
+        conversation.messages.push({ role: 'assistant', content: text });
+        await conversation.save();
+      }
+    } else {
+      const conversationCount = await Conversation.countDocuments({ userId });
+      if (conversationCount >= 5) {
+        const oldestConversation = await Conversation.findOne({ userId }).sort({ createdAt: 1 });
+        await oldestConversation.deleteOne();
+      }
+
+      const titleModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
+      const titleResult = await titleModel.generateContent(titlePrompt);
+      const titleResponse = await titleResult.response;
+      const title = titleResponse.text().trim().replace(/"/g, '');
+
+      conversation = new Conversation({
+        userId,
+        title,
+        messages: [
+          { role: 'user', content: message },
+          { role: 'assistant', content: text },
+        ],
+      });
+      await conversation.save();
+    }
+
+    res.json({ text, model, conversation });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
     res.status(500).json({ error: 'Error communicating with AI' });

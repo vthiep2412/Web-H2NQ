@@ -10,6 +10,7 @@ import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
 import LiquidBackground from '../components/LiquidBackground';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import HistoryNavbar from '../components/HistoryNavbar';
 import '../App.css';
 import './AIPage.css';
 import '../gradient.css';
@@ -22,6 +23,7 @@ function AIPage() {
   );
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
+  const [isHistoryNavbarVisible, setIsHistoryNavbarVisible] = useState(false); // New state for history navbar
   const [manualNavOpen, setManualNavOpen] = useState(false);
   const [manualNavClose, setManualNavClose] = useState(false);
   const [activeView, setActiveView] = useState('chat1');
@@ -50,6 +52,8 @@ function AIPage() {
 
   // Chat State
   const [messages, setMessages] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [activeConversationId, setActiveConversationId] = useState(null);
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
@@ -111,11 +115,33 @@ function AIPage() {
 
 
   useEffect(() => {
-    fetch('/api/messages')
-      .then(res => res.json())
-      .then(data => setMessages(data))
-      .catch(err => console.error('Error fetching messages:', err));
-  }, []);
+    const fetchConversations = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/conversations', {
+          headers: {
+            'x-auth-token': token,
+          },
+        });
+        const data = await res.json();
+        setConversations(data);
+        if (data.length > 0) {
+          setActiveConversationId(data[0]._id);
+          const mappedMessages = data[0].messages.map(msg => ({
+            sender: msg.role === 'assistant' ? 'ai' : 'user',
+            text: msg.content
+          }));
+          setMessages(mappedMessages);
+        }
+      } catch (err) {
+        console.error('Error fetching conversations:', err);
+      }
+    };
+
+    if (user) {
+      fetchConversations();
+    }
+  }, [user]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -171,6 +197,12 @@ useEffect(() => {
       console.log("Sending message from client...");
       const newMessage = { text: message, sender: 'user' };
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
+
+      const conversationHistory = messages.map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'assistant',
+        content: msg.text,
+      }));
+
       setMessages([...messages, newMessage, loadingMessage]);
 
       const startTime = Date.now();
@@ -179,14 +211,14 @@ useEffect(() => {
       }, 100);
 
       try {
-        const token = localStorage.getItem('token'); // Get token from localStorage
+        const token = localStorage.getItem('token');
         const response = await fetch('/api/messages', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-auth-token': token, // Add token to headers
+            'x-auth-token': token,
           },
-          body: JSON.stringify({ message, model: selectedModel }),
+          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId }),
         });
 
         clearInterval(timerRef.current);
@@ -201,7 +233,18 @@ useEffect(() => {
 
         const data = await response.json();
         const thinkingTime = (Date.now() - startTime) / 1000;
-        setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model, thinkingTime }]);
+
+        if (data.conversation && !activeConversationId) {
+          setConversations(prev => [data.conversation, ...prev]);
+          setActiveConversationId(data.conversation._id);
+          const mappedMessages = data.conversation.messages.map(msg => ({
+            sender: msg.role === 'assistant' ? 'ai' : 'user',
+            text: msg.content
+          }));
+          setMessages(mappedMessages);
+        } else {
+            setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { text: data.text, sender: 'ai', model: data.model, thinkingTime }]);
+        }
       } catch (error) {
         console.error('Error sending message:', error);
         clearInterval(timerRef.current);
@@ -260,6 +303,10 @@ useEffect(() => {
     setIsProfileNavbarVisible(!isProfileNavbarVisible);
   };
 
+  const toggleHistoryNavbar = () => {
+    setIsHistoryNavbarVisible(!isHistoryNavbarVisible);
+  };
+
   const handleModelChange = (model) => {
     setSelectedModel(model);
   };
@@ -274,6 +321,32 @@ useEffect(() => {
   const handleBackgroundChange = (background) => {
     setSelectedBackground(background);
   };
+
+  const handleSelectConversation = (conversationId) => {
+    const conversation = conversations.find(c => c._id === conversationId);
+    if (conversation) {
+      setActiveConversationId(conversationId);
+      const mappedMessages = conversation.messages.map(msg => ({
+        sender: msg.role === 'assistant' ? 'ai' : 'user',
+        text: msg.content
+      }));
+      setMessages(mappedMessages);
+    }
+  };
+
+  const handleNewConversation = () => {
+    setActiveConversationId(null);
+    const greetings = [
+      'Hello! How can I help you today?',
+      'Hi there! What can I do for you?',
+      'Greetings! What are we working on?',
+      'Welcome! Ask me anything.',
+      'Hey! Ready to get started?',
+    ];
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    setMessages([{ text: randomGreeting, sender: 'ai' }]);
+  };
+
   const renderActiveView = () => {
     const viewType = activeView.replace(/[0-9]/g, '');
     const userMessages = messages.filter(msg => msg.sender === 'user').slice(-50);
@@ -298,6 +371,8 @@ useEffect(() => {
                   timer={timer}
                   isNavbarVisible={isNavbarVisible}
                   userMessages={userMessages}
+                  toggleHistoryNavbar={toggleHistoryNavbar} // Pass toggle function
+                  onNewConversation={handleNewConversation} // Pass new conversation function
                 />;
     }
   }
@@ -362,6 +437,9 @@ useEffect(() => {
               user={user} // Pass user object
             />
           )}
+        </div>
+        <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
+          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} />
         </div>
       </div>
     </div>
