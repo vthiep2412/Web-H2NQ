@@ -1,0 +1,81 @@
+.introduction-page {
+    position: relative;
+}
+
+/* Give content a higher z-index to appear above stripes */
+.intro-content-main > * {
+    position: relative;
+    z-index: 2;
+}
+
+.content-below {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* Styles for the Introduction Page */
+
+.features-section,
+.big-boxes-section,
+.contributors-section {
+  padding: 5rem 2rem;
+}
+
+.feature-box,
+.big-box,
+.contributor-box {
+  height: 100%;
+  border: 1px solid var(--bs-border-color);
+  background-color: rgba(var(--bs-body-bg-rgb), 0.8);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-box:hover,
+.big-box:hover,
+.contributor-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+}
+
+.big-box .card-body {
+    padding: 2rem;
+}
+
+.big-box .card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.text-center{
+    margin-bottom: 1rem;
+}
+
+.btn-outline-light{
+    margin: .5rem;
+}
+
+@media screen and (max-width: 576px){
+    .navbar-collapse{
+        display: flex;
+        flex-grow: 1;
+        flex-basis: 100%;
+        align-items: stretch;
+        justify-content: center;
+        flex-wrap: nowrap;
+        flex-direction: column;
+    }
+    .theme-toggle-btn{
+        margin-left: auto !important;
+        margin-right: auto;
+    }
+}
+
+.btn-outline-dark{
+    margin: .2rem !important;
+}
+
+.btn-dark{
+    margin: .2rem;
+}
