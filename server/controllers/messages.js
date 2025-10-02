@@ -42,6 +42,9 @@ exports.sendMessage = async (req, res) => {
             messages: [{ role: 'user', content: message }],
             model,
           });
+          if (!completion || !completion.choices || completion.choices.length === 0) {
+            throw new Error('OpenAI API returned an unexpected response format (no choices).');
+          }
           text = completion.choices[0].message.content;
           response = { text, model };
           break; // Success, exit loop

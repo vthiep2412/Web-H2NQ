@@ -93,7 +93,7 @@ const AuthPage = () => {
                         <h1>Sign In</h1>
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        <a href="#">Forgot your password?</a>
+                        <button type="button" className="forgot-password-btn">Forgot your password?</button>
                         <button type="submit">Sign In</button>
                     </form>
                 </div>
