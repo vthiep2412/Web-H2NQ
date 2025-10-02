@@ -9,7 +9,7 @@ const AuthPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState(''); // New state for confirm password
-    const [avatarUrl, setAvatarUrl] = useState(''); // Re-add state for avatar URL
+    const [avatarUrl] = useState(''); // Re-add state for avatar URL
     const [theme, setTheme] = useState(
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
