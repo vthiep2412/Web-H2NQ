@@ -21,6 +21,12 @@ const ConversationSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      model: {
+        type: String,
+      },
+      thinkingTime: {
+        type: Number,
+      },
     },
   ],
   createdAt: {

@@ -40,6 +40,7 @@ exports.sendMessage = async (req, res) => {
 
     const truncatedHistory = truncateHistory(history, MAX_CONTEXT_LENGTH);
 
+    const startTime = Date.now();
     let text;
     if (model.startsWith('gemini')) {
       const geminiModel = genAI.getGenerativeModel({ model });
@@ -97,6 +98,7 @@ exports.sendMessage = async (req, res) => {
       });
       text = chatCompletion.choices[0].message.content;
     }
+    const thinkingTime = (Date.now() - startTime) / 1000;
 
     user.tokenLeft -= 1;
     await user.save();
@@ -106,7 +108,7 @@ exports.sendMessage = async (req, res) => {
       conversation = await Conversation.findById(conversationId);
       if (conversation) {
         conversation.messages.push({ role: 'user', content: message });
-        conversation.messages.push({ role: 'assistant', content: text });
+        conversation.messages.push({ role: 'assistant', content: text, model, thinkingTime });
         await conversation.save();
       }
     } else {
@@ -127,13 +129,13 @@ exports.sendMessage = async (req, res) => {
         title,
         messages: [
           { role: 'user', content: message },
-          { role: 'assistant', content: text },
+          { role: 'assistant', content: text, model, thinkingTime },
         ],
       });
       await conversation.save();
     }
 
-    res.json({ text, model, conversation, user });
+    res.json({ text, model, conversation, user, thinkingTime });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
     res.status(500).json({ error: 'Error communicating with AI' });

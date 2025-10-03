@@ -129,7 +129,9 @@ function AIPage() {
           setActiveConversationId(data[0]._id);
           const mappedMessages = data[0].messages.map(msg => ({
             sender: msg.role === 'assistant' ? 'ai' : 'user',
-            text: msg.content
+            text: msg.content,
+            model: msg.model,
+            thinkingTime: msg.thinkingTime,
           }));
           setMessages(mappedMessages);
         }
@@ -231,8 +233,7 @@ useEffect(() => {
         }
 
         const data = await response.json();
-        const thinkingTime = (Date.now() - startTime) / 1000;
-        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime };
+        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime };
 
         if (data.user) {
           updateUser(data.user);
@@ -244,7 +245,9 @@ useEffect(() => {
           setActiveConversationId(data.conversation._id);
           const mappedMessages = data.conversation.messages.map(msg => ({
             sender: msg.role === 'assistant' ? 'ai' : 'user',
-            text: msg.content
+            text: msg.content,
+            model: msg.model,
+            thinkingTime: msg.thinkingTime,
           }));
           setMessages(mappedMessages);
         } else {
@@ -253,7 +256,8 @@ useEffect(() => {
           // Update the conversations state as well
           setConversations(prevConvos => prevConvos.map(convo => {
             if (convo._id === activeConversationId) {
-              return { ...convo, messages: [...convo.messages, {role: 'user', content: message}, {role: 'assistant', content: data.text}] };
+              const newMessages = [...convo.messages, {role: 'user', content: message}, {role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime}];
+              return { ...convo, messages: newMessages };
             }
             return convo;
           }));
@@ -341,7 +345,9 @@ useEffect(() => {
       setActiveConversationId(conversationId);
       const mappedMessages = conversation.messages.map(msg => ({
         sender: msg.role === 'assistant' ? 'ai' : 'user',
-        text: msg.content
+        text: msg.content,
+        model: msg.model,
+        thinkingTime: msg.thinkingTime,
       }));
       setMessages(mappedMessages);
     }
