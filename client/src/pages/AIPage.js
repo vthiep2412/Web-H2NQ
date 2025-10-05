@@ -207,7 +207,7 @@ function AIPage() {
     if (user && activeWorkspace) {
       fetchConversations();
     }
-  }, [userId, activeWorkspace, showGreetingMessage, isGreetingShown]);
+  }, [userId, activeWorkspace, showGreetingMessage, isGreetingShown, user]);
 
   useEffect(() => {
     const updateCurrentConversation = async () => {
