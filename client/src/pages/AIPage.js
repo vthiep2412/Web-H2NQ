@@ -155,6 +155,12 @@ function AIPage() {
       'Greetings! What are we working on?',
       'Welcome! Ask me anything.',
       'Hey! Ready to get started?',
+      'Hey! What can I help you with? Let’s make something amazing happen!',
+      'Hello! How can I assist you today?',
+      'Hi there! Ready to tackle any challenge or chat about anything.',
+      'Hey there! I’m here to assist you. What’s on your mind?',
+      'Greetings! I’m here to help with whatever you need.',
+      'Hello! Life got you puzzled? Let’s figure it out together!',
     ];
     const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
     setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
