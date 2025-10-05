@@ -50,7 +50,6 @@ function AIPage() {
 
   // AI Memory State
   const activeWorkspace = useMemo(() => {
-    console.log("useMemo: Recalculating activeWorkspace");
     return workspaces.find(ws => ws.children.some(child => child.id === activeView));
   }, [workspaces, activeView]);
   const memories = activeWorkspace ? activeWorkspace.memories : [];
@@ -67,13 +66,11 @@ function AIPage() {
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
-  const [isTypingAnimationComplete, setIsTypingAnimationComplete] = useState(true); // New state
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
 
   const handleTypingComplete = useCallback(() => {
-    setIsTypingAnimationComplete(true);
     setShouldFetchConversations(true); // Trigger conversation fetch after typing is complete
   }, []);
 
@@ -235,14 +232,17 @@ function AIPage() {
       }
     };
     updateCurrentConversation();
-  }, [shouldFetchConversations, activeConversationId]);
+  }, [shouldFetchConversations, activeConversationId, user]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
 useEffect(() => {
-    scrollToBottom();
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 500);
+    return () => clearTimeout(timer);
   }, [messages]);
 
   useEffect(() => {
@@ -297,7 +297,6 @@ useEffect(() => {
       }));
 
       setMessages([...messages, userMessage, loadingMessage]);
-      setIsTypingAnimationComplete(false); // Reset for new AI message
       setShouldFetchConversations(false); // Prevent premature fetch
 
       const startTime = Date.now();
@@ -429,6 +428,13 @@ useEffect(() => {
     setActiveView(viewId);
     if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
       toggleNavbar(false);
+    }
+    // Check if the new view is an AI Chat view
+    if (viewId.endsWith('-chat')) {
+      // Delay scrolling to ensure the ChatView component has rendered and messages are in place
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     }
   };
 

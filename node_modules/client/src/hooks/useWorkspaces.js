@@ -1,10 +1,39 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChatDots, Cpu, JournalCode, Hdd } from 'react-bootstrap-icons';
 import { useAuth } from '../context/AuthContext';
 
+// Basic deep comparison utility for arrays of objects
+const deepEqual = (a, b) => {
+  if (a === b) return true;
+  if (a == null || typeof a != "object" ||
+      b == null || typeof b != "object") return false;
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; i++) {
+    const objA = a[i];
+    const objB = b[i];
+
+    if (objA === objB) continue;
+    if (objA == null || typeof objA != "object" ||
+        objB == null || typeof objB != "object") return false;
+
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
+
+    if (keysA.length !== keysB.length) return false;
+
+    for (const key of keysA) {
+      if (!keysB.includes(key) || objA[key] !== objB[key]) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 const useWorkspaces = () => {
   const [workspaces, setWorkspaces] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const loadingRef = useRef(false); // Use useRef for loading state
   const { user } = useAuth();
 
   const addWorkspace = useCallback(async (name) => {
@@ -30,7 +59,13 @@ const useWorkspaces = () => {
               { id: `${data._id}-store`, name: 'Storage', icon: <Hdd className="me-2" /> },
             ]
         };
-        setWorkspaces(prev => [...prev, newWorkspace]);
+        setWorkspaces(prev => {
+          const newWorkspaces = [...prev, newWorkspace];
+          if (!deepEqual(prev, newWorkspaces)) {
+            return newWorkspaces;
+          }
+          return prev;
+        });
       } catch (err) {
         console.error('Error adding workspace:', err);
       }
@@ -38,8 +73,8 @@ const useWorkspaces = () => {
   }, []);
 
   const getWorkspaces = useCallback(async () => {
-    if (loading) return;
-    setLoading(true);
+    if (loadingRef.current) return; // Read from ref
+    loadingRef.current = true; // Update ref
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/workspaces', {
@@ -58,15 +93,20 @@ const useWorkspaces = () => {
           { id: `${ws._id}-store`, name: 'Storage', icon: <Hdd className="me-2" /> },
         ]
       }));
-      setWorkspaces(workspacesWithChildren);
+      setWorkspaces(prev => {
+        if (!deepEqual(prev, workspacesWithChildren)) {
+          return workspacesWithChildren;
+        }
+        return prev;
+      });
       return workspacesWithChildren;
     } catch (err) {
       console.error('Error fetching workspaces:', err);
       return [];
     } finally {
-      setLoading(false);
+      loadingRef.current = false; // Update ref
     }
-  }, []);
+  }, []); // Empty dependency array for stability
 
   useEffect(() => {
     const fetchAndCreate = async () => {
@@ -93,9 +133,15 @@ const useWorkspaces = () => {
           body: JSON.stringify({ name: newName }),
         });
         const data = await res.json();
-        setWorkspaces(workspaces.map(ws => 
-          ws.id === workspaceId ? { ...ws, name: data.name } : ws
-        ));
+        setWorkspaces(prev => {
+          const newWorkspaces = prev.map(ws => 
+            ws.id === workspaceId ? { ...ws, name: data.name } : ws
+          );
+          if (!deepEqual(prev, newWorkspaces)) {
+            return newWorkspaces;
+          }
+          return prev;
+        });
       } catch (err) {
         console.error('Error editing workspace:', err);
       }
@@ -111,7 +157,13 @@ const useWorkspaces = () => {
           'x-auth-token': token,
         },
       });
-      setWorkspaces(workspaces.filter(ws => ws.id !== workspaceId));
+      setWorkspaces(prev => {
+        const newWorkspaces = prev.filter(ws => ws.id !== workspaceId);
+        if (!deepEqual(prev, newWorkspaces)) {
+          return newWorkspaces;
+        }
+        return prev;
+      });
     } catch (err) {
       console.error('Error deleting workspace:', err);
     }
@@ -129,9 +181,15 @@ const useWorkspaces = () => {
         body: JSON.stringify({ memories }),
       });
       const data = await res.json();
-      setWorkspaces(workspaces.map(ws =>
-        ws.id === workspaceId ? { ...ws, memories: data.memories } : ws
-      ));
+      setWorkspaces(prev => {
+        const newWorkspaces = prev.map(ws =>
+          ws.id === workspaceId ? { ...ws, memories: data.memories } : ws
+        );
+        if (!deepEqual(prev, newWorkspaces)) {
+          return newWorkspaces;
+        }
+        return prev;
+      });
     } catch (err) {
       console.error('Error updating workspace memories:', err);
     }

@@ -45,7 +45,7 @@ const VerticalNavbar = React.memo(({
     if (workspaces.length > 0 && Object.keys(open).length === 0) {
       setOpen(prevOpen => ({ ...prevOpen, [workspaces[0].id]: true }));
     }
-  }, [workspaces]);
+  }, [workspaces, open]);
 
   const toggleWorkspace = (id) => {
     setOpen(prevOpen => ({ ...prevOpen, [id]: !prevOpen[id] }));
