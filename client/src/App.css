@@ -681,7 +681,7 @@ h
 }
 
 .btn{
-  margin: .5rem !important;
+  /* margin: .5rem !important; */
   border-radius: 10px;
 }
 
@@ -701,7 +701,7 @@ h
     display: flex;
     flex-grow: 1;
     flex-basis: 100%;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-content: stretch;
     align-items: center;

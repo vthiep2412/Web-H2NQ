@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
+const Workspace = require('../models/Workspace');
 
 // @route   POST api/auth/register
 // @desc    Register a user
@@ -47,6 +48,13 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
+
+      const newWorkspace = new Workspace({
+        userId: user.id,
+        name: 'Your workspace',
+      });
+
+      await newWorkspace.save();
 
       const payload = {
         user: {

@@ -7,6 +7,11 @@ const ConversationSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
+  workspaceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Workspace',
+    required: true,
+  },
   title: {
     type: String,
     default: 'New Chat',

@@ -12,6 +12,23 @@
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--bs-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-header .close-button {
+  background: none;
+  border: none;
+  color: var(--bs-body-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.history-header .close-button:hover {
+  color: var(--bs-primary);
 }
 
 .history-list {

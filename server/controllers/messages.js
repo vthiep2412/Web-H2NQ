@@ -19,18 +19,19 @@ exports.getMessages = (req, res) => {
 
 const truncateHistory = (history, maxLength) => {
   let totalLength = history.reduce((sum, msg) => sum + msg.content.length, 0);
+  let truncated = false;
   while (totalLength > maxLength && history.length > 0) {
     const removedMessage = history.shift(); // Remove the oldest message
     totalLength -= removedMessage.content.length;
+    truncated = true;
   }
-  return history;
+  return { history, truncated };
 };
 
 exports.sendMessage = async (req, res) => {
   console.log("Received message, sending to AI...");
-  const { message, model, history, conversationId } = req.body;
+  const { message, model, history, conversationId, memories, workspaceId } = req.body;
   const userId = req.user.id;
-  const MAX_CONTEXT_LENGTH = 256 * 1024; // 256k characters
 
   try {
     const user = await User.findById(userId);
@@ -38,17 +39,42 @@ exports.sendMessage = async (req, res) => {
       return res.status(403).json({ error: 'You have no tokens left.' });
     }
 
-    const truncatedHistory = truncateHistory(history, MAX_CONTEXT_LENGTH);
+    const MAX_CONTEXT_LENGTH = user.tier === 'free' ? 256000 : 1000000;
+
+    let fullHistory = [...history];
+    if (memories && memories.length > 0) {
+      const memorySystemPrompt = {
+        role: 'system',
+        content: `Please follow these rules when responding:
+${memories.map(mem => `- ${mem.text}`).join('\n')}`
+      };
+      fullHistory.unshift(memorySystemPrompt);
+    }
+
+    const { history: truncatedHistory, truncated } = truncateHistory(fullHistory, MAX_CONTEXT_LENGTH);
 
     const startTime = Date.now();
     let text;
     if (model.startsWith('gemini')) {
       const geminiModel = genAI.getGenerativeModel({ model });
-      const geminiHistory = truncatedHistory.map(msg => ({
-        role: msg.role === 'assistant' ? 'model' : msg.role,
+
+      const systemInstruction = truncatedHistory.find(msg => msg.role === 'system')?.content;
+      const historyWithoutSystem = truncatedHistory.filter(msg => msg.role !== 'system');
+
+      const geminiHistory = historyWithoutSystem.map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }],
       }));
-      const result = await geminiModel.generateContent({ contents: [...geminiHistory, { role: 'user', parts: [{ text: message }] }] });
+
+      const request = {
+        contents: [...geminiHistory, { role: 'user', parts: [{ text: message }] }]
+      };
+
+      if (systemInstruction) {
+        request.systemInstruction = systemInstruction;
+      }
+
+      const result = await geminiModel.generateContent(request);
       const response = await result.response;
       text = response.text();
     } else if (model.startsWith('gpt')) {
@@ -126,6 +152,7 @@ exports.sendMessage = async (req, res) => {
 
       conversation = new Conversation({
         userId,
+        workspaceId,
         title,
         messages: [
           { role: 'user', content: message },
@@ -135,7 +162,7 @@ exports.sendMessage = async (req, res) => {
       await conversation.save();
     }
 
-    res.json({ text, model, conversation, user, thinkingTime });
+    res.json({ text, model, conversation, user, thinkingTime, truncated });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
     res.status(500).json({ error: 'Error communicating with AI' });

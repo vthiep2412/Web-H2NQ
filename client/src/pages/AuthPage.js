@@ -106,7 +106,7 @@ const AuthPage = () => {
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                        <button type="submit">Sign Up</button>
+                        <button type="submit" id="signUpBtn" style={{ marginTop: '10px' }}>Sign Up</button>
                         <span className={styles.mobileToggleLink} onClick={handleSignInClick}>Already have an account? Sign In</span>
                     </form>
                 </div>

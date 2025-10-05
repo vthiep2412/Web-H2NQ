@@ -15,7 +15,7 @@ const formatTime = (seconds) => {
   return `${minutes} minute${minutes > 1 ? 's' : ''} ${remainingSeconds.toFixed(1)} seconds`;
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation }) => {
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete }) => {
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -39,12 +39,12 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                         <div className="loading-container">
                           <span className="thinking-text">Thinking</span>
                           <span className="thinking-dots">
-                            <span>.</span><span>.</span><span>.</span>
+                            <span>.</span><span>.</span><span>...</span>
                           </span>
                           <span>{timer.toFixed(1)}s</span>
                         </div>
                       ) : msg.sender === 'ai' ? (
-                        <TypingEffect text={msg.text} />
+                        <TypingEffect text={msg.text} isNew={msg.isNew} onComplete={onTypingComplete} />
                       ) : (
                         msg.text
                       )}
@@ -61,7 +61,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
       </main>
       <footer className="p-3 chat-footer">
         <Container>
-          <ChatInput selectedModel={selectedModel} onSubmit={onSubmit} onLocalChat={onLocalChat} userMessages={userMessages} onNewConversation={onNewConversation} />
+          <ChatInput selectedModel={selectedModel} onSubmit={onSubmit} onLocalChat={onLocalChat} userMessages={userMessages} onNewConversation={onNewConversation} onTestModal={onTestModal} />
         </Container>
       </footer>
     </>

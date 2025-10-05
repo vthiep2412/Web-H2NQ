@@ -13,7 +13,7 @@ const calculateContextSize = (messages) => {
 // @desc    Save a new conversation
 // @access  Private
 router.post('/', auth, async (req, res) => {
-  const { title, messages } = req.body;
+  const { title, messages, workspaceId } = req.body;
   const userId = req.user.id;
   const userTier = req.user.tier;
 
@@ -26,14 +26,15 @@ router.post('/', auth, async (req, res) => {
     }
 
     const contextSize = calculateContextSize(messages);
-    const maxContextSize = userTier === 'free' ? 256 * 1024 : 1024 * 1024; // 256KB for free, 1MB for pro/admin
+    const maxContextSize = userTier === 'free' ? 256000 : 1000000;
 
     if (contextSize > maxContextSize) {
-      return res.status(403).json({ msg: `Conversation context exceeds ${maxContextSize / 1024}KB limit for your ${userTier} tier.` });
+      return res.status(403).json({ msg: `Conversation context exceeds ${maxContextSize / 1000}K character limit for your ${userTier} tier.` });
     }
 
     const newConversation = new Conversation({
       userId,
+      workspaceId,
       title: title || 'New Chat',
       messages,
     });
@@ -51,11 +52,14 @@ router.post('/', auth, async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
   const userId = req.user.id;
-  const userTier = req.user.tier;
+  const { workspaceId } = req.query;
+
+  if (!workspaceId) {
+    return res.json([]);
+  }
 
   try {
-    const maxConversations = userTier === 'free' ? 5 : 10;
-    const conversations = await Conversation.find({ userId }).sort({ updatedAt: -1 }).limit(maxConversations);
+    const conversations = await Conversation.find({ userId, workspaceId }).sort({ updatedAt: -1 });
     res.json(conversations);
   } catch (err) {
     console.error(err.message);

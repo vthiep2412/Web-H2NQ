@@ -4,11 +4,11 @@ import { Paperclip, SendFill, Camera, PlusCircle } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 import { getLabelForModel } from '../utils/models';
 
-const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation }) => { 
+const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation, onTestModal }) => {
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [tempInput, setTempInput] = useState(''); 
+  const [tempInput, setTempInput] = useState('');
   const handleAttachClick = () => {
     fileInputRef.current.click();
   };
@@ -34,7 +34,7 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
     e.preventDefault();
     const trimmedInput = input.trim();
     if (trimmedInput.startsWith('/chat')) {
-      const regex = /\/chat\s+"(.*?)"\s+"(ai|me)"/;
+      const regex = /^\/chat\s+"(.*?)"\s+"(ai|me)"$/;
       const match = trimmedInput.match(regex);
 
       if (match) {
@@ -48,6 +48,9 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
         console.error(errorMessage);
         onLocalChat(errorMessage, 'ai');
       }
+    } else if (trimmedInput === '/testmodal') {
+      onTestModal();
+      setInput('');
     } else if (trimmedInput) {
       onSubmit(trimmedInput);
       setInput('');
@@ -98,13 +101,13 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
   return (
     <Form onSubmit={handleSubmit}>
       <InputGroup className="chat-input-group">
-        <Button variant="secondary" className="attach-btn" onClick={onNewConversation} style={{ borderTopLeftRadius: '50px', borderBottomLeftRadius: '50px' }}>
+        <Button variant="secondary" className="attach-btn"onClick={onNewConversation} style={{ borderTopLeftRadius: '50px',borderBottomLeftRadius: '50px' }}>
           <PlusCircle />
         </Button>
-        <Button variant="secondary" className="attach-btn" onClick={handleAttachClick}>
+        <Button variant="secondary" className="attach-btn"onClick={handleAttachClick}>
           <Paperclip />
         </Button>
-        <Button variant="secondary" className="attach-btn d-lg-none" onClick={handleCameraClick}>
+        <Button variant="secondary" className="attach-btn d-lg-none"onClick={handleCameraClick}>
           <Camera />
         </Button>
         <Form.Control
@@ -122,7 +125,8 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
           onKeyDown={handleKeyDown}
           className="form-control chat-input chat-textarea"
           style={textareaStyle} />
-        <Button variant="primary" type="submit" className="send-btn" style={{ borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>
+        <Button variant="primary" type="submit" className="send-btn" style={{
+borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>
           <SendFill />
         </Button>
       </InputGroup>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Nav, Collapse, Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { 
   ChevronDown, 
@@ -20,13 +20,32 @@ const VerticalNavbar = React.memo(({
   editWorkspace,
   deleteWorkspace,
   toggleHistoryNavbar,
-  isHistoryNavbarVisible
+  isHistoryNavbarVisible,
+  toggleNavbar // Added toggleNavbar prop
 }) => {
-  const [open, setOpen] = useState({ ws1: true });
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 576) {
+        toggleNavbar(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [toggleNavbar]);
+  const [open, setOpen] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [editingWorkspaceId, setEditingWorkspaceId] = useState(null);
   const [editingName, setEditingName] = useState('');
+
+  useEffect(() => {
+    if (workspaces.length > 0 && Object.keys(open).length === 0) {
+      setOpen(prevOpen => ({ ...prevOpen, [workspaces[0].id]: true }));
+    }
+  }, [workspaces]);
 
   const toggleWorkspace = (id) => {
     setOpen(prevOpen => ({ ...prevOpen, [id]: !prevOpen[id] }));
@@ -107,7 +126,13 @@ const VerticalNavbar = React.memo(({
               ) : (
                 <>
                   <Nav.Link 
-                    onClick={() => { toggleWorkspace(ws.id); onViewChange(ws.children[0]?.id || ws.id); }} 
+                    onClick={() => {
+                      toggleWorkspace(ws.id);
+                      onViewChange(ws.children[0]?.id || ws.id);
+                      if (window.innerWidth < 576) {
+                        toggleNavbar(false);
+                      }
+                    }} 
                     aria-expanded={open[ws.id]} 
                     className="workspace-toggle flex-grow-1"
                   >
@@ -120,7 +145,7 @@ const VerticalNavbar = React.memo(({
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger overlay={<Tooltip>Delete</Tooltip>}>
-                    <Button variant="link" onClick={() => handleDelete(ws.id)} className="p-1 text-dark mb-2 theme-aware-button">
+                    <Button variant="link" onClick={() => handleDelete(ws.id)} className="p-1 text-dark mb-2 theme-aware-button" disabled={workspaces.length <= 1}>
                       <Trash size={16} />
                     </Button>
                   </OverlayTrigger>
@@ -133,14 +158,24 @@ const VerticalNavbar = React.memo(({
                   <Nav.Link 
                     key={child.id} 
                     active={activeView === child.id}
-                    onClick={() => onViewChange(child.id)}
+                    onClick={() => {
+                      onViewChange(child.id);
+                      if (window.innerWidth < 576) {
+                        toggleNavbar(false);
+                      }
+                    }}
                   >
                     {child.icon}
                     {child.name}
                   </Nav.Link>
                 ))}
                 <Nav.Link 
-                  onClick={toggleHistoryNavbar}
+                  onClick={() => {
+                    toggleHistoryNavbar();
+                    if (window.innerWidth < 576) {
+                      toggleNavbar(false);
+                    }
+                  }}
                   active={isHistoryNavbarVisible}
                 >
                   <ClockHistory className="me-2" /> History

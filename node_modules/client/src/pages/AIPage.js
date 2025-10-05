@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Header from '../components/Header';
 import VerticalNavbar from '../components/VerticalNavbar';
 import ProfileNavbar from '../components/ProfileNavbar'; // New
@@ -11,6 +11,7 @@ import useWorkspaces from '../hooks/useWorkspaces';
 import LiquidBackground from '../components/LiquidBackground';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import HistoryNavbar from '../components/HistoryNavbar';
+import Modal from '../components/Modal';
 import '../App.css';
 import './AIPage.css';
 import '../gradient.css';
@@ -45,7 +46,14 @@ function AIPage() {
   const [selectedBackground, setSelectedBackground] = useState('none');
 
   // Workspace State
-  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace } = useWorkspaces();
+  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories } = useWorkspaces();
+
+  // AI Memory State
+  const activeWorkspace = useMemo(() => {
+    console.log("useMemo: Recalculating activeWorkspace");
+    return workspaces.find(ws => ws.children.some(child => child.id === activeView));
+  }, [workspaces, activeView]);
+  const memories = activeWorkspace ? activeWorkspace.memories : [];
 
   // Model State
   const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
@@ -54,11 +62,34 @@ function AIPage() {
   const [messages, setMessages] = useState([]);
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
+  const [isGreetingShown, setIsGreetingShown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
+  const [isTypingAnimationComplete, setIsTypingAnimationComplete] = useState(true); // New state
+  const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
+
+  const handleTypingComplete = useCallback(() => {
+    setIsTypingAnimationComplete(true);
+    setShouldFetchConversations(true); // Trigger conversation fetch after typing is complete
+  }, []);
+
+  const addMemory = (text) => {
+    if (text && activeWorkspace) {
+      const newMemories = [...memories, { text }];
+      updateWorkspaceMemories(activeWorkspace.id, newMemories);
+    }
+  };
+
+  const deleteMemory = (id) => {
+    if (activeWorkspace) {
+      const newMemories = memories.filter(mem => mem._id !== id);
+      updateWorkspaceMemories(activeWorkspace.id, newMemories);
+    }
+  };
 
   const toggleNavbar = useCallback((forceState) => {
     const isManualToggle = forceState === null || forceState === undefined;
@@ -115,10 +146,40 @@ function AIPage() {
 
 
   useEffect(() => {
+    if (workspaces.length > 0 && activeView === 'chat1') {
+      setActiveView(workspaces[0].children[0].id);
+    }
+  }, [workspaces, activeView]);
+
+  const showGreetingMessage = useCallback(() => {
+    const greetings = [
+      'Hello! How can I help you today?',
+      'Hi there! What can I do for you?',
+      'Greetings! What are we working on?',
+      'Welcome! Ask me anything.',
+      'Hey! Ready to get started?',
+    ];
+    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
+    setIsGreetingShown(true);
+  }, []);
+
+  const userId = user?._id;
+  const initialFetchDone = useRef(false);
+
+  useEffect(() => {
     const fetchConversations = async () => {
+      if (!activeWorkspace) {
+        return;
+      }
+      // Only run initial fetch once
+      if (initialFetchDone.current) {
+        return;
+      }
+
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('/api/conversations', {
+        const res = await fetch(`/api/conversations?workspaceId=${activeWorkspace.id}`, {
           headers: {
             'x-auth-token': token,
           },
@@ -132,18 +193,49 @@ function AIPage() {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
+            isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
+        } else if (!isGreetingShown) {
+          showGreetingMessage();
+          setActiveConversationId(null);
         }
       } catch (err) {
-        console.error('Error fetching conversations:', err);
+        console.error('Initial fetchConversations: Error fetching conversations:', err);
+      } finally {
+        initialFetchDone.current = true; // Mark initial fetch as done
       }
     };
 
-    if (user) {
+    if (user && activeWorkspace) {
       fetchConversations();
     }
-  }, [user]);
+  }, [userId, activeWorkspace, showGreetingMessage, isGreetingShown]);
+
+  useEffect(() => {
+    const updateCurrentConversation = async () => {
+      if (shouldFetchConversations && activeConversationId) {
+        try {
+          const token = localStorage.getItem('token');
+          const res = await fetch(`/api/conversations/${activeConversationId}`, {
+            headers: {
+              'x-auth-token': token,
+            },
+          });
+          const data = await res.json();
+          setConversations(prevConvos => prevConvos.map(convo => 
+            convo._id === activeConversationId ? data : convo
+          ));
+          setShouldFetchConversations(false); // Reset after fetching
+        } catch (err) {
+          console.error('Error updating current conversation:', err);
+        }
+      } else if (shouldFetchConversations && !activeConversationId) {
+      } else {
+      }
+    };
+    updateCurrentConversation();
+  }, [shouldFetchConversations, activeConversationId]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -205,6 +297,8 @@ useEffect(() => {
       }));
 
       setMessages([...messages, userMessage, loadingMessage]);
+      setIsTypingAnimationComplete(false); // Reset for new AI message
+      setShouldFetchConversations(false); // Prevent premature fetch
 
       const startTime = Date.now();
       timerRef.current = setInterval(() => {
@@ -219,7 +313,7 @@ useEffect(() => {
             'Content-Type': 'application/json',
             'x-auth-token': token,
           },
-          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId }),
+          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id }),
         });
 
         clearInterval(timerRef.current);
@@ -233,14 +327,16 @@ useEffect(() => {
         }
 
         const data = await response.json();
-        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime };
+        if (data.truncated) {
+          setShowModal(true);
+        }
+        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, isNew: true }; // New AI messages are new
 
         if (data.user) {
           updateUser(data.user);
         }
 
         if (data.conversation && !activeConversationId) {
-          // New conversation was created
           setConversations(prev => [data.conversation, ...prev]);
           setActiveConversationId(data.conversation._id);
           const mappedMessages = data.conversation.messages.map(msg => ({
@@ -248,10 +344,10 @@ useEffect(() => {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
+            isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
         } else {
-          // Existing conversation was updated
           setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), aiMessage]);
           // Update the conversations state as well
           setConversations(prevConvos => prevConvos.map(convo => {
@@ -263,10 +359,11 @@ useEffect(() => {
           }));
         }
       } catch (error) {
-        console.error('Error sending message:', error);
+        console.error('handleSubmit: Error sending message:', error);
         clearInterval(timerRef.current);
         setTimer(0);
         setMessages(prevMessages => prevMessages.filter(m => m.id !== 'loading'));
+      } finally {
       }
     }
   };
@@ -348,26 +445,26 @@ useEffect(() => {
         text: msg.content,
         model: msg.model,
         thinkingTime: msg.thinkingTime,
+        isNew: false, // Loaded messages are not new
       }));
       setMessages(mappedMessages);
+      if (window.innerWidth < 576) {
+        setIsHistoryNavbarVisible(false); // Close history navbar after selection
+      }
     }
   };
 
   const handleNewConversation = () => {
     setActiveConversationId(null);
-    const greetings = [
-      'Hello! How can I help you today?',
-      'Hi there! What can I do for you?',
-      'Greetings! What are we working on?',
-      'Welcome! Ask me anything.',
-      'Hey! Ready to get started?',
-    ];
-    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    setMessages([{ text: randomGreeting, sender: 'ai' }]);
+    showGreetingMessage();
+  };
+
+  const handleTestModal = () => {
+    setShowModal(true);
   };
 
   const renderActiveView = () => {
-    const viewType = activeView.replace(/[0-9]/g, '');
+    const viewType = activeView.split('-').pop();
     const userMessages = messages.filter(msg => msg.sender === 'user').slice(-50);
 
     switch (viewType) {
@@ -376,7 +473,7 @@ useEffect(() => {
       case 'store':
         return <StoragePage />;
       case 'mem':
-        return <AIMemoryPage />;
+        return <AIMemoryPage memories={memories} addMemory={addMemory} deleteMemory={deleteMemory} />;
       case 'settings':
         return <SettingsPage />;
       case 'chat':
@@ -392,6 +489,8 @@ useEffect(() => {
                   userMessages={userMessages}
                   toggleHistoryNavbar={toggleHistoryNavbar} // Pass toggle function
                   onNewConversation={handleNewConversation} // Pass new conversation function
+                  onTestModal={handleTestModal}
+                  onTypingComplete={handleTypingComplete}
                 />;
     }
   }
@@ -429,13 +528,15 @@ useEffect(() => {
             deleteWorkspace={deleteWorkspace}
             toggleHistoryNavbar={toggleHistoryNavbar}
             isHistoryNavbarVisible={isHistoryNavbarVisible}
+            screenSizeRef={screenSizeRef}
+            toggleNavbar={toggleNavbar}
           />
         </div>
         <div className="d-flex flex-column flex-grow-1 idk" style={{ overflow: 'hidden' }}>
           {renderActiveView()}
         </div>
         <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
-          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} />
+          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onClose={toggleHistoryNavbar} />
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           {user && (
@@ -463,6 +564,9 @@ useEffect(() => {
           )}
         </div>
       </div>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <p>The conversation history has been shortened to meet the context limit.</p>
+      </Modal>
     </div>
   );
 }

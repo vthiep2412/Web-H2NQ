@@ -106,8 +106,9 @@ a {
     border: none;
     border-radius: 5px; /* Slightly rounded corners */
     padding: 10px 15px; /* Smaller padding */
-    margin: 8px 0;
+    margin: 4px 0;
     width: 100%;
+    border-radius: 0.8rem;
 }
 
 button {
@@ -339,4 +340,8 @@ button.ghost {
     form {
         background-color: transparent !important;
     }
+}
+
+p {
+    color: white !important;
 }

@@ -60,7 +60,7 @@
 }
 
 .btn-outline-light{
-    margin: .5rem;
+    margin: .2rem;
 }
 
 @media screen and (max-width: 576px){
@@ -79,10 +79,18 @@
     }
 }
 
+.btn{
+    margin: .5rem !important;
+}
+
 .btn-outline-dark{
-    margin: .2rem !important;
+    margin: .2rem ;
 }
 
 .btn-dark{
     margin: .2rem;
+}
+
+.theme-toggle-btn{
+    margin: .2rem ;
 }

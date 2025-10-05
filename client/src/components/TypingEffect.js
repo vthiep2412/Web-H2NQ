@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { Clipboard } from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
@@ -7,33 +7,52 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-const TypingEffect = React.memo(({ text }) => {
+const TypingEffect = React.memo(({ text, isNew, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [words, setWords] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
+    // Clear any existing timeout when props change
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    if (!isNew) {
+      setDisplayedText(text);
+      setWords([]);
+      setCurrentIndex(0);
+      return;
+    }
+
     const splitWords = text.split(' ');
     setWords(splitWords);
     setDisplayedText('');
     setCurrentIndex(0);
-  }, [text]);
+  }, [text, isNew]);
 
   useEffect(() => {
+    if (!isNew) {
+      return;
+    }
+
     if (words.length > 0 && currentIndex < words.length) {
       const wordCount = words.length;
       const baseDelay = 10;
       const delayReduction = Math.floor(wordCount / 100) * 2;
       const finalDelay = Math.max(2, baseDelay - delayReduction);
 
-      const timeout = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setDisplayedText(prev => prev + (currentIndex > 0 ? ' ' : '') + words[currentIndex]);
         setCurrentIndex(prevIndex => prevIndex + 1);
       }, finalDelay);
 
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(timeoutRef.current);
+    } else if (isNew && currentIndex === words.length && onComplete) {
+      onComplete();
     }
-  }, [currentIndex, words]);
+  }, [currentIndex, words, isNew, onComplete]);
 
   return (
     <ReactMarkdown
