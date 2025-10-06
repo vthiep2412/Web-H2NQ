@@ -18,3 +18,7 @@
 [data-bs-theme="dark"] .profile-navbar {
   background-color: transparent !important;
 }
+
+.message-text {
+  white-space: pre-wrap;
+}

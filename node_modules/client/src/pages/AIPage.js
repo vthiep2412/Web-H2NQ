@@ -471,13 +471,14 @@ useEffect(() => {
     showGreetingMessage();
   };
 
-  const handleTestModal = () => {
+  const handleTestModal = useCallback(() => {
     setShowModal(true);
-  };
+  }, []);
+
+  const userMessages = useMemo(() => messages.filter(msg => msg.sender === 'user').slice(-50), [messages]);
 
   const renderActiveView = () => {
     const viewType = activeView.split('-').pop();
-    const userMessages = messages.filter(msg => msg.sender === 'user').slice(-50);
 
     switch (viewType) {
       case 'ide':

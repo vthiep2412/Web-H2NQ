@@ -46,7 +46,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       ) : msg.sender === 'ai' ? (
                         <TypingEffect text={msg.text} isNew={msg.isNew} onComplete={onTypingComplete} />
                       ) : (
-                        msg.text
+                        <div className="message-text">{msg.text}</div>
                       )}
                     </div>
                     {msg.sender === 'ai' && msg.model && <div className="model-name">{getLabelForModel(msg.model)}</div>}
