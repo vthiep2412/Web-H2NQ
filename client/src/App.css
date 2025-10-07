@@ -37,7 +37,8 @@
 .chat-input-group,
 .chat-input,
 .btn,
-.form-control {
+.form-control,
+details.thought-box {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -709,4 +710,43 @@ h
   .navbar-nav .btn {
     width: 100%;
   }
+}
+
+details.thought-box {
+  background-color: #343a40;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #f8f9fa;
+}
+
+summary.thought-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.thought-content {
+  font-style: italic;
+  padding: 10px 0;
+}
+
+[data-bs-theme="light"] details.thought-box {
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+.thought-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+[data-bs-theme="light"] .thought-box {
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+details[open] .thought-content-wrapper {
+  max-height: 500px;
 }

@@ -163,7 +163,7 @@ function AIPage() {
       'Hello! Life got you puzzled? Let’s figure it out together!',
     ];
     const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
+    setMessages([{ text: randomGreeting, sender: 'ai', isNew: false, isGreeting: true }]);
     setIsGreetingShown(true);
   }, []);
 
@@ -196,6 +196,7 @@ function AIPage() {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
+            thought: msg.thought,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -335,7 +336,7 @@ useEffect(() => {
         if (data.truncated) {
           setShowModal(true);
         }
-        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, isNew: true }; // New AI messages are new
+        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, isNew: true, thought: data.thought }; // New AI messages are new
 
         if (data.user) {
           updateUser(data.user);
@@ -349,6 +350,7 @@ useEffect(() => {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
+            thought: msg.thought,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -457,6 +459,7 @@ useEffect(() => {
         text: msg.content,
         model: msg.model,
         thinkingTime: msg.thinkingTime,
+        thought: msg.thought,
         isNew: false, // Loaded messages are not new
       }));
       setMessages(mappedMessages);

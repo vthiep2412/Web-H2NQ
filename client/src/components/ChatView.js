@@ -34,6 +34,14 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                   {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
                   <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
                     {msg.sender === 'ai' && msg.thinkingTime && <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>}
+                    {msg.sender === 'ai' && msg.thought && (
+                      <details className="thought-box">
+                        <summary className="thought-title">Thought</summary>
+                        <div className="thought-content-wrapper">
+                            <div className="thought-content">{msg.thought}</div>
+                        </div>
+                      </details>
+                    )}
                     <div className={`message-bubble ${msg.sender} ${msg.type === 'error' ? 'error-bubble' : ''}`} style={msg.sender === 'ai' ? aiMessageBubbleStyle : {}}>
                       {msg.type === 'loading' ? (
                         <div className="loading-container">
