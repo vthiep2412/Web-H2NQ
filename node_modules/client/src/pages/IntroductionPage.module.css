@@ -1,20 +1,20 @@
-.introduction-page {
+.introductionPage {
     position: relative;
 }
 
 /* Give content a higher z-index to appear above stripes */
-.intro-content-main > * {
+.introContentMain > * {
     position: relative;
     z-index: 2;
 }
 
-.intro-logo {
+.introLogo {
     max-width: 150px; /* Adjust size as needed */
     height: auto;
     margin-bottom: 20px;
 }
 
-.content-below {
+.contentBelow {
     position: relative;
     z-index: 2;
 }
@@ -22,10 +22,10 @@
 
 /* Styles for the Introduction Page */
 
-.features-section,
-.big-boxes-section,
-.contributors-section,
-.ai-updates-section {
+.featuresSection,
+.bigBoxesSection,
+.contributorsSection,
+.aiUpdatesSection {
   padding: 5rem 2rem;
 }
 
@@ -53,6 +53,22 @@
 .big-box .card-title {
     font-size: 1.5rem;
     font-weight: 600;
+}
+
+.welcomeTitle {
+  /* Add styles for welcomeTitle if needed */
+}
+
+.introLead {
+  /* Add styles for introLead if needed */
+}
+
+.aiUpdatesLead {
+  /* Add styles for aiUpdatesLead if needed */
+}
+
+.introButton {
+  /* Add styles for introButton if needed */
 }
 
 .text-center{

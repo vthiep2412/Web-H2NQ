@@ -6,7 +6,7 @@ import FeatureBox from '../components/FeatureBox';
 import BigBox from '../components/BigBox';
 import ContributorBox from '../components/ContributorBox';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
-import './IntroductionPage.css';
+import styles from './IntroductionPage.module.css';
 
 // --- Data --- //
 const features = [
@@ -32,7 +32,7 @@ const contributors = [
 ];
 
 const FeaturesSection = () => (
-    <div className="features-section">
+    <div className={styles.featuresSection}>
         <h2 className="text-center">Features</h2>
         <Row>
             {features.map((feature, index) => (
@@ -45,7 +45,7 @@ const FeaturesSection = () => (
 );
 
 const BigBoxesSection = () => (
-    <div className="big-boxes-section">
+    <div className={styles.bigBoxesSection}>
         <h2 className="text-center">Why H2NQ-AI?</h2>
         <Row className="justify-content-center">
             {bigBoxContent.map((box, index) => (
@@ -58,7 +58,7 @@ const BigBoxesSection = () => (
 );
 
 const ContributorsSection = () => (
-    <div className="contributors-section">
+    <div className={styles.contributorsSection}>
         <h2 className="text-center">Contributors & Technologies</h2>
         <Row>
             {contributors.map((contributor, index) => (
@@ -71,7 +71,7 @@ const ContributorsSection = () => (
 );
 
 const AIUpdatesSection = () => (
-  <div className="ai-updates-section">
+  <div className={styles.aiUpdatesSection}>
     <h2 className="text-center">Upcoming AI Enhancements</h2>
     <p className="text-center lead">Stay tuned for powerful new AI features and model integrations!</p>
     {/* Future AI update content will go here */}
@@ -81,7 +81,7 @@ const AIUpdatesSection = () => (
 const WelcomeTitle = React.memo(() => {
   const text = "Welcome to H2NQ";
   return (
-    <h1 className="welcome-title">
+    <h1 className={styles.welcomeTitle}>
       {text.split('').map((char, index) => (
         <span key={index} style={{ animationDelay: `${index * 0.05}s` }}>
           {char}
@@ -113,21 +113,21 @@ function IntroductionPage() {
   };
 
   return (
-    <div className="introduction-page">
+    <div className={styles.introductionPage}>
       <IntroHeader theme={theme} toggleTheme={toggleTheme} onNavClick={() => {}} />
-      <Container className={`d-flex flex-column justify-content-center align-items-start text-start intro-content-main vh-100 position-relative`}>
+      <Container className={`d-flex flex-column justify-content-center align-items-start text-start ${styles.introContentMain} vh-100 position-relative`}>
         <WelcomeTitle />
-        <p className="lead my-4">Your intelligent web companion, supercharged.</p>
+        <p className={`lead my-4 ${styles.introLead}`}>Your intelligent web companion, supercharged.</p>
         <div>
           <Link to="/auth">
-            <Button variant="light" size="lg" className="me-3 intro-button">Get Started</Button>
+            <Button variant="light" size="lg" className={`me-3 ${styles.introButton}`}>Get Started</Button>
           </Link>
           <Link to="/auth">
-            <Button variant="outline-light" size="lg" className="intro-button">Login</Button>
+            <Button variant="outline-light" size="lg" className={styles.introButton}>Login</Button>
           </Link>
         </div>
       </Container>
-      <div className="content-below">
+      <div className={styles.contentBelow}>
         <FeaturesSection />
         <hr className="my-5" />
         <BigBoxesSection />
