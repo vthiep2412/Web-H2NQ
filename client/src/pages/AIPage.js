@@ -163,7 +163,7 @@ function AIPage() {
       'Hello! Life got you puzzled? Let’s figure it out together!',
     ];
     const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-    setMessages([{ text: randomGreeting, sender: 'ai', isNew: false, isGreeting: true }]);
+    setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
     setIsGreetingShown(true);
   }, []);
 
@@ -196,7 +196,7 @@ function AIPage() {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
-            thought: msg.thought,
+            thoughts: msg.thoughts,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -336,7 +336,7 @@ useEffect(() => {
         if (data.truncated) {
           setShowModal(true);
         }
-        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, isNew: true, thought: data.thought }; // New AI messages are new
+        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts, isNew: true }; // New AI messages are new
 
         if (data.user) {
           updateUser(data.user);
@@ -350,7 +350,7 @@ useEffect(() => {
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
-            thought: msg.thought,
+            thoughts: msg.thoughts,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -454,15 +454,14 @@ useEffect(() => {
     const conversation = conversations.find(c => c._id === conversationId);
     if (conversation) {
       setActiveConversationId(conversationId);
-      const mappedMessages = conversation.messages.map(msg => ({
-        sender: msg.role === 'assistant' ? 'ai' : 'user',
-        text: msg.content,
-        model: msg.model,
-        thinkingTime: msg.thinkingTime,
-        thought: msg.thought,
-        isNew: false, // Loaded messages are not new
-      }));
-      setMessages(mappedMessages);
+                const mappedMessages = conversation.messages.map(msg => ({
+                  sender: msg.role === 'assistant' ? 'ai' : 'user',
+                  text: msg.content,
+                  model: msg.model,
+                  thinkingTime: msg.thinkingTime,
+                  thoughts: msg.thoughts,
+                  isNew: false, // Loaded messages are not new
+                }));      setMessages(mappedMessages);
       if (window.innerWidth < 576) {
         setIsHistoryNavbarVisible(false); // Close history navbar after selection
       }

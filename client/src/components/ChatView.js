@@ -4,6 +4,8 @@ import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
 import { getLabelForModel } from '../utils/models';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import '../App.css';
 
 const formatTime = (seconds) => {
@@ -34,11 +36,18 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                   {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
                   <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
                     {msg.sender === 'ai' && msg.thinkingTime && <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>}
-                    {msg.sender === 'ai' && msg.thought && (
+                    {msg.sender === 'ai' && msg.thoughts && msg.thoughts.length > 0 && (
                       <details className="thought-box">
-                        <summary className="thought-title">Thought</summary>
-                        <div className="thought-content-wrapper">
-                            <div className="thought-content">{msg.thought}</div>
+                        <summary>Show Thoughts</summary>
+                        <div className="thoughts-container">
+                          {msg.thoughts.map((thought, thoughtIndex) => (
+                            <div key={thoughtIndex} className="individual-thought-box">
+                              {thought.thought && <p><ReactMarkdown remarkPlugins={[remarkGfm]}>{thought.thought}</ReactMarkdown></p>}
+                              {thought.functionCall && (
+                                <p>Function Call: <pre>{JSON.stringify(thought.functionCall, null, 2)}</pre></p>
+                              )}
+                            </div>
+                          ))}
                         </div>
                       </details>
                     )}

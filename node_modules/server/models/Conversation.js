@@ -32,6 +32,9 @@ const ConversationSchema = new mongoose.Schema({
       thinkingTime: {
         type: Number,
       },
+      thoughts: {
+        type: [mongoose.Schema.Types.Mixed],
+      },
     },
   ],
   createdAt: {
@@ -42,6 +45,6 @@ const ConversationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { minimize: false });
 
 module.exports = mongoose.model('Conversation', ConversationSchema);

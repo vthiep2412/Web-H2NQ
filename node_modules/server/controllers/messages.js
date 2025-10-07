@@ -1,4 +1,3 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const OpenAI = require('openai');
 const axios = require('axios');
 const { InferenceClient } = require('@huggingface/inference');
@@ -6,7 +5,6 @@ const { GEMINI_API_KEY, OPENAI_API_KEYS, OPENROUTER_API_KEY, HUGGINGFACE_API_FIN
 const Conversation = require('../models/Conversation');
 const User = require('../models/User');
 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const hf = new InferenceClient(HUGGINGFACE_API_FINEGRAINED_KEY);
 
 const messages = [
@@ -34,6 +32,9 @@ exports.sendMessage = async (req, res) => {
   const userId = req.user.id;
 
   try {
+    const { GoogleGenAI } = await import('@google/genai');
+    const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+
     const user = await User.findById(userId);
     if (!user || user.tokenLeft <= 0) {
       return res.status(403).json({ error: 'You have no tokens left.' });
@@ -55,9 +56,8 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
 
     const startTime = Date.now();
     let text;
+    let thoughts = [];
     if (model.startsWith('gemini')) {
-      const geminiModel = genAI.getGenerativeModel({ model });
-
       const systemInstruction = truncatedHistory.find(msg => msg.role === 'system')?.content;
       const historyWithoutSystem = truncatedHistory.filter(msg => msg.role !== 'system');
 
@@ -66,17 +66,51 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
         parts: [{ text: msg.content }],
       }));
 
-      const request = {
-        contents: [...geminiHistory, { role: 'user', parts: [{ text: message }] }]
+      const contents = [...geminiHistory, { role: 'user', parts: [{ text: message }] }];
+
+      const config = {
+        thinkingConfig: {
+          thinkingBudget: -1,
+          includeThoughts: true,
+        },
+        tools: [{ googleSearch: {} }],
+        candidateCount: 1,
+        temperature: 1,
       };
 
-      if (systemInstruction) {
-        request.systemInstruction = systemInstruction;
-      }
+      const responseStream = await genAI.models.generateContentStream({
+        model: model,
+        config,
+        contents,
+        systemInstruction,
+      });
 
-      const result = await geminiModel.generateContent(request);
-      const response = await result.response;
-      text = response.text();
+      let accumulatedText = "";
+      for await (const chunk of responseStream) {
+          if (chunk.thoughtSummary) {
+              thoughts.push({ thoughtSummary: chunk.thoughtSummary });
+          }
+          for (const candidate of chunk.candidates) {
+              for (const part of candidate.content.parts) {
+                  if (part.text) {
+                      accumulatedText += part.text;
+                  }
+                  if (part.functionCall) {
+                      thoughts.push(part.functionCall);
+                  }
+                  if (part.thought) {
+                      thoughts.push({ thought: part.text });
+                  }
+              }
+          }
+      }
+      text = accumulatedText;
+
+      if (thoughts && thoughts.length > 0) {
+        // console.log("AI Thoughts:", JSON.stringify(thoughts, null, 2));
+      } else {
+        // console.log("No thoughts found for this response.");
+      }
     } else if (model.startsWith('gpt')) {
       let response = null;
       const allKeys = [process.env.OPENAI_API_KEY, ...OPENAI_API_KEYS].filter(Boolean);
@@ -134,7 +168,7 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
       conversation = await Conversation.findById(conversationId);
       if (conversation) {
         conversation.messages.push({ role: 'user', content: message });
-        conversation.messages.push({ role: 'assistant', content: text, model, thinkingTime });
+        conversation.messages.push({ role: 'assistant', content: text, model, thinkingTime, thoughts });
         await conversation.save();
       }
     } else {
@@ -144,11 +178,13 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
         await oldestConversation.deleteOne();
       }
 
-      const titleModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
-      const titleResult = await titleModel.generateContent(titlePrompt);
+      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: \"${message}\". The title should be no more than 5 words.`;
+      const titleResult = await genAI.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [{ role: 'user', parts: [{ text: titlePrompt }] }],
+      });
       const titleResponse = await titleResult.response;
-      const title = titleResponse.text().trim().replace(/"/g, '');
+      const title = titleResponse.text().trim().replace(/\"/g, '');
 
       conversation = new Conversation({
         userId,
@@ -156,13 +192,13 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
         title,
         messages: [
           { role: 'user', content: message },
-          { role: 'assistant', content: text, model, thinkingTime },
+          { role: 'assistant', content: text, model, thinkingTime, thoughts },
         ],
       });
       await conversation.save();
     }
 
-    res.json({ text, model, conversation, user, thinkingTime, truncated });
+    res.json({ text, model, conversation, user, thinkingTime, truncated, thoughts });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
     res.status(500).json({ error: 'Error communicating with AI' });
