@@ -43,6 +43,8 @@ function AIPage() {
   const [isGradientNone, setIsGradientNone] = useState(true);
   const [isGradientColor1Enabled, setIsGradientColor1Enabled] = useState(false);
   const [isGradientColor2Enabled, setIsGradientColor2Enabled] = useState(false);
+  const [isGradientAnimated, setIsGradientAnimated] = useState(false);
+  const [hasGradient, setHasGradient] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState('none');
 
   // Workspace State
@@ -121,8 +123,10 @@ function AIPage() {
 
     if (gradientColorsArray.length > 1) {
       root.style.setProperty('--primary-background', `linear-gradient(135deg, ${gradientColorsArray.join(', ')})`);
+      setHasGradient(true);
     } else {
       root.style.setProperty('--primary-background', customTheme.primaryColor);
+      setHasGradient(false);
     }
 
     root.style.setProperty('--gradient-color-1', gradientColors[0]);
@@ -140,6 +144,14 @@ function AIPage() {
       body.style.background = ''; // Revert to default
     }
   }, [customTheme, theme, selectedGradientType, gradientColors]);
+
+  useEffect(() => {
+    if (isGradientAnimated) {
+        document.body.classList.add('gradient-animated');
+    } else {
+        document.body.classList.remove('gradient-animated');
+    }
+  }, [isGradientAnimated]);
 
 
   useEffect(() => {
@@ -420,6 +432,10 @@ useEffect(() => {
     }
   };
 
+  const handleGradientAnimationToggle = () => {
+    setIsGradientAnimated(prevState => !prevState);
+  };
+
   const toggleProfileNavbar = () => {
     setIsProfileNavbarVisible(!isProfileNavbarVisible);
   };
@@ -512,7 +528,7 @@ useEffect(() => {
 
   return (
     <div 
-      className={`d-flex flex-column ai-page ${selectedGradientType === 'animated' ? 'animated-background-on' : ''} ${selectedGradientType === 'gradient' ? 'gradient-text' : ''}`}
+      className={`d-flex flex-column ai-page ${selectedGradientType === 'animated' ? 'animated-background-on' : ''} ${selectedGradientType === 'gradient' ? 'gradient-text' : ''} ${hasGradient ? 'gradient-active' : ''}`}
     >
       {selectedBackground === 'coloredSnowy' && (
         <div className="ai-page-background">
@@ -572,6 +588,8 @@ useEffect(() => {
               isGradientColor1Enabled={isGradientColor1Enabled}
               isGradientColor2Enabled={isGradientColor2Enabled}
               onGradientToggle={handleGradientToggle}
+              isGradientAnimated={isGradientAnimated}
+              onGradientAnimationToggle={handleGradientAnimationToggle}
               selectedBackground={selectedBackground}
               onBackgroundChange={handleBackgroundChange}
               user={user} // Pass user object

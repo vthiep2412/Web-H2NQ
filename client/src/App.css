@@ -24,6 +24,7 @@
   --gradient-color-2: #00c6ff;
   --gradient-color-3: #007bff;
   --gradient-color-4: #00c6ff;
+  --primary-background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-3), var(--gradient-color-4), var(--gradient-color-3), var(--gradient-color-2), var(--gradient-color-1));
 }
 
 /* General App Styles & Introduction Page */
@@ -47,7 +48,7 @@
   border-radius: 1rem;
   background-color: #3d3d3d;
   margin-bottom: 0.5rem;
-  width: 65%;
+  width: 75%;
   max-height: 3rem;
   overflow-y: auto;
   transition: all 0.3s ease;
@@ -76,6 +77,10 @@
   border-radius: 5px;
   background-color: var(--secondary-background);
   border: 1px solid var(--border-color);
+}
+
+.individual-thought-box p{
+  margin-bottom: 0px;
 }
 
 .individual-thought-box:last-child {
@@ -213,6 +218,7 @@
 .chat-main-view {
   padding: 2.5rem;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .message-list {
@@ -750,4 +756,45 @@ h
   .navbar-nav .btn {
     width: 100%;
   }
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+html[data-bs-theme="dark"] body.gradient-animated .vertical-navbar .nav-link.active,
+html[data-bs-theme="light"] body.gradient-animated .send-btn:hover,
+html[data-bs-theme="dark"] body.gradient-animated .send-btn:hover,
+html[data-bs-theme="dark"] body.gradient-animated .history-item.active,
+body.gradient-animated .ai-avatar,
+body.gradient-animated .user-avatar {
+  background-size: 200% 200%;
+  animation: gradient-animation 10s linear infinite alternate;
+  background-image: var(--primary-background);
+}
+
+[data-bs-theme="dark"] .history-item.active {
+  background: var(--primary-background);
+  color: white;
+}
+
+[data-bs-theme="light"] .history-item.active {
+  background-color: #e7f1ff !important;
+  color: var(--primary-color) !important;
+  font-weight: 500;
+}
+
+/* .history-item.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-light);
+} */
+
+.history-item.active:hover {
+  /* background-color: var(--bs-primary); */
+  /* color: var(--bs-light); */
 }

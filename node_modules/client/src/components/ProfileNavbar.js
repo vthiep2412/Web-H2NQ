@@ -17,6 +17,8 @@ const ProfileNavbar = React.memo(({
   isGradientColor1Enabled,
   isGradientColor2Enabled,
   onGradientToggle,
+  isGradientAnimated,
+  onGradientAnimationToggle,
   selectedBackground,
   onBackgroundChange,
   user // Destructure user prop
@@ -128,6 +130,15 @@ const ProfileNavbar = React.memo(({
               </div>
             </div>
           </div>
+        </div>
+        <div className="gradient-animation-section">
+            <Form.Check
+                type="switch"
+                id="gradient-animation-switch"
+                label="Gradient Animation"
+                checked={isGradientAnimated}
+                onChange={onGradientAnimationToggle}
+            />
         </div>
       </div>
 

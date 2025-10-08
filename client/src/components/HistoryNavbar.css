@@ -51,16 +51,6 @@
   background-color: var(--bs-secondary-bg);
 }
 
-.history-item.active {
-  background-color: var(--bs-primary);
-  color: var(--bs-light);
-}
-
-.history-item.active:hover {
-  background-color: var(--bs-primary);
-  color: var(--bs-light);
-}
-
 .history-item span {
   flex-grow: 1;
 }
