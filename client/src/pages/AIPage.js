@@ -551,7 +551,7 @@ useEffect(() => {
           {renderActiveView()}
         </div>
         <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
-          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onClose={toggleHistoryNavbar} />
+          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onClose={toggleHistoryNavbar} activeConversationId={activeConversationId} />
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           {user && (

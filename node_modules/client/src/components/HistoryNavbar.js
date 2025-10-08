@@ -3,7 +3,7 @@ import React from 'react';
 import './HistoryNavbar.css';
 import { X } from 'react-bootstrap-icons'; // Import the X icon
 
-const HistoryNavbar = ({ conversations, onSelectConversation, onDeleteConversation, onClose }) => {
+const HistoryNavbar = ({ conversations, onSelectConversation, onDeleteConversation, onClose, activeConversationId }) => {
   return (
     <nav className="history-navbar">
       <div className="history-header">
@@ -12,7 +12,7 @@ const HistoryNavbar = ({ conversations, onSelectConversation, onDeleteConversati
       </div>
       <div className="history-list">
         {conversations && conversations.map(convo => (
-          <div key={convo._id} className="history-item">
+          <div key={convo._id} className={`history-item ${convo._id === activeConversationId ? 'active' : ''}`}>
             <span onClick={() => onSelectConversation(convo._id)}>{convo.title}</span>
             <button onClick={() => onDeleteConversation(convo._id)}>&times;</button>
           </div>

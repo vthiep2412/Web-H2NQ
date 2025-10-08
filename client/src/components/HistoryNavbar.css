@@ -41,11 +41,24 @@
   align-items: center;
   padding: 0.5rem;
   cursor: pointer;
-  border-radius: 0.25rem;
+  border-radius: 0.7rem;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .history-item:hover {
   background-color: var(--bs-secondary-bg);
+}
+
+.history-item.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-light);
+}
+
+.history-item.active:hover {
+  background-color: var(--bs-primary);
+  color: var(--bs-light);
 }
 
 .history-item span {
