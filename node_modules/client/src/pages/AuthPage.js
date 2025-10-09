@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SunFill, MoonFill } from 'react-bootstrap-icons';
+import { SunFill, MoonFill, EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import styles from './AuthPage.module.css'; // Import CSS module
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import Modal from '../components/Modal'; // Import the Modal component
@@ -11,7 +11,9 @@ const AuthPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState(''); // New state for confirm password
     const [avatarUrl] = useState(''); // Re-add state for avatar URL
-    const [theme, setTheme] = useState(
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+        const [theme, setTheme] = useState(
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
             : 'light'
@@ -156,8 +158,18 @@ const AuthPage = () => {
                         <h1>Create Account</h1>
                         <input type="text" placeholder="Username" value={name} onChange={(e) => setName(e.target.value)} required />
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                        <div className={styles.passwordContainer}>
+                            <input type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            <span onClick={() => setShowPassword(!showPassword)} className={styles.eyeIcon}>
+                                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+                            </span>
+                        </div>
+                        <div className={styles.passwordContainer}>
+                            <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                            <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={styles.eyeIcon}>
+                                {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
+                            </span>
+                        </div>
                         <button type="submit" id="signUpBtn" style={{ marginTop: '10px' }}>Sign Up</button>
                         <span className={styles.mobileToggleLink} onClick={handleSignInClick}>Already have an account? Sign In</span>
                     </form>
@@ -167,7 +179,12 @@ const AuthPage = () => {
                         <img src="/H2NQ-LOGO.png" alt="H2NQ Logo" className={styles.authLogo} />
                         <h1>Sign In</h1>
                         <input type="text" placeholder="Username or Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <div className={styles.passwordContainer}>
+                            <input type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            <span onClick={() => setShowPassword(!showPassword)} className={styles.eyeIcon}>
+                                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+                            </span>
+                        </div>
                         <a href="/forgot-password" className={styles.forgotPasswordLink}>Forgot your password?</a>
                         <button type="submit">Sign In</button>
                         <span className={styles.mobileToggleLink} onClick={handleSignUpClick}>Don't have an account? Sign Up</span>

@@ -14,21 +14,32 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
   tier: {
     type: String,
     default: 'free',
   },
   avatarUrl: {
     type: String,
-    default: null,
+    default: '', // Default to empty string
   },
   tokenLeft: {
     type: Number,
     default: 1000,
   },
-  date: {
-    type: Date,
-    default: Date.now,
+  settings: {
+    theme: { type: String, default: 'dark' },
+    primaryColor: { type: String, default: '#007bff' },
+    gradientColor1: { type: String, default: '#ff0000' },
+    gradientColor2: { type: String, default: '#0000ff' },
+    isGradientColor1Enabled: { type: Boolean, default: false },
+    isGradientColor2Enabled: { type: Boolean, default: false },
+    isGradientAnimated: { type: Boolean, default: false },
+    selectedModel: { type: String, default: 'gemini-2.5-flash' },
+    selectedBackground: { type: String, default: 'none' },
   },
 });
 

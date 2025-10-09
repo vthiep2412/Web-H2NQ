@@ -22,10 +22,10 @@ import '../gradient.css';
 
 
 function AIPage() {
+  const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
+
   // UI State
-  const [theme, setTheme] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  );
+  const [theme, setTheme] = useState(user?.settings?.theme || 'dark');
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
   const [isHistoryNavbarVisible, setIsHistoryNavbarVisible] = useState(false); // New state for history navbar
@@ -37,19 +37,19 @@ function AIPage() {
 
   // New Theme State
   const [customTheme, setCustomTheme] = useState({
-    primaryColor: '#007bff',
+    primaryColor: user?.settings?.primaryColor || '#007bff',
   });
   const [selectedGradientType, setSelectedGradientType] = useState('off'); // 'off', 'animated', 'gradient'
   const [secondaryColor, setSecondaryColor] = useState('#00ff00'); // Default secondary color
   const [gradientColors] = useState(['#ff0000', '#0000ff']);
-  const [gradientColor1, setGradientColor1] = useState('#ff0000');
-  const [gradientColor2, setGradientColor2] = useState('#0000ff');
+  const [gradientColor1, setGradientColor1] = useState(user?.settings?.gradientColor1 || '#ff0000');
+  const [gradientColor2, setGradientColor2] = useState(user?.settings?.gradientColor2 || '#0000ff');
   const [isGradientNone, setIsGradientNone] = useState(true);
-  const [isGradientColor1Enabled, setIsGradientColor1Enabled] = useState(false);
-  const [isGradientColor2Enabled, setIsGradientColor2Enabled] = useState(false);
-  const [isGradientAnimated, setIsGradientAnimated] = useState(false);
+  const [isGradientColor1Enabled, setIsGradientColor1Enabled] = useState(user?.settings?.isGradientColor1Enabled || false);
+  const [isGradientColor2Enabled, setIsGradientColor2Enabled] = useState(user?.settings?.isGradientColor2Enabled || false);
+  const [isGradientAnimated, setIsGradientAnimated] = useState(user?.settings?.isGradientAnimated || false);
   const [hasGradient, setHasGradient] = useState(false);
-  const [selectedBackground, setSelectedBackground] = useState('none');
+  const [selectedBackground, setSelectedBackground] = useState(user?.settings?.selectedBackground || 'none');
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories } = useWorkspaces();
@@ -61,7 +61,7 @@ function AIPage() {
   const memories = activeWorkspace ? activeWorkspace.memories : [];
 
   // Model State
-  const [selectedModel, setSelectedModel] = useState('gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState(user?.settings?.selectedModel || 'gemini-2.5-flash');
 
   // Chat State
   const [messages, setMessages] = useState([]);
@@ -74,7 +74,57 @@ function AIPage() {
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
-  const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
+  const saveSettings = async (settings) => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch('/api/users/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+        body: JSON.stringify({ settings }),
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ theme });
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ primaryColor: customTheme.primaryColor });
+    }
+  }, [customTheme.primaryColor]);
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled });
+    }
+  }, [gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled]);
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ isGradientAnimated });
+    }
+  }, [isGradientAnimated]);
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ selectedModel });
+    }
+  }, [selectedModel]);
+
+  useEffect(() => {
+    if (user) {
+      saveSettings({ selectedBackground });
+    }
+  }, [selectedBackground]);
 
   const handleTypingComplete = useCallback(() => {
     setShouldFetchConversations(true); // Trigger conversation fetch after typing is complete
