@@ -257,7 +257,7 @@ button.ghost {
 .dark p,
 .dark span,
 .dark a {
-    color: #a0a0a0;
+    color: #ffffff;
 }
 
 .dark .formContainer input {
@@ -340,8 +340,4 @@ button.ghost {
     form {
         background-color: transparent !important;
     }
-}
-
-p {
-    color: white !important;
 }

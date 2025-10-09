@@ -12,7 +12,6 @@
 }
 
 .modal-content {
-  background: var(--bs-body-bg);
   padding: 20px;
   border-radius: 5px;
   max-width: 500px;
@@ -21,12 +20,12 @@
   text-align: center;
 }
 
-.modal-close-btn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+.modal-content-light {
+    background: white;
+    color: black;
+}
+
+.modal-content-dark {
+    background: #212529;
+    color: white;
 }

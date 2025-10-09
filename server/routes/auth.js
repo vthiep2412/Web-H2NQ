@@ -1,18 +1,36 @@
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
+const { rateLimit } = require('express-rate-limit');
+const LRUCache = require('lru-cache');
 
 const User = require('../models/User');
 const Workspace = require('../models/Workspace');
+
+// Rate limiter for registration
+const authLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // 10 registrations per hour from an IP
+});
+
+// Manual rate limiting for login
+const failedAttempts = new LRUCache({
+  max: 1000,
+  ttl: 20 * 60 * 1000, // 20 minutes
+});
+
+const blockedIps = new LRUCache({ max: 500 });
+
+const MAX_FAILED_ATTEMPTS = 10;
 
 // @route   POST api/auth/register
 // @desc    Register a user
 // @access  Public
 router.post(
   '/register',
+  authLimiter,
   [
     check('name', 'Please add username').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
@@ -80,7 +98,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      res.status(500).json({ msg: 'Server error' });
     }
   }
 );
@@ -95,6 +113,17 @@ router.post(
     check('password', 'Password is required').exists(),
   ],
   async (req, res) => {
+    const ip = req.ip;
+    const blockedUntil = blockedIps.get(ip);
+
+    if (blockedUntil && blockedUntil > Date.now()) {
+      const timeLeft = Math.ceil((blockedUntil - Date.now()) / 1000);
+      return res.status(429).json({
+        msg: `Too many failed login attempts. You are blocked.`,
+        timeLeft: timeLeft,
+      });
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -104,22 +133,37 @@ router.post(
 
     try {
       let user;
-      // Check if login is an email or username
       if (login.includes('@')) {
         user = await User.findOne({ email: login });
       } else {
         user = await User.findOne({ name: login });
       }
 
-      if (!user) {
-        return res.status(400).json({ msg: 'Invalid Credentials' });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = user ? await bcrypt.compare(password, user.password) : false;
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid Credentials' });
+        const currentAttempts = (failedAttempts.get(ip) || 0) + 1;
+        failedAttempts.set(ip, currentAttempts);
+
+        if (currentAttempts >= MAX_FAILED_ATTEMPTS) {
+          const blockDuration = 20 * 60 * 1000; // 20 minutes
+          blockedIps.set(ip, Date.now() + blockDuration, blockDuration);
+          const timeLeft = Math.ceil(blockDuration / 1000);
+          return res.status(429).json({
+            msg: `Too many failed login attempts. You are blocked.`,
+            timeLeft: timeLeft,
+          });
+        }
+
+        const remaining = MAX_FAILED_ATTEMPTS - currentAttempts;
+        return res.status(400).json({
+          msg: `Wrong email or password. ${remaining} attempts remaining.`,
+        });
       }
+
+      // On success, reset the counters
+      failedAttempts.del(ip);
+      blockedIps.del(ip);
 
       const payload = {
         user: {
@@ -145,7 +189,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      res.status(500).json({ msg: 'Server error' });
     }
   }
 );
@@ -163,6 +207,7 @@ router.get('/me', auth, async (req, res) => {
     res.json(req.user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ msg: 'Server Error' });
   }
 });
+

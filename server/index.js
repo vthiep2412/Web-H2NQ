@@ -16,6 +16,7 @@ const workspacesRouter = require('./routes/workspaces');
 
 app.use(cors());
 app.use(express.json());
+app.set('trust proxy', 1);
 
 app.get('/', (req, res) => {
   res.send('Hello from server!');
