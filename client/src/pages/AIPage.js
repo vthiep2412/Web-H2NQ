@@ -94,37 +94,37 @@ function AIPage() {
     if (user) {
       saveSettings({ theme });
     }
-  }, [theme]);
+  }, [theme, user]);
 
   useEffect(() => {
     if (user) {
       saveSettings({ primaryColor: customTheme.primaryColor });
     }
-  }, [customTheme.primaryColor]);
+  }, [customTheme.primaryColor, user]);
 
   useEffect(() => {
     if (user) {
       saveSettings({ gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled });
     }
-  }, [gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled]);
+  }, [gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, user]);
 
   useEffect(() => {
     if (user) {
       saveSettings({ isGradientAnimated });
     }
-  }, [isGradientAnimated]);
+  }, [isGradientAnimated, user]);
 
   useEffect(() => {
     if (user) {
       saveSettings({ selectedModel });
     }
-  }, [selectedModel]);
+  }, [selectedModel, user]);
 
   useEffect(() => {
     if (user) {
       saveSettings({ selectedBackground });
     }
-  }, [selectedBackground]);
+  }, [selectedBackground, user]);
 
   const handleTypingComplete = useCallback(() => {
     setShouldFetchConversations(true); // Trigger conversation fetch after typing is complete
