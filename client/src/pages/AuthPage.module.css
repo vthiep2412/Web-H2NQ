@@ -301,6 +301,19 @@ button.ghost {
     color: #8ab4f8;
 }
 
+.passwordContainer {
+    position: relative;
+    width: 100%;
+}
+
+.eyeIcon {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .overlayContainer {
         display: none;
