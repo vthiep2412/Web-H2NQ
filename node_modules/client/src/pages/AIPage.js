@@ -9,6 +9,10 @@ import AIMemoryPage from './AIMemoryPage';
 import SettingsPage from './SettingsPage';
 import useWorkspaces from '../hooks/useWorkspaces';
 import LiquidBackground from '../components/LiquidBackground';
+import AnimatedGradient from '../components/AnimatedGradient';
+import FloatingSquares from '../components/FloatingSquares';
+import SvgAnimation from '../components/SvgAnimation';
+import MovingSquares from '../components/MovingSquares';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import HistoryNavbar from '../components/HistoryNavbar';
 import Modal from '../components/Modal';
@@ -148,7 +152,8 @@ function AIPage() {
   useEffect(() => {
     if (isGradientAnimated) {
         document.body.classList.add('gradient-animated');
-    } else {
+    }
+    else {
         document.body.classList.remove('gradient-animated');
     }
   }, [isGradientAnimated]);
@@ -247,7 +252,8 @@ function AIPage() {
           console.error('Error updating current conversation:', err);
         }
       } else if (shouldFetchConversations && !activeConversationId) {
-      } else {
+      }
+      else {
       }
     };
     updateCurrentConversation();
@@ -538,6 +544,26 @@ useEffect(() => {
             gradientColor2={isGradientColor2Enabled ? gradientColor2 : null}
             theme={theme}
           />
+        </div>
+      )}
+      {selectedBackground === 'animatedGradient' && (
+        <div className="ai-page-background">
+          <AnimatedGradient />
+        </div>
+      )}
+      {selectedBackground === 'floatingSquares' && (
+        <div className="ai-page-background">
+          <FloatingSquares theme={theme} />
+        </div>
+      )}
+      {selectedBackground === 'svgAnimation' && (
+        <div className="ai-page-background">
+          <SvgAnimation />
+        </div>
+      )}
+      {selectedBackground === 'movingSquares' && (
+        <div className="ai-page-background">
+          <MovingSquares />
         </div>
       )}
       <Header 

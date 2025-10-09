@@ -1,0 +1,30 @@
+.moving-squares-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #000;
+    overflow: hidden; /* To prevent scrollbars */
+}
+
+.squares-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.square {
+    width: 20%;
+    height: 20%;
+    background-color: #111;
+    border: 1px solid #000;
+    transition: 2s;
+}
+
+.square:hover {
+    background-color: #D62828;
+    transition-duration: 0s;
+}

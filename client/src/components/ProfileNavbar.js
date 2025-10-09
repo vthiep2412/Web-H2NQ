@@ -156,6 +156,30 @@ const ProfileNavbar = React.memo(({
         >
           Colored Snowy
         </Button>
+        <Button
+          className={`btn-background-option ${selectedBackground === 'animatedGradient' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('animatedGradient')}
+        >
+          Animated Gradient
+        </Button>
+        <Button
+          className={`btn-background-option ${selectedBackground === 'floatingSquares' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('floatingSquares')}
+        >
+          Floating Squares
+        </Button>
+        <Button
+          className={`btn-background-option ${selectedBackground === 'svgAnimation' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('svgAnimation')}
+        >
+          SVG Animation
+        </Button>
+        {/* <Button
+          className={`btn-background-option ${selectedBackground === 'movingSquares' ? 'active' : ''}`}
+          onClick={() => onBackgroundChange('movingSquares')}
+        >
+          Moving Squares
+        </Button> */}
       </div>
 
       <div className="logout-section">
