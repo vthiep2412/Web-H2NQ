@@ -1,3 +1,4 @@
+import { checkPasswordStrength } from '../utils/password'; // Import password strength checker
 import React, { useState, useEffect } from 'react';
 import { SunFill, MoonFill, EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import styles from './AuthPage.module.css'; // Import CSS module
@@ -13,7 +14,8 @@ const AuthPage = () => {
     const [avatarUrl] = useState(''); // Re-add state for avatar URL
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-        const [theme, setTheme] = useState(
+    const [passwordStrength, setPasswordStrength] = useState(0); // New state for password strength
+    const [theme, setTheme] = useState(
         window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
             : 'light'
@@ -28,6 +30,10 @@ const AuthPage = () => {
     useEffect(() => {
         document.documentElement.setAttribute('data-bs-theme', theme);
     }, [theme]);
+
+    useEffect(() => {
+        setPasswordStrength(checkPasswordStrength(password));
+    }, [password]);
 
     useEffect(() => {
         let timer;
@@ -63,6 +69,13 @@ const AuthPage = () => {
     
         if (password !== confirmPassword) {
             setModalMessage('Passwords do not match!');
+            setShowModal(true);
+            return;
+        }
+
+        const MIN_PASSWORD_STRENGTH = 3; // Define minimum acceptable strength
+        if (passwordStrength < MIN_PASSWORD_STRENGTH) {
+            setModalMessage('Password is too weak. Please use a stronger password.');
             setShowModal(true);
             return;
         }
@@ -164,6 +177,14 @@ const AuthPage = () => {
                                 {showPassword ? <EyeSlashFill /> : <EyeFill />}
                             </span>
                         </div>
+                        {isSignUp && password.length > 0 && (
+                            <div className={styles.passwordStrengthIndicator}>
+                                Password Strength: {' '}
+                                {passwordStrength <= 2 && <span style={{ color: 'red' }}>Weak</span>}
+                                {passwordStrength > 2 && passwordStrength <= 5 && <span style={{ color: 'orange' }}>Medium</span>}
+                                {passwordStrength > 5 && <span style={{ color: 'green' }}>Strong</span>}
+                            </div>
+                        )}
                         <div className={styles.passwordContainer}>
                             <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                             <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} className={styles.eyeIcon}>
