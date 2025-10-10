@@ -13,7 +13,6 @@ const messagesRouter = require('./routes/messages');
 const authRouter = require('./routes/auth');
 const conversationsRouter = require('./routes/conversations');
 const workspacesRouter = require('./routes/workspaces');
-const usersRouter = require('./routes/users');
 
 app.use(cors());
 app.use(express.json());
@@ -31,7 +30,7 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/conversations', conversationsRouter);
 app.use('/api/workspaces', workspacesRouter);
-app.use('/api/users', usersRouter);
+// app.use('/api/users', usersRouter);
 
 module.exports = app;
 
