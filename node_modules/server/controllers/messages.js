@@ -178,13 +178,18 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
         await oldestConversation.deleteOne();
       }
 
-      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: \"${message}\". The title should be no more than 5 words.`;
+      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
       const titleResult = await genAI.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: [{ role: 'user', parts: [{ text: titlePrompt }] }],
       });
       const titleResponse = await titleResult.response;
-      const title = titleResponse.text().trim().replace(/\"/g, '');
+      let title = 'New Conversation'; // Default title in case of API error
+      if (titleResponse && titleResponse.text) {
+        title = titleResponse.text().trim().replace(/"/g, '');
+      } else {
+        console.error('Failed to generate title from AI, using default title.');
+      }
 
       conversation = new Conversation({
         userId,
