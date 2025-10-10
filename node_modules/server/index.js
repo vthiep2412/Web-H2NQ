@@ -30,7 +30,6 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/conversations', conversationsRouter);
 app.use('/api/workspaces', workspacesRouter);
-// app.use('/api/users', usersRouter);
 
 module.exports = app;
 
