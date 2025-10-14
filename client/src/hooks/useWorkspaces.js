@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ChatDots, Cpu, JournalCode, Hdd } from 'react-bootstrap-icons';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 // Basic deep comparison utility for arrays of objects
 const deepEqual = (a, b) => {
@@ -32,6 +33,7 @@ const deepEqual = (a, b) => {
 };
 
 const useWorkspaces = () => {
+  const { t } = useTranslation();
   const [workspaces, setWorkspaces] = useState([]);
   const loadingRef = useRef(false); // Use useRef for loading state
   const { user } = useAuth();
@@ -53,10 +55,10 @@ const useWorkspaces = () => {
             ...data,
             id: data._id,
             children: [
-              { id: `${data._id}-chat`, name: 'AI Chat', icon: <ChatDots className="me-2" /> },
-              { id: `${data._id}-mem`, name: 'AI Memory', icon: <Cpu className="me-2" /> },
-              { id: `${data._id}-ide`, name: 'FreeForm whiteboard', icon: <JournalCode className="me-2" /> },
-              { id: `${data._id}-store`, name: 'Storage', icon: <Hdd className="me-2" /> },
+              { id: `${data._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
+              { id: `${data._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
+              { id: `${data._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
+              { id: `${data._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
             ]
         };
         setWorkspaces(prev => {
@@ -70,7 +72,7 @@ const useWorkspaces = () => {
         console.error('Error adding workspace:', err);
       }
     }
-  }, []);
+  }, [t]);
 
   const getWorkspaces = useCallback(async () => {
     if (loadingRef.current) return; // Read from ref
@@ -87,10 +89,10 @@ const useWorkspaces = () => {
         ...ws,
         id: ws._id, // Remap _id to id for client-side consistency
         children: [
-          { id: `${ws._id}-chat`, name: 'AI Chat', icon: <ChatDots className="me-2" /> },
-          { id: `${ws._id}-mem`, name: 'AI Memory', icon: <Cpu className="me-2" /> },
-          { id: `${ws._id}-ide`, name: 'FreeForm whiteboard', icon: <JournalCode className="me-2" /> },
-          { id: `${ws._id}-store`, name: 'Storage', icon: <Hdd className="me-2" /> },
+          { id: `${ws._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
+          { id: `${ws._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
+          { id: `${ws._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
+          { id: `${ws._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
         ]
       }));
       setWorkspaces(prev => {
@@ -106,19 +108,19 @@ const useWorkspaces = () => {
     } finally {
       loadingRef.current = false; // Update ref
     }
-  }, []); // Empty dependency array for stability
+  }, [t]); // Empty dependency array for stability
 
   useEffect(() => {
     const fetchAndCreate = async () => {
       if (user) {
         const fetchedWorkspaces = await getWorkspaces();
         if (fetchedWorkspaces && fetchedWorkspaces.length === 0) {
-          addWorkspace('Your workspace');
+          addWorkspace(t('yourWorkspace'));
         }
       }
     }
     fetchAndCreate();
-  }, [user, getWorkspaces, addWorkspace]);
+  }, [user, getWorkspaces, addWorkspace, t]);
 
   const editWorkspace = async (workspaceId, newName) => {
     if (newName) {

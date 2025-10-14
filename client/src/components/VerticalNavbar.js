@@ -11,6 +11,7 @@ import {
   Trash,
   ClockHistory
 } from 'react-bootstrap-icons';
+import { useTranslation } from 'react-i18next';
 
 const VerticalNavbar = React.memo(({ 
   activeView, 
@@ -23,6 +24,8 @@ const VerticalNavbar = React.memo(({
   isHistoryNavbarVisible,
   toggleNavbar // Added toggleNavbar prop
 }) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 576) {
@@ -78,7 +81,7 @@ const VerticalNavbar = React.memo(({
   };
 
   const handleDelete = (workspaceId) => {
-    if (window.confirm('Are you sure you want to delete this workspace?')) {
+    if (window.confirm(t('deleteWorkspaceConfirmation'))) {
       deleteWorkspace(workspaceId);
     }
   };
@@ -86,7 +89,7 @@ const VerticalNavbar = React.memo(({
   return (
     <nav className="vertical-navbar">
       <div className="navbar-brand-container d-flex justify-content-between align-items-center mb-2">
-        <h4 className="navbar-brand">Workspaces</h4>
+        <h4 className="navbar-brand">{t('workspaces')}</h4>
         <Button variant="link" onClick={() => setIsAdding(!isAdding)} className="p-0 text-dark mb-2 theme-aware-button">
           <PlusLg size={20} />
         </Button>
@@ -95,12 +98,12 @@ const VerticalNavbar = React.memo(({
       {isAdding && (
         <InputGroup className="mb-2">
           <Form.Control
-            placeholder="New workspace name"
+            placeholder={t('newWorkspaceNamePlaceholder')}
             value={newWorkspaceName}
             onChange={(e) => setNewWorkspaceName(e.target.value)}
             onKeyPress={e => e.key === 'Enter' && handleAddWorkspace()}
           />
-          <Button variant="outline-secondary" onClick={handleAddWorkspace} className="theme-aware-button">Add</Button>
+          <Button variant="outline-secondary" onClick={handleAddWorkspace} className="theme-aware-button">{t('add')}</Button>
         </InputGroup>
       )}
 
@@ -116,10 +119,10 @@ const VerticalNavbar = React.memo(({
                     onKeyPress={e => e.key === 'Enter' && handleEditWorkspace(ws.id)}
                     autoFocus
                   />
-                  <OverlayTrigger overlay={<Tooltip>Save</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip>{t('save')}</Tooltip>}>
                     <Button variant="link" onClick={() => handleEditWorkspace(ws.id)} className="p-1 text-dark mb-2 theme-aware-button"><Check size={20} /></Button>
                   </OverlayTrigger>
-                  <OverlayTrigger overlay={<Tooltip>Cancel</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip>{t('cancel')}</Tooltip>}>
                     <Button variant="link" onClick={cancelEditing} className="p-1 text-dark mb-2 theme-aware-button"><X size={20} /></Button>
                   </OverlayTrigger>
                 </InputGroup>
@@ -139,12 +142,12 @@ const VerticalNavbar = React.memo(({
                     {open[ws.id] ? <ChevronDown className="me-2" /> : <ChevronRight className="me-2" />}
                     <strong>{ws.name}</strong>
                   </Nav.Link>
-                  <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip>{t('edit')}</Tooltip>}>
                     <Button variant="link" onClick={() => startEditing(ws)} className="p-1 text-dark mb-2 me-1 theme-aware-button">
                       <Pencil size={16} />
                     </Button>
                   </OverlayTrigger>
-                  <OverlayTrigger overlay={<Tooltip>Delete</Tooltip>}>
+                  <OverlayTrigger overlay={<Tooltip>{t('delete')}</Tooltip>}>
                     <Button variant="link" onClick={() => handleDelete(ws.id)} className="p-1 text-dark mb-2 theme-aware-button" disabled={workspaces.length <= 1}>
                       <Trash size={16} />
                     </Button>
@@ -178,7 +181,7 @@ const VerticalNavbar = React.memo(({
                   }}
                   active={isHistoryNavbarVisible}
                 >
-                  <ClockHistory className="me-2" /> History
+                  <ClockHistory className="me-2" /> {t('history')}
                 </Nav.Link>
               </div>
             </Collapse>
@@ -192,7 +195,7 @@ const VerticalNavbar = React.memo(({
             active={activeView === 'settings'}
             onClick={() => onViewChange('settings')}
           >
-            <Gear className="me-2" /> Settings
+            <Gear className="me-2" /> {t('settings')}
           </Nav.Link>
         </Nav>
       </div>

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
+import { useTranslation } from 'react-i18next';
 import './ProfileNavbar.css';
 
 
@@ -23,6 +24,7 @@ const ProfileNavbar = React.memo(({
   onBackgroundChange,
   user // Destructure user prop
 }) => {
+  const { t } = useTranslation();
   const primaryDebounceTimeout = useRef(null);
   const gradient1DebounceTimeout = useRef(null);
   const gradient2DebounceTimeout = useRef(null);
@@ -66,35 +68,35 @@ const ProfileNavbar = React.memo(({
           <PersonCircle size={50} />
         )}
         <div className="profile-info">
-          <h5>{user ? user.name : 'Guest'}</h5>
-          <p>{user ? user.email : 'guest@example.com'}</p>
-          <p>Tier: {user ? user.tier : 'Guest Tier'}</p>
+          <h5>{user ? user.name : t('guest')}</h5>
+          <p>{user ? user.email : t('guestEmail')}</p>
+          <p>{t('tier')}: {user ? user.tier : t('guestTier')}</p>
         </div>
       </div>
 
       <div className="token-usage-section">
-        <h6>Token Usage</h6>
+        <h6>{t('tokenUsage')}</h6>
         <div className="token-bar-container">
           <div className="token-bar" style={{ width: `${user ? (user.tokenLeft / 1000) * 100 : 0}%` }}></div>
         </div>
-        <p>Tokens Left: {user ? user.tokenLeft : 0} / 1000</p>
+        <p>{t('tokensLeft')}: {user ? user.tokenLeft : 0} / 1000</p>
       </div>
 
       <div className="theme-section">
-        <h6>Theme</h6>
+        <h6>{t('theme')}</h6>
         <div className="theme-and-gradient-container">
           <div className="theme-options">
-            <Form.Label htmlFor="theme-color-picker">Primary Color</Form.Label>
+            <Form.Label htmlFor="theme-color-picker">{t('primaryColor')}</Form.Label>
             <Form.Control
               type="color"
               id="theme-color-picker"
               defaultValue="#007bff"
-              title="Choose your color"
+              title={t('chooseYourColor')}
               onChange={handleColorChange}
             />
           </div>
           <div className="gradient-section">
-            <Form.Label>Gradient Color</Form.Label>
+            <Form.Label>{t('gradientColor')}</Form.Label>
             <div className="color-pickers-container">
               <div className="color-picker-item">
                 <Form.Check 
@@ -107,7 +109,7 @@ const ProfileNavbar = React.memo(({
                   type="color"
                   id="gradient-color1-picker"
                   value={gradientColor1}
-                  title="Choose your color"
+                  title={t('chooseYourColor')}
                   onChange={handleGradientColor1Change}
                   disabled={!isGradientColor1Enabled}
                 />
@@ -123,7 +125,7 @@ const ProfileNavbar = React.memo(({
                   type="color"
                   id="gradient-color2-picker"
                   value={gradientColor2}
-                  title="Choose your color"
+                  title={t('chooseYourColor')}
                   onChange={handleGradientColor2Change}
                   disabled={!isGradientColor2Enabled}
                 />
@@ -135,44 +137,44 @@ const ProfileNavbar = React.memo(({
             <Form.Check
                 type="switch"
                 id="gradient-animation-switch"
-                label="Gradient Animation"
+                label={t('gradientAnimation')}
                 checked={isGradientAnimated}
                 onChange={onGradientAnimationToggle}
             />
         </div>
       </div>
 
-      <h6>Animated Background</h6>
+      <h6>{t('animatedBackground')}</h6>
       <div className="background-options">
         <Button
           className={`btn-background-option ${selectedBackground === 'none' ? 'active' : ''}`}
           onClick={() => onBackgroundChange('none')}
         >
-          None
+          {t('none')}
         </Button>
         <Button
           className={`btn-background-option ${selectedBackground === 'coloredSnowy' ? 'active' : ''}`}
           onClick={() => onBackgroundChange('coloredSnowy')}
         >
-          Colored Snowy
+          {t('coloredSnowy')}
         </Button>
         <Button
           className={`btn-background-option ${selectedBackground === 'animatedGradient' ? 'active' : ''}`}
           onClick={() => onBackgroundChange('animatedGradient')}
         >
-          Animated Gradient
+          {t('animatedGradient')}
         </Button>
         <Button
           className={`btn-background-option ${selectedBackground === 'floatingSquares' ? 'active' : ''}`}
           onClick={() => onBackgroundChange('floatingSquares')}
         >
-          Floating Squares
+          {t('floatingSquares')}
         </Button>
         <Button
           className={`btn-background-option ${selectedBackground === 'svgAnimation' ? 'active' : ''}`}
           onClick={() => onBackgroundChange('svgAnimation')}
         >
-          SVG Animation
+          {t('svgAnimation')}
         </Button>
         {/* <Button
           className={`btn-background-option ${selectedBackground === 'movingSquares' ? 'active' : ''}`}
@@ -183,7 +185,7 @@ const ProfileNavbar = React.memo(({
       </div>
 
       <div className="logout-section">
-        <Button variant="danger" onClick={onLogout}>Logout</Button>
+        <Button variant="danger" onClick={onLogout}>{t('logout')}</Button>
       </div>
     </nav>
   );

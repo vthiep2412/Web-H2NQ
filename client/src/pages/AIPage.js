@@ -15,6 +15,7 @@ import SvgAnimation from '../components/SvgAnimation';
 import MovingSquares from '../components/MovingSquares';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import HistoryNavbar from '../components/HistoryNavbar';
+import { useTranslation } from 'react-i18next';
 import Modal from '../components/Modal';
 import '../App.css';
 import './AIPage.css';
@@ -22,6 +23,7 @@ import '../gradient.css';
 
 
 function AIPage() {
+  const { t } = useTranslation();
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
 
   // UI State
@@ -216,23 +218,24 @@ function AIPage() {
   }, [workspaces, activeView]);
 
   const showGreetingMessage = useCallback(() => {
-    const greetings = [
-      'Hello! How can I help you today?',
-      'Hi there! What can I do for you?',
-      'Greetings! What are we working on?',
-      'Welcome! Ask me anything.',
-      'Hey! Ready to get started?',
-      'Hey! What can I help you with? Let’s make something amazing happen!',
-      'Hello! How can I assist you today?',
-      'Hi there! Ready to tackle any challenge or chat about anything.',
-      'Hey there! I’m here to assist you. What’s on your mind?',
-      'Greetings! I’m here to help with whatever you need.',
-      'Hello! Life got you puzzled? Let’s figure it out together!',
+    const greetingKeys = [
+      'greeting1',
+      'greeting2',
+      'greeting3',
+      'greeting4',
+      'greeting5',
+      'greeting6',
+      'greeting7',
+      'greeting8',
+      'greeting9',
+      'greeting10',
+      'greeting11',
     ];
-    const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+    const randomGreetingKey = greetingKeys[Math.floor(Math.random() * greetingKeys.length)];
+    const randomGreeting = t(randomGreetingKey);
     setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
     setIsGreetingShown(true);
-  }, []);
+  }, [t]);
 
   const userId = user?._id;
   const initialFetchDone = useRef(false);

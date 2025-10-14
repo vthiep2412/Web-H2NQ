@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
 import { models, getLabelForModel } from '../utils/models';
+import { useTranslation } from 'react-i18next';
+import './Header.css';
 
 const Header = React.memo(({ 
   theme, 
@@ -11,6 +13,12 @@ const Header = React.memo(({
   selectedModel, 
   handleModelChange 
 }) => {
+  const { i18n } = useTranslation();
+
+  const changeLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'vi' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   return (
     <header className="app-header">
@@ -37,6 +45,9 @@ const Header = React.memo(({
                 </Dropdown>
             </Col>
             <Col className="d-flex justify-content-end align-items-center p-3">
+                <Button onClick={changeLanguage} variant="link" className="language-toggle-btn">
+                    <img src={i18n.language === 'vi' ? 'https://flagicons.lipis.dev/flags/4x3/vn.svg' : 'https://flagicons.lipis.dev/flags/4x3/gb.svg'} alt="flag" className="flag-icon" />
+                </Button>
                 <Button onClick={toggleTheme} variant="link" className="theme-toggle-btn">
                     {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
                 </Button>
