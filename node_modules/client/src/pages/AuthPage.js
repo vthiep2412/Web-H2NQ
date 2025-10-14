@@ -167,7 +167,7 @@ const AuthPage = () => {
             <div className={`${styles.authContainer} ${isSignUp ? styles.rightPanelActive : ""}`} id="container">
                 <div className={`${styles.formContainer} ${styles.signUpContainer}`}>
                     <form onSubmit={handleRegister}>
-                        <img src="/H2NQ-LOGO.png" alt="H2NQ Logo" className={styles.authLogo} />
+                        <img src="/H2NQ-SVG.svg" alt="H2NQ Logo" className={styles.authLogo} />
                         <h1>Create Account</h1>
                         <input type="text" placeholder="Username" value={name} onChange={(e) => setName(e.target.value)} required />
                         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -197,7 +197,7 @@ const AuthPage = () => {
                 </div>
                 <div className={`${styles.formContainer} ${styles.signInContainer}`}>
                     <form onSubmit={handleLogin}>
-                        <img src="/H2NQ-LOGO.png" alt="H2NQ Logo" className={styles.authLogo} />
+                        <img src="/H2NQ-SVG.svg" alt="H2NQ Logo" className={styles.authLogo} />
                         <h1>Sign In</h1>
                         <input type="text" placeholder="Username or Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <div className={styles.passwordContainer}>

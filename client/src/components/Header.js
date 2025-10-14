@@ -19,7 +19,7 @@ const Header = React.memo(({
                 <Button variant="link" onClick={() => toggleNavbar(null)} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
                     <List size={24} />
                 </Button>
-                <img src="/H2NQ-LOGO.png" alt="H2NQ-AI Logo" className="theme-aware-image" />
+                <img src="/H2NQ-SVG.svg" alt="H2NQ-AI Logo" className="theme-aware-image" />
             </Col>
             <Col className='d-flex align-items-center justify-content-center'>
                 <Dropdown onSelect={handleModelChange}>

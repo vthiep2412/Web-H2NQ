@@ -92,14 +92,13 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
           }
           for (const candidate of chunk.candidates) {
               for (const part of candidate.content.parts) {
-                  if (part.text) {
+                  if (part.thought) {
+                      thoughts.push({ thought: part.text });
+                  } else if (part.text) {
                       accumulatedText += part.text;
                   }
                   if (part.functionCall) {
                       thoughts.push(part.functionCall);
-                  }
-                  if (part.thought) {
-                      thoughts.push({ thought: part.text });
                   }
               }
           }

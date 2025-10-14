@@ -10,7 +10,7 @@ const IntroHeader = React.memo(({ theme, toggleTheme, onNavClick }) => {
     <Navbar bg={theme} variant={theme} expand="lg" className="intro-header" fixed="top">
       <Container>
         <Navbar.Brand href="#home" onClick={() => onNavClick('home')}>
-          <img src="/H2NQ-LOGO.png" alt="H2NQ-AI Logo" className="theme-aware-image" />
+          <img src="/H2NQ-SVG.svg" alt="H2NQ-AI Logo" className="theme-aware-image" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
