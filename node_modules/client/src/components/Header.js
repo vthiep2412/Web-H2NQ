@@ -6,18 +6,35 @@ import { useTranslation } from 'react-i18next';
 import './Header.css';
 
 const languages = [
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文 (简体)', flag: '🇨🇳' },
-  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' },
-  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
-  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
-  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
-  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺' },
-  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱' },
+  { code: 'en', name: 'English', nativeName: 'English' },
+  { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文 (简体)' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
+  { code: 'es', name: 'Spanish', nativeName: 'Español' },
+  { code: 'fr', name: 'French', nativeName: 'Français' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch' },
+  { code: 'it', name: 'Italian', nativeName: 'Italiano' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский' },
+  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands' },
 ];
+
+const getCountryCode = (langCode) => {
+  const codeMap = {
+    en: 'gb',
+    vi: 'vn',
+    zh: 'cn',
+    hi: 'in',
+    es: 'es',
+    fr: 'fr',
+    de: 'de',
+    it: 'it',
+    ja: 'jp',
+    ru: 'ru',
+    nl: 'nl',
+  };
+  return codeMap[langCode] || 'xx';
+};
 
 const Header = React.memo(({ 
   theme, 
@@ -62,12 +79,12 @@ const Header = React.memo(({
             <Col className="d-flex justify-content-end align-items-center p-3">
                 <Dropdown onSelect={changeLanguage} className="language-dropdown">
                   <Dropdown.Toggle variant="link" className="language-toggle-btn">
-                    <span className="flag-icon">{currentLanguage.flag}</span>
+                     <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(currentLanguage.code)}.svg`} alt="flag" className="flag-icon" />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {languages.map(lang => (
                       <Dropdown.Item key={lang.code} eventKey={lang.code}>
-                        <span className="flag-icon">{lang.flag}</span> {lang.nativeName}
+                        <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(lang.code)}.svg`} alt={`${lang.name} flag`} className="flag-icon me-2" /> {lang.nativeName}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>
