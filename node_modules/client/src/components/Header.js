@@ -5,6 +5,20 @@ import { models, getLabelForModel } from '../utils/models';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
 
+const languages = [
+  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
+  { code: 'vi', name: 'Vietnamese', nativeName: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'zh', name: 'Chinese', nativeName: '中文 (简体)', flag: '🇨🇳' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸' },
+  { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹' },
+  { code: 'ja', name: 'Japanese', nativeName: '日本語', flag: '🇯🇵' },
+  { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺' },
+  { code: 'nl', name: 'Dutch', nativeName: 'Nederlands', flag: '🇳🇱' },
+];
+
 const Header = React.memo(({ 
   theme, 
   toggleTheme, 
@@ -15,10 +29,11 @@ const Header = React.memo(({
 }) => {
   const { i18n } = useTranslation();
 
-  const changeLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'vi' : 'en';
-    i18n.changeLanguage(newLang);
+  const changeLanguage = (langCode) => {
+    i18n.changeLanguage(langCode);
   };
+
+  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   return (
     <header className="app-header">
@@ -45,9 +60,18 @@ const Header = React.memo(({
                 </Dropdown>
             </Col>
             <Col className="d-flex justify-content-end align-items-center p-3">
-                <Button onClick={changeLanguage} variant="link" className="language-toggle-btn">
-                    <img src={i18n.language === 'vi' ? 'https://flagicons.lipis.dev/flags/4x3/vn.svg' : 'https://flagicons.lipis.dev/flags/4x3/gb.svg'} alt="flag" className="flag-icon" />
-                </Button>
+                <Dropdown onSelect={changeLanguage} className="language-dropdown">
+                  <Dropdown.Toggle variant="link" className="language-toggle-btn">
+                    <span className="flag-icon">{currentLanguage.flag}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {languages.map(lang => (
+                      <Dropdown.Item key={lang.code} eventKey={lang.code}>
+                        <span className="flag-icon">{lang.flag}</span> {lang.nativeName}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
                 <Button onClick={toggleTheme} variant="link" className="theme-toggle-btn">
                     {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
                 </Button>

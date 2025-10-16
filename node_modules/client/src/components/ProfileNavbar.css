@@ -207,6 +207,7 @@
 .btn-background-option {
   background-color: transparent;
   border: 1px solid var(--bs-border-color);
+  min-width: 9rem;
 }
 
 [data-bs-theme="light"] .btn-background-option {
@@ -225,13 +226,15 @@
 
 @media screen and (max-width: 576px){
   .profile-navbar-container{
-    max-width: 10000px;
+    /* max-width: 10000px; */
     min-width: 100vw;
     transition: all 0.3s ease;
+    /* margin-right: -100%; */
   }
   .profile-navbar-container:not(.visible){
-    max-width: 10000px;
-    min-width: 100vw;
-    margin-right: -100%;
+    /* max-width: 10000px; */
+    /* min-width: 100vw; */
+    /* margin-right: -200%; */
+    transform: translateX(100%);
   }
 }

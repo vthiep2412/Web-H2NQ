@@ -416,13 +416,14 @@ useEffect(() => {
         if (data.conversation && !activeConversationId) {
           setConversations(prev => [data.conversation, ...prev]);
           setActiveConversationId(data.conversation._id);
-          const mappedMessages = data.conversation.messages.map(msg => ({
+          const conversationMessages = data.conversation.messages;
+          const mappedMessages = conversationMessages.map((msg, index) => ({
             sender: msg.role === 'assistant' ? 'ai' : 'user',
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
             thoughts: msg.thoughts,
-            isNew: false, // Loaded messages are not new
+            isNew: index === conversationMessages.length - 1,
           }));
           setMessages(mappedMessages);
         } else {
