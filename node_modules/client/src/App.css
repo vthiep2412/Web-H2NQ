@@ -532,7 +532,7 @@
 }
 
 [data-bs-theme="dark"] .theme-aware-button {
-  background-color: #1e1e1e; /* Dark background for dark theme */
+  background-color: #1e1e1e !important; /* Dark background for dark theme */
   color: #e0e0e0; /* Light text for dark theme */
 }
 
