@@ -280,9 +280,9 @@ button.ghost {
     border-color: #fff;
 }
 
-.dark .authLogo {
+/* .dark .authLogo {
     filter: invert(1);
-}
+} */
 
 .mobileToggleLink {
     display: none; /* Hidden by default */

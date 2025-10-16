@@ -544,9 +544,9 @@
   filter: brightness(150%);
 }
 
-[data-bs-theme="dark"] .theme-aware-button svg {
+/* [data-bs-theme="dark"] .theme-aware-button svg {
   filter: invert(1);
-}
+} */
 
 th {
   border-radius: 15px !important;
@@ -719,9 +719,9 @@ h
     border-color: color-mix(in srgb, var(--primary-color) 80%, black);
 }
 
-[data-bs-theme="dark"] .theme-aware-image {
+/* [data-bs-theme="dark"] .theme-aware-image {
   filter: invert(1);
-}
+} */
 
 .theme-aware-image{
   height: 72px;
