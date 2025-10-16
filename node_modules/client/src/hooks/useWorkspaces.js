@@ -115,7 +115,7 @@ const useWorkspaces = () => {
       if (user) {
         const fetchedWorkspaces = await getWorkspaces();
         if (fetchedWorkspaces && fetchedWorkspaces.length === 0) {
-          addWorkspace(t('yourWorkspace'));
+          addWorkspace('Your Workspace');
         }
       }
     }
