@@ -5,8 +5,7 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": { 
-        "distDir": "client/build",
-        "buildCommand": "npx react-scripts build"
+        "distDir": "client/build"
       }
     },
     {
