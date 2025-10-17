@@ -32,7 +32,8 @@
     "three": "^0.180.0",
     "web-vitals": "^2.1.4",
     "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "semver": "^7.6.2"
   },
   "scripts": {
     "start": "cross-env PORT=3002 react-scripts start",
