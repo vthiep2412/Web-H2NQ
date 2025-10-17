@@ -313,14 +313,18 @@ function AIPage() {
   }, [shouldFetchConversations, activeConversationId, user]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = document.querySelector('.chat-main-view');
+    if (el) {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+    // messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
 useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToBottom();
-    }, 500);
-    return () => clearTimeout(timer);
+    scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
@@ -351,7 +355,7 @@ useEffect(() => {
     }
   }, [activeView, isNavbarVisible, manualNavOpen, toggleNavbar]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const setPageHeight = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -361,7 +365,7 @@ useEffect(() => {
     setPageHeight();
 
     return () => window.removeEventListener('resize', setPageHeight);
-  }, []);
+  }, []);*/
 
   // Handlers
   const handleSubmit = async (message) => {
@@ -544,6 +548,28 @@ useEffect(() => {
     }
   };
 
+  const handleDeleteConversation = async (conversationId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/conversations/${conversationId}`, {
+        method: 'DELETE',
+        headers: {
+          'x-auth-token': token,
+        },
+      });
+
+      if (response.ok) {
+        setConversations(prev => prev.filter(c => c._id !== conversationId));
+        if (activeConversationId === conversationId) {
+          setActiveConversationId(null);
+          showGreetingMessage();
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting conversation:', error);
+    }
+  };
+
   const handleNewConversation = () => {
     setActiveConversationId(null);
     showGreetingMessage();
@@ -647,7 +673,7 @@ useEffect(() => {
           {renderActiveView()}
         </div>
         <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
-          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onClose={toggleHistoryNavbar} activeConversationId={activeConversationId} />
+          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onDeleteConversation={handleDeleteConversation} onClose={toggleHistoryNavbar} activeConversationId={activeConversationId} />
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           {user && (

@@ -4,6 +4,9 @@ const { InferenceClient } = require('@huggingface/inference');
 const { GEMINI_API_KEY, OPENAI_API_KEYS, OPENROUTER_API_KEY, HUGGINGFACE_API_FINEGRAINED_KEY } = require('../config');
 const Conversation = require('../models/Conversation');
 const User = require('../models/User');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI2 = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const hf = new InferenceClient(HUGGINGFACE_API_FINEGRAINED_KEY);
 
@@ -91,15 +94,17 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
               thoughts.push({ thoughtSummary: chunk.thoughtSummary });
           }
           for (const candidate of chunk.candidates) {
-              for (const part of candidate.content.parts) {
-                  if (part.thought) {
-                      thoughts.push({ thought: part.text });
-                  } else if (part.text) {
-                      accumulatedText += part.text;
-                  }
-                  if (part.functionCall) {
-                      thoughts.push(part.functionCall);
-                  }
+              if (candidate.content && candidate.content.parts) {
+                for (const part of candidate.content.parts) {
+                    if (part.thought) {
+                        thoughts.push({ thought: part.text });
+                    } else if (part.text) {
+                        accumulatedText += part.text;
+                    }
+                    if (part.functionCall) {
+                        thoughts.push(part.functionCall);
+                    }
+                }
               }
           }
       }
@@ -177,15 +182,20 @@ ${memories.map(mem => `- ${mem.text}`).join('\n')}`
         await oldestConversation.deleteOne();
       }
 
+      // const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
+      // const titleResult = await genAI.models.generateContent({
+      //   model: 'gemini-1.0-pro',
+      //   contents: [{ role: 'user', parts: [{ text: titlePrompt }] }],
+      // });
+
+      const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash' });
       const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
-      const titleResult = await genAI.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: [{ role: 'user', parts: [{ text: titlePrompt }] }],
-      });
+      const titleResult = await titleModel.generateContent(titlePrompt);
+
       const titleResponse = await titleResult.response;
       let title = 'New Conversation'; // Default title in case of API error
-      if (titleResponse && titleResponse.text) {
-        title = titleResponse.text().trim().replace(/"/g, '');
+      if (titleResponse && titleResponse.candidates && titleResponse.candidates.length > 0 && titleResponse.candidates[0].content && titleResponse.candidates[0].content.parts && titleResponse.candidates[0].content.parts.length > 0) {
+        title = titleResponse.candidates[0].content.parts[0].text.trim().replace(/"/g, '');
       } else {
         console.error('Failed to generate title from AI, using default title.');
       }

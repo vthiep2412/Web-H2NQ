@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import './ProfileNavbar.css';
 
 
@@ -72,6 +73,12 @@ const ProfileNavbar = React.memo(({
           <p>{user ? user.email : t('guestEmail')}</p>
           <p>{t('tier')}: {user ? user.tier : t('guestTier')}</p>
         </div>
+      </div>
+
+      <div className="profile-actions-section">
+        <Link to="/profile" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+          <Button variant="outline-secondary" className="w-100">My Profile</Button>
+        </Link>
       </div>
 
       <div className="token-usage-section">

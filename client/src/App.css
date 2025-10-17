@@ -106,7 +106,7 @@
 /* --- Base Layout & Components --- */
 
 .ai-page {
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;
 }
 
 .app-header {
@@ -544,7 +544,7 @@
   filter: brightness(150%);
 }
 
-/* [data-bs-theme="dark"] .theme-aware-button svg {
+/* [data-bs-theme="dark"] .theme-aware-image {
   filter: invert(1);
 } */
 

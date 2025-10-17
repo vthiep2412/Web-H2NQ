@@ -20,22 +20,38 @@
     padding: 5px 8px;
     cursor: pointer;
     color: #000;
+    scale: 1.2;
+    transition: all 0.3s ease;
 }
-
+button{
+    transition: all 0.3s ease !important;
+}
+button:hover{
+    background-color: #295ef0;;
+}
 .dark .themeToggleBtnAuth {
     color: #fff;
     border: 1px solid #fff; /* White border for dark theme */
+}
+.themeToggleBtnAuth:hover{
+    background-color: #f1f3f5;
+}
+
+.dark .themeToggleBtnAuth:hover,.dark button:hover{
+    background-color: #343a40;
 }
 
 .formContainer h1 {
     font-weight: bold;
     margin: 0;
     font-size: 1.8em; /* Reduced font size */
+    margin-bottom: .5rem;
 }
 
 .authLogo {
     max-width: 100px; /* Adjust as needed */
     height: auto;
+    margin-bottom: -.5rem;
 }
 
 .authBody p {
@@ -271,7 +287,7 @@ button.ghost {
 }
 
 .dark button {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     border-color: #007bff;
 }
 

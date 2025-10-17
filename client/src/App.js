@@ -8,6 +8,7 @@ const IntroductionPage = React.lazy(() => import('./pages/IntroductionPage'));
 const AIPage = React.lazy(() => import('./pages/AIPage'));
 const AuthPage = React.lazy(() => import('./pages/AuthPage'));
 const TrollPage = React.lazy(() => import('./pages/TrollPage'));
+const ProfilePage = React.lazy(() => import('./pages/ProfilePage')); // Import ProfilePage
 
 function App() {
   const [isServerOnline, setIsServerOnline] = useState(false);
@@ -51,6 +52,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AIPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           } 
         />

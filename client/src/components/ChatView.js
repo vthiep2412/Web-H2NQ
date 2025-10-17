@@ -6,6 +6,8 @@ import ChatInput from './ChatInput';
 import { getLabelForModel } from '../utils/models';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import '../App.css';
 
 const formatTime = (seconds) => {
@@ -61,7 +63,11 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                           <span>{timer.toFixed(1)}s</span>
                         </div>
                       ) : msg.sender === 'ai' ? (
-                        <TypingEffect text={msg.text} isNew={msg.isNew} onComplete={onTypingComplete} />
+                        msg.text.includes('$') ? (
+                          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>{msg.text}</ReactMarkdown>
+                        ) : (
+                          <TypingEffect text={msg.text} isNew={msg.isNew} onComplete={onTypingComplete} />
+                        )
                       ) : (
                         <div className="message-text">{msg.text}</div>
                       )}

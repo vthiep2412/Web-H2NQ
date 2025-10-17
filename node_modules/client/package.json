@@ -28,7 +28,9 @@
     "react-spring": "^10.0.3",
     "react-syntax-highlighter": "^15.6.6",
     "react-textarea-autosize": "^8.5.9",
+    "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "three": "^0.180.0",
     "web-vitals": "^2.1.4"
   },
@@ -57,6 +59,11 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^10.1.0"
+    "cross-env": "^10.1.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2"
   }
 }
