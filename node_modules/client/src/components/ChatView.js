@@ -5,9 +5,9 @@ import ChatInput from './ChatInput';
 import { getLabelForModel } from '../utils/models';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-// import remarkMath from 'remark-math';
-// import rehypeKatex from 'rehype-katex';
-// import 'katex/dist/katex.min.css'; // ✅ Required for KaTeX styling
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css'; // ✅ Required for KaTeX styling
 import '../App.css';
 
 const formatTime = (seconds) => {
@@ -70,9 +70,8 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       ) : msg.sender === 'ai' ? (
                         <div className="markdown-content">
                           <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            // remarkPlugins={[remarkGfm, remarkMath]}
-                            // rehypePlugins={[rehypeKatex]}
+                            remarkPlugins={[remarkGfm, remarkMath]}
+                            rehypePlugins={[rehypeKatex]}
                           >
                             {cleanMarkdown(msg.text)}
                           </ReactMarkdown>
