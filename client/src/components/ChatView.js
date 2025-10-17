@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Robot, PersonCircle } from 'react-bootstrap-icons';
-import TypingEffect from './TypingEffect';
 import ChatInput from './ChatInput';
 import { getLabelForModel } from '../utils/models';
 import ReactMarkdown from 'react-markdown';
