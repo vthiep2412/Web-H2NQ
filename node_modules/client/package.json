@@ -38,7 +38,8 @@
     "start": "cross-env PORT=3002 react-scripts start",
     "build": " react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "chmod +x node_modules/.bin/react-scripts"
   },
   "eslintConfig": {
     "extends": [
