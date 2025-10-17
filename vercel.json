@@ -4,7 +4,10 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "client/build" }
+      "config": { 
+        "distDir": "client/build",
+        "buildCommand": "chmod +x node_modules/.bin/react-scripts && npm run build"
+      }
     },
     {
       "src": "server/index.js",
