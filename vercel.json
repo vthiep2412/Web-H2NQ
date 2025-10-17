@@ -14,7 +14,7 @@
     }
   ],
   "installCommand": "npm install --legacy-peer-deps && cd client && npm install --legacy-peer-deps",
-  "buildCommand": "cd client && npm run build",
+  "buildCommand": "cd client && npx react-scripts build",
   "rewrites": [
     {
       "source": "/api/(.*)",
