@@ -33,10 +33,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "postinstall": "chmod +x node_modules/.bin/react-scripts || true",
+    "postinstall": "test -f node_modules/.bin/react-scripts && chmod +x node_modules/.bin/react-scripts || exit 0",
     "start": "cross-env PORT=3002 react-scripts start",
-    "dev": "cross-env PORT=3002 react-scripts start",
-    "build": "sudo npx react-scripts build",
+    "dev": "cross-env PORT=3002 react-scripts start", 
+    "build": "node node_modules/react-scripts/bin/react-scripts.js build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
