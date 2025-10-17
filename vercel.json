@@ -4,17 +4,13 @@
     {
       "src": "package.json",
       "use": "@vercel/static-build",
-      "config": { 
-        "distDir": "client/build"
-      }
+      "config": { "distDir": "client/build" }
     },
     {
       "src": "server/index.js",
       "use": "@vercel/node"
     }
   ],
-  "installCommand": "npm install --legacy-peer-deps && cd client && npm install --legacy-peer-deps",
-  "buildCommand": "cd client && npx react-scripts build",
   "rewrites": [
     {
       "source": "/api/(.*)",
