@@ -1,6 +1,7 @@
 .katex{
-  transform: scale(0.8);
+  line-height: 2 !important;
 }
+
 .chat-view-header {
   position: relative;
   height: 40px; 
