@@ -13,6 +13,8 @@
       "use": "@vercel/node"
     }
   ],
+  "installCommand": "npm install --legacy-peer-deps && cd client && npm install --legacy-peer-deps",
+  "buildCommand": "cd client && npm run build",
   "rewrites": [
     {
       "source": "/api/(.*)",

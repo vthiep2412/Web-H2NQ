@@ -6,7 +6,7 @@
     "server"
   ],
   "scripts": {
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install --legacy-peer-deps && npm run build"
   },
   "devDependencies": {
     "@eslint/css": "^0.11.1",
