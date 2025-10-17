@@ -34,7 +34,9 @@
   },
   "scripts": {
     "start": "cross-env PORT=3002 react-scripts start",
-    "chmod": "chmod +x node_modules/.bin/*",
+    "dev": "cross-env PORT=3002 react-scripts start",
+    "postinstall": "npm run chmod",
+    "chmod": "chmod +x ./node_modules/.bin/*",
     "build": "npx react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
