@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { ChatDots, Cpu, JournalCode, Hdd } from 'react-bootstrap-icons';
-import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
 // Basic deep comparison utility for arrays of objects
@@ -36,7 +35,6 @@ const useWorkspaces = () => {
   const { t } = useTranslation();
   const [workspaces, setWorkspaces] = useState([]);
   const loadingRef = useRef(false); // Use useRef for loading state
-  const { user } = useAuth();
 
   const addWorkspace = useCallback(async (name) => {
     if (name) {
