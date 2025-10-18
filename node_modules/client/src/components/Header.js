@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
 import { models, getLabelForModel } from '../utils/models';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import './Header.css';
 
 const languages = [
