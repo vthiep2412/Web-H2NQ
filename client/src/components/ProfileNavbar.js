@@ -77,7 +77,7 @@ const ProfileNavbar = React.memo(({
 
       <div className="profile-actions-section">
         <Link to="/profile" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
-          <Button variant="outline-secondary" className="w-100">My Profile</Button>
+          <Button variant="outline-secondary" className="w-100 profile-button">My Profile</Button>
         </Link>
       </div>
 

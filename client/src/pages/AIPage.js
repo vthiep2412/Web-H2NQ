@@ -23,11 +23,12 @@ import '../gradient.css';
 
 
 function AIPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
 
   // UI State
   const [theme, setTheme] = useState(user?.settings?.theme || 'dark');
+  const [language, setLanguage] = useState(user?.settings?.language || 'en');
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
   const [isHistoryNavbarVisible, setIsHistoryNavbarVisible] = useState(false); // New state for history navbar
@@ -76,10 +77,10 @@ function AIPage() {
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
-  const saveSettings = async (settings) => {
+  const saveSettings = useCallback(async (settings) => {
     try {
       const token = localStorage.getItem('token');
-      await fetch('/api/users/settings', {
+      const response = await fetch('/api/users/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,46 +88,50 @@ function AIPage() {
         },
         body: JSON.stringify({ settings }),
       });
+      if (response.ok) {
+        const updatedUser = await response.json();
+        updateUser(updatedUser);
+        console.log('Settings saved successfully:', updatedUser);
+      } else {
+        console.error('Failed to save settings:', response.statusText);
+      }
     } catch (error) {
       console.error('Error saving settings:', error);
     }
+  }, [updateUser]);
+
+  const debounceTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (user) {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      debounceTimeoutRef.current = setTimeout(() => {
+        const settingsToSave = {
+          theme,
+          primaryColor: customTheme.primaryColor,
+          gradientColor1,
+          gradientColor2,
+          isGradientColor1Enabled,
+          isGradientColor2Enabled,
+          isGradientAnimated,
+          selectedModel,
+          selectedBackground,
+          language,
+        };
+        saveSettings(settingsToSave);
+      }, 500); // Debounce for 500ms
+    }
+  }, [theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, user, saveSettings]);
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
+
+  const handleLanguageChange = (langCode) => {
+    setLanguage(langCode);
   };
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ theme });
-    }
-  }, [theme, user]);
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ primaryColor: customTheme.primaryColor });
-    }
-  }, [customTheme.primaryColor, user]);
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled });
-    }
-  }, [gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, user]);
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ isGradientAnimated });
-    }
-  }, [isGradientAnimated, user]);
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ selectedModel });
-    }
-  }, [selectedModel, user]);
-
-  useEffect(() => {
-    if (user) {
-      saveSettings({ selectedBackground });
-    }
-  }, [selectedBackground, user]);
 
   const handleTypingComplete = useCallback(() => {
     setShouldFetchConversations(true); // Trigger conversation fetch after typing is complete
@@ -521,7 +526,13 @@ useEffect(() => {
     if (viewId.endsWith('-chat')) {
       // Delay scrolling to ensure the ChatView component has rendered and messages are in place
       setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        const el = document.querySelector('.chat-main-view');
+        if (el) {
+          el.scrollTo({
+            top: el.scrollHeight,
+            behavior: 'smooth',
+          });
+        }
       }, 100);
     }
   };
@@ -653,6 +664,8 @@ useEffect(() => {
         toggleProfileNavbar={toggleProfileNavbar}
         selectedModel={selectedModel}
         handleModelChange={handleModelChange}
+        language={language}
+        onLanguageChange={handleLanguageChange}
       />
       <div style={{ display: 'flex', flex: '1 1 auto', overflow: 'hidden' }}>
         <div ref={navbarRef} className={`navbar-container ${isNavbarVisible ? 'visible' : ''}`}>

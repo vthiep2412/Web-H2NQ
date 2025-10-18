@@ -40,6 +40,7 @@ const UserSchema = new mongoose.Schema({
     isGradientAnimated: { type: Boolean, default: false },
     selectedModel: { type: String, default: 'gemini-2.5-flash' },
     selectedBackground: { type: String, default: 'none' },
+    language: { type: String, default: 'en' },
   },
 });
 

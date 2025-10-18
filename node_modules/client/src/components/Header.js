@@ -42,15 +42,17 @@ const Header = React.memo(({
   toggleNavbar, 
   toggleProfileNavbar, 
   selectedModel, 
-  handleModelChange 
+  handleModelChange,
+  language,
+  onLanguageChange
 }) => {
   const { i18n } = useTranslation();
 
   const changeLanguage = (langCode) => {
-    i18n.changeLanguage(langCode);
+    onLanguageChange(langCode);
   };
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
   return (
     <header className="app-header">

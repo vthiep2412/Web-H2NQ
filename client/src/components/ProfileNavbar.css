@@ -56,7 +56,7 @@
 }
 
 .token-bar {
-  background-color: #007bff;
+  /* background-color: #007bff; */
   height: 100%;
   border-radius: 0.25rem;
 }
