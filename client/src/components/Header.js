@@ -46,7 +46,7 @@ const Header = React.memo(({
   language,
   onLanguageChange
 }) => {
-  const { i18n } = useTranslation();
+  // const { i18n } = useTranslation();
 
   const changeLanguage = (langCode) => {
     onLanguageChange(langCode);
