@@ -50,24 +50,29 @@ const useWorkspaces = () => {
           },
           body: JSON.stringify({ name }),
         });
-        const data = await res.json();
-        const newWorkspace = {
-            ...data,
-            id: data._id,
-            children: [
-              { id: `${data._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
-              { id: `${data._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
-              { id: `${data._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
-              { id: `${data._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
-            ]
-        };
-        setWorkspaces(prev => {
-          const newWorkspaces = [...prev, newWorkspace];
-          if (!deepEqual(prev, newWorkspaces)) {
-            return newWorkspaces;
-          }
-          return prev;
-        });
+        if (res.ok) {
+          const data = await res.json();
+          const newWorkspace = {
+              ...data,
+              id: data._id,
+              children: [
+                { id: `${data._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
+                { id: `${data._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
+                { id: `${data._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
+                { id: `${data._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
+              ]
+          };
+          setWorkspaces(prev => {
+            const newWorkspaces = [...prev, newWorkspace];
+            if (!deepEqual(prev, newWorkspaces)) {
+              return newWorkspaces;
+            }
+            return prev;
+          });
+        } else {
+          const errorData = await res.json();
+          alert(errorData.msg);
+        }
       } catch (err) {
         console.error('Error adding workspace:', err);
       }
@@ -109,18 +114,6 @@ const useWorkspaces = () => {
       loadingRef.current = false; // Update ref
     }
   }, [t]); // Empty dependency array for stability
-
-  useEffect(() => {
-    const fetchAndCreate = async () => {
-      if (user) {
-        const fetchedWorkspaces = await getWorkspaces();
-        if (fetchedWorkspaces && fetchedWorkspaces.length === 0) {
-          addWorkspace('Your Workspace');
-        }
-      }
-    }
-    fetchAndCreate();
-  }, [user, getWorkspaces, addWorkspace, t]);
 
   const editWorkspace = async (workspaceId, newName) => {
     if (newName) {
@@ -197,7 +190,7 @@ const useWorkspaces = () => {
     }
   };
 
-  return { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories };
+  return { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces };
 };
 
 export default useWorkspaces;

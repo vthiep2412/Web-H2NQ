@@ -1,5 +1,4 @@
-
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
@@ -59,9 +58,9 @@ export const AuthProvider = ({ children }) => {
         window.location.href = '/auth'; // Force full page reload to /auth
     };
 
-    const updateUser = (newUserData) => {
+    const updateUser = useCallback((newUserData) => {
         setUser(prevUser => ({ ...prevUser, ...newUserData }));
-    };
+    }, []);
 
     return (
         <AuthContext.Provider value={{ token, user, login, logout, updateUser }}>

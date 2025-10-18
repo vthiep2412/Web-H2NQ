@@ -67,12 +67,15 @@ router.post(
 
       await user.save();
 
-      const newWorkspace = new Workspace({
-        userId: user.id,
-        name: 'Your workspace',
-      });
+      const existingWorkspace = await Workspace.findOne({ userId: user.id, name: 'Your workspace' });
 
-      await newWorkspace.save();
+      if (!existingWorkspace) {
+        const newWorkspace = new Workspace({
+          userId: user.id,
+          name: 'Your workspace',
+        });
+        await newWorkspace.save();
+      }
 
       const payload = {
         user: {

@@ -21,16 +21,13 @@ exports.createWorkspace = async (req, res) => {
     const user = await User.findById(userId);
     const workspaceCount = await Workspace.countDocuments({ userId });
 
-    if (name === 'Your workspace') {
-      const existingDefaultWorkspace = await Workspace.findOne({ userId, name: 'Your workspace' });
-      if (existingDefaultWorkspace) {
-        console.log(`Existing default workspace found for userId: ${userId}. Returning existing workspace.`);
-        return res.json(existingDefaultWorkspace);
-      }
-    }
-
     if (user.tier === 'free' && workspaceCount >= 2) {
       return res.status(403).json({ msg: 'You have reached the maximum of 2 workspaces for your free tier.' });
+    }
+
+    const existingWorkspace = await Workspace.findOne({ userId, name });
+    if (existingWorkspace) {
+      return res.status(400).json({ msg: 'Workspace with this name already exists' });
     }
 
     const newWorkspace = new Workspace({

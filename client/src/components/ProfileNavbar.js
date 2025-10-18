@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
@@ -26,38 +26,20 @@ const ProfileNavbar = React.memo(({
   user // Destructure user prop
 }) => {
   const { t } = useTranslation();
-  const primaryDebounceTimeout = useRef(null);
-  const gradient1DebounceTimeout = useRef(null);
-  const gradient2DebounceTimeout = useRef(null);
 
   const handleColorChange = (e) => {
     const newColor = e.target.value;
-    if (primaryDebounceTimeout.current) {
-      clearTimeout(primaryDebounceTimeout.current);
-    }
-    primaryDebounceTimeout.current = setTimeout(() => {
-      onThemeChange({ ...customTheme, primaryColor: newColor });
-    }, 0);
+    onThemeChange({ ...customTheme, primaryColor: newColor });
   };
 
   const handleGradientColor1Change = (e) => {
     const newColor = e.target.value;
-    if (gradient1DebounceTimeout.current) {
-      clearTimeout(gradient1DebounceTimeout.current);
-    }
-    gradient1DebounceTimeout.current = setTimeout(() => {
-      onGradientColor1Change(newColor);
-    }, 0);
+    onGradientColor1Change(newColor);
   };
 
   const handleGradientColor2Change = (e) => {
     const newColor = e.target.value;
-    if (gradient2DebounceTimeout.current) {
-      clearTimeout(gradient2DebounceTimeout.current);
-    }
-    gradient2DebounceTimeout.current = setTimeout(() => {
-      onGradientColor2Change(newColor);
-    }, 0);
+    onGradientColor2Change(newColor);
   };
 
   return (

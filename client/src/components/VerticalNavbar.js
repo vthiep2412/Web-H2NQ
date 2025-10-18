@@ -22,9 +22,14 @@ const VerticalNavbar = React.memo(({
   deleteWorkspace,
   toggleHistoryNavbar,
   isHistoryNavbarVisible,
-  toggleNavbar // Added toggleNavbar prop
+  toggleNavbar, // Added toggleNavbar prop
+  getWorkspaces
 }) => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    getWorkspaces();
+  }, [getWorkspaces]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -135,6 +140,7 @@ const VerticalNavbar = React.memo(({
                       if (window.innerWidth < 576) {
                         toggleNavbar(false);
                       }
+                      getWorkspaces();
                     }} 
                     aria-expanded={open[ws.id]} 
                     className="workspace-toggle flex-grow-1"
@@ -166,6 +172,7 @@ const VerticalNavbar = React.memo(({
                       if (window.innerWidth < 576) {
                         toggleNavbar(false);
                       }
+                      getWorkspaces();
                     }}
                   >
                     {child.icon}
@@ -178,6 +185,7 @@ const VerticalNavbar = React.memo(({
                     if (window.innerWidth < 576) {
                       toggleNavbar(false);
                     }
+                    getWorkspaces();
                   }}
                   active={isHistoryNavbarVisible}
                 >
@@ -193,7 +201,10 @@ const VerticalNavbar = React.memo(({
         <Nav className="flex-column">
           <Nav.Link 
             active={activeView === 'settings'}
-            onClick={() => onViewChange('settings')}
+            onClick={() => {
+              onViewChange('settings');
+              getWorkspaces();
+            }}
           >
             <Gear className="me-2" /> {t('settings')}
           </Nav.Link>

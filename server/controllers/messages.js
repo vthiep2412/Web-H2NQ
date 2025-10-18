@@ -31,7 +31,7 @@ const truncateHistory = (history, maxLength) => {
 
 exports.sendMessage = async (req, res) => {
   console.log("Received message, sending to AI...");
-  const { message, model, history, conversationId, memories, workspaceId } = req.body;
+  const { message, model, history, conversationId, memories, workspaceId, language } = req.body;
   const userId = req.user.id;
 
   try {
@@ -46,13 +46,16 @@ exports.sendMessage = async (req, res) => {
     const MAX_CONTEXT_LENGTH = user.tier === 'free' ? 256000 : 1000000;
 
     let fullHistory = [...history];
+    let systemPrompt = '';
+    if (language) {
+      systemPrompt += `Please respond in ${language}.\n`;
+    }
     if (memories && memories.length > 0) {
-      const memorySystemPrompt = {
-        role: 'system',
-        content: `Please follow these rules when responding:
-${memories.map(mem => `- ${mem.text}`).join('\n')}`
-      };
-      fullHistory.unshift(memorySystemPrompt);
+      systemPrompt += `Please follow these rules when responding:\n${memories.map(mem => `- ${mem.text}`).join('\n')}`;
+    }
+
+    if (systemPrompt) {
+      fullHistory.unshift({ role: 'system', content: systemPrompt });
     }
 
     const { history: truncatedHistory, truncated } = truncateHistory(fullHistory, MAX_CONTEXT_LENGTH);

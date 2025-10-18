@@ -55,7 +55,7 @@ function AIPage() {
   const [selectedBackground, setSelectedBackground] = useState(user?.settings?.selectedBackground || 'none');
 
   // Workspace State
-  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories } = useWorkspaces();
+  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces } = useWorkspaces();
 
   // AI Memory State
   const activeWorkspace = useMemo(() => {
@@ -77,53 +77,48 @@ function AIPage() {
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
-  const saveSettings = useCallback(async (settings) => {
+  useEffect(() => {
+    getWorkspaces();
+  }, [getWorkspaces]);
+
+  const saveSettings = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
+      const settingsToSave = {
+        theme,
+        primaryColor: customTheme.primaryColor,
+        gradientColor1,
+        gradientColor2,
+        isGradientColor1Enabled,
+        isGradientColor2Enabled,
+        isGradientAnimated,
+        selectedModel,
+        selectedBackground,
+        language,
+      };
       const response = await fetch('/api/users/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'x-auth-token': token,
         },
-        body: JSON.stringify({ settings }),
+        body: JSON.stringify({ settings: settingsToSave }),
       });
       if (response.ok) {
         const updatedUser = await response.json();
         updateUser(updatedUser);
-        console.log('Settings saved successfully:', updatedUser);
+        // console.log('Settings saved successfully:', updatedUser);
       } else {
         console.error('Failed to save settings:', response.statusText);
       }
     } catch (error) {
       console.error('Error saving settings:', error);
     }
-  }, [updateUser]);
-
-  const debounceTimeoutRef = useRef(null);
+  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language]);
 
   useEffect(() => {
-    if (user) {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-      debounceTimeoutRef.current = setTimeout(() => {
-        const settingsToSave = {
-          theme,
-          primaryColor: customTheme.primaryColor,
-          gradientColor1,
-          gradientColor2,
-          isGradientColor1Enabled,
-          isGradientColor2Enabled,
-          isGradientAnimated,
-          selectedModel,
-          selectedBackground,
-          language,
-        };
-        saveSettings(settingsToSave);
-      }, 500); // Debounce for 500ms
-    }
-  }, [theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, user, saveSettings]);
+    saveSettings();
+  }, [saveSettings]);
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -399,7 +394,7 @@ useEffect(() => {
             'Content-Type': 'application/json',
             'x-auth-token': token,
           },
-          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id }),
+          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language }),
         });
 
         clearInterval(timerRef.current);
@@ -680,6 +675,7 @@ useEffect(() => {
             isHistoryNavbarVisible={isHistoryNavbarVisible}
             screenSizeRef={screenSizeRef}
             toggleNavbar={toggleNavbar}
+            getWorkspaces={getWorkspaces}
           />
         </div>
         <div className="d-flex flex-column flex-grow-1 idk" style={{ overflow: 'hidden' }}>
