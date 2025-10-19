@@ -511,6 +511,7 @@
 .vertical-navbar .nav-link {
   border-radius: 10px;
   margin-bottom: 4px !important;
+  margin-top: 0px;
 }
 
 .workspace-toggle {
@@ -807,6 +808,6 @@ body.gradient-animated .user-avatar {
 }
 
 h1{
-  font-size: revert !important;
-  font-weight: revert !important;
+  font-size: revert;
+  font-weight: revert;
 }
