@@ -4,9 +4,11 @@ import { SunFill, MoonFill, EyeFill, EyeSlashFill } from 'react-bootstrap-icons'
 import styles from './AuthPage.module.css'; // Import CSS module
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import Modal from '../components/Modal'; // Import the Modal component
+import { useLocation } from 'react-router-dom';
 
 const AuthPage = () => {
-    const [isSignUp, setIsSignUp] = useState(false);
+    const location = useLocation();
+    const [isSignUp, setIsSignUp] = useState(location.state?.formType === 'signup');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -140,7 +142,8 @@ const AuthPage = () => {
                     setCountdown(errorData.timeLeft || 0);
                 } else if (res.status === 400 && errorData) {
                     setModalMessage(errorData.msg || 'Wrong email or password');
-                } else {
+                }
+                else {
                     // Fallback for non-JSON responses or other errors
                     setModalMessage('Login failed. Please try again later.');
                 }

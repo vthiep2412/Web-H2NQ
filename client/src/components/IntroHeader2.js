@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import SunIcon from './icons/intro/SunIcon';
-import MoonIcon from './icons/intro/MoonIcon';
+import { Link } from 'react-router-dom';
+import SunIcon from './icons/SunIcon';
+import MoonIcon from './icons/MoonIcon';
 
-const IntroHeader = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, onTechClick, theme, toggleTheme }) => {
+
+const IntroHeader2 = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, onTechClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            return 'dark';
+        }
+    }
+    return 'light';
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +22,20 @@ const IntroHeader = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
   
   const navItems = [
     { label: 'Home', action: onHomeClick },
@@ -45,12 +67,12 @@ const IntroHeader = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, 
             </nav>
             <div className="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
             <div className="flex items-center space-x-2">
-                <button onClick={() => navigate('/auth', { state: { formType: 'login' } })} className="text-slate-600 dark:text-slate-300 hover:text-[#379eff] px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                <Link to="/auth" className="text-slate-600 dark:text-slate-300 hover:text-[#379eff] px-3 py-2 rounded-md text-sm font-medium transition-colors">
                     Log In
-                </button>
-                <button onClick={() => navigate('/auth', { state: { formType: 'signup' } })} className="bg-[#379eff] text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-opacity-90 transition">
+                </Link>
+                <Link to="/auth" className="bg-[#379eff] text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-opacity-90 transition">
                     Sign Up
-                </button>
+                </Link>
                 <button 
                   onClick={toggleTheme} 
                   className="p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
@@ -69,4 +91,4 @@ const IntroHeader = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, 
   );
 };
 
-export default IntroHeader;
+export default IntroHeader2;

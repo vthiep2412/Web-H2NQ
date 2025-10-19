@@ -4,7 +4,7 @@ import WaitingPage from './pages/WaitingPage';
 import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
 import './App.css';
 
-const IntroductionPage = React.lazy(() => import('./pages/IntroductionPage'));
+const IntroductionPage = React.lazy(() => import('./pages/IntroductionPage.js'));
 const AIPage = React.lazy(() => import('./pages/AIPage'));
 const AuthPage = React.lazy(() => import('./pages/AuthPage'));
 const TrollPage = React.lazy(() => import('./pages/TrollPage'));
