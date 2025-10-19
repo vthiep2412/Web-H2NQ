@@ -122,6 +122,7 @@ function AIPage() {
 
   const handleLanguageChange = (langCode) => {
     setLanguage(langCode);
+    saveSettings();
   };
 
   const handleTypingComplete = useCallback(() => {
@@ -453,29 +454,38 @@ useEffect(() => {
   };
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+    setTheme(prevTheme => {
+      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+      saveSettings(); // Save settings after theme change
+      return newTheme;
+    });
   };
 
   const handleSelectGradient = (type) => {
     setSelectedGradientType(type);
+    saveSettings();
   };
 
 
 
   const handleThemeChange = (newTheme) => {
     setCustomTheme(newTheme);
+    saveSettings();
   };
 
   const handleSecondaryColorChange = (color) => {
     setSecondaryColor(color);
+    saveSettings();
   };
 
   const handleGradientColor1Change = (color) => {
     setGradientColor1(color);
+    saveSettings();
   };
 
   const handleGradientColor2Change = (color) => {
     setGradientColor2(color);
+    saveSettings();
   };
 
   const handleGradientToggle = (toggle) => {
@@ -483,17 +493,21 @@ useEffect(() => {
       setIsGradientNone(true);
       setIsGradientColor1Enabled(false);
       setIsGradientColor2Enabled(false);
+      saveSettings();
     } else if (toggle === 'color1') {
       setIsGradientNone(false);
       setIsGradientColor1Enabled(!isGradientColor1Enabled);
+      saveSettings();
     } else if (toggle === 'color2') {
       setIsGradientNone(false);
       setIsGradientColor2Enabled(!isGradientColor2Enabled);
+      saveSettings();
     }
   };
 
   const handleGradientAnimationToggle = () => {
     setIsGradientAnimated(prevState => !prevState);
+    saveSettings();
   };
 
   const toggleProfileNavbar = () => {
@@ -530,6 +544,7 @@ useEffect(() => {
 
   const handleBackgroundChange = (background) => {
     setSelectedBackground(background);
+    saveSettings();
   };
 
   const handleSelectConversation = (conversationId) => {
