@@ -29,7 +29,7 @@ const IntroHeader = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white cursor-pointer" onClick={onHomeClick}><img src="/H2NQ-SVG.svg" alt="Example SVG Image" className="h-16 w-auto"/></span>
+            <span className="text-2xl font-bold text-slate-900 dark:text-white cursor-pointer" onClick={onHomeClick}><img src="/H2NQ-SVG.svg" alt="H2NQ Logo" className="h-16 w-auto"/></span>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <nav className="flex items-baseline space-x-1">
