@@ -36,12 +36,12 @@ const getCountryCode = (langCode) => {
   return codeMap[langCode] || 'xx';
 };
 
-const Header = React.memo(({ 
-  theme, 
-  toggleTheme, 
-  toggleNavbar, 
-  toggleProfileNavbar, 
-  selectedModel, 
+const Header = React.memo(({
+  theme,
+  toggleTheme,
+  toggleNavbar,
+  toggleProfileNavbar,
+  selectedModel,
   handleModelChange,
   language,
   onLanguageChange
@@ -80,13 +80,13 @@ const Header = React.memo(({
             </Col>
             <Col className="d-flex justify-content-end align-items-center p-3">
                 <Dropdown onSelect={changeLanguage} className="language-dropdown">
-                  <Dropdown.Toggle variant="link" className="language-toggle-btn">
+                  <Dropdown.Toggle variant="link" className="language-toggle-btn flex items-center">
                      <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(currentLanguage.code)}.svg`} alt="flag" className="flag-icon" />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {languages.map(lang => (
-                      <Dropdown.Item key={lang.code} eventKey={lang.code}>
-                        <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(lang.code)}.svg`} alt={`${lang.name} flag`} className="flag-icon me-2" /> {lang.nativeName}
+                      <Dropdown.Item key={lang.code} eventKey={lang.code} className="flex items-center">
+                        <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(lang.code)}.svg`} alt={`${lang.name} flag`} className="flag-icon mr-2" /> {lang.nativeName}
                       </Dropdown.Item>
                     ))}
                   </Dropdown.Menu>

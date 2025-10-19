@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Nav, Collapse, Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { 
-  ChevronDown, 
-  ChevronRight, 
+import {
+  ChevronDown,
+  ChevronRight,
   Gear,
   Pencil,
   PlusLg,
@@ -13,11 +13,11 @@ import {
 } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 
-const VerticalNavbar = React.memo(({ 
-  activeView, 
-  onViewChange, 
-  workspaces, 
-  addWorkspace, 
+const VerticalNavbar = React.memo(({
+  activeView,
+  onViewChange,
+  workspaces,
+  addWorkspace,
   editWorkspace,
   deleteWorkspace,
   toggleHistoryNavbar,
@@ -143,9 +143,9 @@ const VerticalNavbar = React.memo(({
                       getWorkspaces();
                     }} 
                     aria-expanded={open[ws.id]} 
-                    className="workspace-toggle flex-grow-1"
+                    className="workspace-toggle flex-grow-1 flex items-center"
                   >
-                    {open[ws.id] ? <ChevronDown className="me-2" /> : <ChevronRight className="me-2" />}
+                    {open[ws.id] ? <ChevronDown className="mr-2" /> : <ChevronRight className="mr-2" />}
                     <strong>{ws.name}</strong>
                   </Nav.Link>
                   <OverlayTrigger overlay={<Tooltip>{t('edit')}</Tooltip>}>
@@ -174,24 +174,25 @@ const VerticalNavbar = React.memo(({
                       }
                       getWorkspaces();
                     }}
+                    className="flex items-center"
                   >
-                    {child.icon}
+                    {child.icon && <span className="mr-2">{child.icon}</span>}
                     {child.name}
                   </Nav.Link>
                 ))}
-                <Nav.Link 
-                  onClick={() => {
-                    toggleHistoryNavbar();
-                    if (window.innerWidth < 576) {
-                      toggleNavbar(false);
-                    }
-                    getWorkspaces();
-                  }}
-                  active={isHistoryNavbarVisible}
-                >
-                  <ClockHistory className="me-2" /> {t('history')}
-                </Nav.Link>
-              </div>
+                                  <Nav.Link 
+                                    onClick={() => {
+                                      toggleHistoryNavbar();
+                                      if (window.innerWidth < 576) {
+                                        toggleNavbar(false);
+                                      }
+                                      getWorkspaces();
+                                    }}
+                                    active={isHistoryNavbarVisible}
+                                    className="flex items-center"
+                                  >
+                                    <span className="mr-2 custom-history-nav"><ClockHistory /></span> {t('history')}
+                                  </Nav.Link>              </div>
             </Collapse>
           </div>
         ))}
@@ -205,8 +206,9 @@ const VerticalNavbar = React.memo(({
               onViewChange('settings');
               getWorkspaces();
             }}
+            className="flex items-center"
           >
-            <Gear className="me-2" /> {t('settings')}
+            <Gear className="mr-2" /> {t('settings')}
           </Nav.Link>
         </Nav>
       </div>
@@ -215,3 +217,4 @@ const VerticalNavbar = React.memo(({
 });
 
 export default VerticalNavbar;
+

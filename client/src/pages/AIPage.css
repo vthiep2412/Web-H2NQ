@@ -22,3 +22,7 @@
 .message-text {
   white-space: pre-wrap;
 }
+
+.custom-history-nav{
+  margin-right: 1rem !important;
+}
