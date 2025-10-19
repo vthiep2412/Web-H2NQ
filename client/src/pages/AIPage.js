@@ -117,10 +117,6 @@ function AIPage() {
   }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language]);
 
   useEffect(() => {
-    saveSettings();
-  }, [saveSettings]);
-
-  useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
 
