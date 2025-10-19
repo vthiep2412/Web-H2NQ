@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import IntroHeader from '../components/IntroHeader';
 import IntroFooter from '../components/IntroFooter';
 import MongoDbIcon from '../components/icons/intro/MongoDbIcon';

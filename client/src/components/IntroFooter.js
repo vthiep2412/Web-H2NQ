@@ -38,10 +38,10 @@ const IntroFooter = ({ onHomeClick, onIntroClick, onFeatureClick, onAboutClick, 
                 <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 tracking-wider uppercase">Legal</h3>
                 <ul className="mt-4 space-y-4">
                   <li>
-                    <a href="#" className="text-base text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">Privacy Policy</a>
+                    <span className="text-base text-slate-600 dark:text-slate-300">Privacy Policy</span>
                   </li>
                   <li>
-                    <a href="#" className="text-base text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">Terms of Service</a>
+                    <span className="text-base text-slate-600 dark:text-slate-300">Terms of Service</span>
                   </li>
                 </ul>
               </div>
