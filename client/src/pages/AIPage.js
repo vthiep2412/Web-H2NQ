@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import debounce from 'lodash.debounce';
 import Header from '../components/Header';
 import VerticalNavbar from '../components/VerticalNavbar';
 import ProfileNavbar from '../components/ProfileNavbar'; // New
@@ -37,6 +38,7 @@ function AIPage() {
   const [activeView, setActiveView] = useState('chat1');
   const navbarRef = useRef(null);
   const screenSizeRef = useRef(window.innerWidth < 992 ? 'small' : 'large');
+  const isInitialMount = useRef(true);
 
   // New Theme State
   const [customTheme, setCustomTheme] = useState({
@@ -117,12 +119,19 @@ function AIPage() {
   }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language]);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      saveSettings();
+    }
+  }, [saveSettings]);
+
+  useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
 
   const handleLanguageChange = (langCode) => {
     setLanguage(langCode);
-    saveSettings();
   };
 
   const handleTypingComplete = useCallback(() => {
@@ -344,7 +353,7 @@ useEffect(() => {
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, [isNavbarVisible, manualNavOpen, manualNavClose, toggleNavbar]);
+}, [isNavbarVisible, manualNavOpen, manualNavClose, toggleNavbar]);
 
   useEffect(() => {
     if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
@@ -456,58 +465,48 @@ useEffect(() => {
   const toggleTheme = () => {
     setTheme(prevTheme => {
       const newTheme = prevTheme === 'light' ? 'dark' : 'light';
-      saveSettings(); // Save settings after theme change
       return newTheme;
     });
   };
 
   const handleSelectGradient = (type) => {
     setSelectedGradientType(type);
-    saveSettings();
   };
 
 
 
-  const handleThemeChange = (newTheme) => {
+  const handleThemeChange = useMemo(() => debounce((newTheme) => {
     setCustomTheme(newTheme);
-    saveSettings();
-  };
+  }, 100), []);
 
   const handleSecondaryColorChange = (color) => {
     setSecondaryColor(color);
-    saveSettings();
   };
 
-  const handleGradientColor1Change = (color) => {
+  const handleGradientColor1Change = useMemo(() => debounce((color) => {
     setGradientColor1(color);
-    saveSettings();
-  };
+  }, 100), []);
 
-  const handleGradientColor2Change = (color) => {
+  const handleGradientColor2Change = useMemo(() => debounce((color) => {
     setGradientColor2(color);
-    saveSettings();
-  };
+  }, 100), []);
 
   const handleGradientToggle = (toggle) => {
     if (toggle === 'none') {
       setIsGradientNone(true);
       setIsGradientColor1Enabled(false);
       setIsGradientColor2Enabled(false);
-      saveSettings();
     } else if (toggle === 'color1') {
       setIsGradientNone(false);
-      setIsGradientColor1Enabled(!isGradientColor1Enabled);
-      saveSettings();
+      setIsGradientColor1Enabled(prev => !prev);
     } else if (toggle === 'color2') {
       setIsGradientNone(false);
-      setIsGradientColor2Enabled(!isGradientColor2Enabled);
-      saveSettings();
+      setIsGradientColor2Enabled(prev => !prev);
     }
   };
 
   const handleGradientAnimationToggle = () => {
     setIsGradientAnimated(prevState => !prevState);
-    saveSettings();
   };
 
   const toggleProfileNavbar = () => {
@@ -544,7 +543,6 @@ useEffect(() => {
 
   const handleBackgroundChange = (background) => {
     setSelectedBackground(background);
-    saveSettings();
   };
 
   const handleSelectConversation = (conversationId) => {

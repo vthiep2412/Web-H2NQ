@@ -300,9 +300,20 @@
 .attach-btn, .send-btn {
   border: none;
   padding: 0 15px;
+  margin-top: .5rem !important;
+  margin-bottom: .5rem !important;
+  border-radius: 5rem !important
 }
 
+.attach-btn{
+  margin-left: .5rem !important;
+  margin-right: 0rem !important;
+}
 
+.send-btn{
+  margin-left: .5rem !important;
+  margin-right: .5rem !important;
+}
 
 .chat-input {
   border-radius: 0 !important;
@@ -805,6 +816,14 @@ body.gradient-animated .user-avatar {
   /* border-color: var(--primary-color); */
   margin-bottom: 1rem;
   margin-top: -1rem;
+}
+
+[data-bs-theme="dark"] .profile-button{
+  color: white !important;
+}
+
+a{
+  margin: 0px !important;
 }
 
 h1{
