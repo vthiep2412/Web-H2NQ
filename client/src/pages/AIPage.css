@@ -21,6 +21,7 @@
 
 .message-text {
   white-space: pre-wrap;
+  /* margin-bottom: 1rem; */
 }
 
 .custom-history-nav{

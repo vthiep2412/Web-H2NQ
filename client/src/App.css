@@ -1,3 +1,16 @@
+body::-webkit-scrollbar,html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body,html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+html{
+  overflow-y: hidden;
+}
+
 .katex{
   line-height: 2 !important;
 }
@@ -239,15 +252,21 @@
 }
 
 .message-bubble {
-  padding: 12px 18px;
+  padding-top: 12px;
+  padding-right: 18px;
+  /* padding-bottom: 12px; */
+  padding-left: 18px;
   border-radius: 18px;
   word-wrap: break-word;
   line-height: 1.5;
 }
 
+.message-bubble.user{
+  padding-bottom: 12px !important;
+}
 
-.message-bubble p{
-  margin-bottom: 0px;
+.message-bubble.ai p{
+  margin-bottom: 1rem !important;
 }
 
 .ai-avatar,
@@ -608,7 +627,28 @@ th {
   }
 }
 
-h
+
+
+
+
+.markdown-content ul{
+  list-style-type: disc !important;
+  /* margin-top: -1rem !important; */
+  margin-bottom: 1rem !important;
+  padding-left: 2rem !important;
+}
+
+.markdown-content ol{
+  list-style-type: decimal !important;
+  /* margin-top: -1rem !important; */
+  margin-bottom: 1rem !important;
+  padding-left: 2rem !important;
+}
+
+.thinking-text {
+  margin-bottom: 1rem;
+}
+
 /* Markdown Styles */
 .message-bubble table {
   width: 100%;
@@ -806,10 +846,10 @@ body.gradient-animated .user-avatar {
   color: var(--bs-light);
 } */
 
-.history-item.active:hover {
+/* .history-item.active:hover { */
   /* background-color: var(--bs-primary); */
   /* color: var(--bs-light); */
-}
+/* } */
 
 .profile-button{
   /* background-color: var(--primary-color); */
@@ -829,4 +869,102 @@ a{
 h1{
   font-size: revert;
   font-weight: revert;
+}
+
+/* New styles for file upload preview and animation */
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+}
+
+.selected-files-preview-container {
+  display: flex;
+  flex-wrap: nowrap; /* Ensure horizontal layout */
+  overflow-x: auto; /* Allow horizontal scrolling if many files */
+  gap: 10px;
+  padding: 10px 0;
+  animation: pullUp 0.3s ease-out forwards;
+}
+
+.selected-file-preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: var(--bs-tertiary-bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  min-width: 100px; /* Minimum width for each preview */
+}
+
+.file-preview-image {
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.file-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.file-icon-container svg {
+  font-size: 3rem; /* Adjust icon size */
+  color: var(--bs-secondary-color);
+}
+
+.selected-file-preview span {
+  font-size: 0.8rem;
+  text-align: center;
+  word-break: break-all;
+  color: var(--bs-body-color);
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 0, 0, 0.7);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.remove-file-btn:hover {
+  background-color: rgba(255, 0, 0, 1);
+}
+
+.chat-input-group.file-selected {
+  /* Dimmer on light theme */
+  [data-bs-theme="light"] & {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  /* Brighter on dark theme */
+  [data-bs-theme="dark"] & {
+    background-color: rgba(51, 51, 51, 1.2); /* Adjust as needed */
+  }
+}
+
+@keyframes pullUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

@@ -23,7 +23,7 @@ const cleanMarkdown = (text) => {
     .replace(/([^\n])\n([^\n])/g, '$1  \n$2'); // Add line breaks for single newlines
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete }) => {
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language }) => {
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -64,8 +64,8 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       {msg.type === 'loading' ? (
                         <div className="loading-container">
                           <span className="thinking-text">Thinking</span>
-                          <span className="thinking-dots"><span>.</span><span>.</span><span>...</span></span>
-                          <span>{timer.toFixed(1)}s</span>
+                          <span className="thinking-dots" style={{ marginBottom: '1rem' }}><span>.</span><span>.</span><span>...</span></span>
+                          <span style={{ marginBottom: '1rem' }}>{timer.toFixed(1)}s</span>
                         </div>
                       ) : msg.sender === 'ai' ? (
                         <div className="markdown-content">
@@ -101,6 +101,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
             userMessages={userMessages}
             onNewConversation={onNewConversation}
             onTestModal={onTestModal}
+            language={language}
           />
         </Container>
       </footer>

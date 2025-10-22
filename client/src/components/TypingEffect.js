@@ -3,9 +3,18 @@ import { Button } from 'react-bootstrap';
 import { Clipboard } from 'react-bootstrap-icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math'; // Import remarkMath
+import rehypeKatex from 'rehype-katex'; // Import rehypeKatex
+import 'katex/dist/katex.min.css'; // Import KaTeX styling
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const cleanMarkdown = (text) => {
+  return text
+    .replace(/\n{2,}/g, '\n\n') // Ensure paragraph breaks
+    .replace(/([^\n])\n([^\n])/g, '$1  \n$2'); // Add line breaks for single newlines
+};
 
 const TypingEffect = React.memo(({ text, isNew, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
@@ -20,13 +29,14 @@ const TypingEffect = React.memo(({ text, isNew, onComplete }) => {
     }
 
     if (!isNew) {
-      setDisplayedText(text);
+      setDisplayedText(cleanMarkdown(text)); // Apply cleanMarkdown here
       setWords([]);
       setCurrentIndex(0);
       return;
     }
 
-    const splitWords = text.split(' ');
+    const cleanedText = cleanMarkdown(text); // Apply cleanMarkdown here
+    const splitWords = cleanedText.split(/\s+/).filter(Boolean);
     setWords(splitWords);
     setDisplayedText('');
     setCurrentIndex(0);
@@ -56,7 +66,8 @@ const TypingEffect = React.memo(({ text, isNew, onComplete }) => {
 
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
       components={{
         code({ node, inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '');

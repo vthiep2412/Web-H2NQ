@@ -374,9 +374,13 @@ useEffect(() => {
   }, []);*/
 
   // Handlers
-  const handleSubmit = async (message) => {
-    if (message.trim()) {
+  const handleSubmit = async (message, files = []) => {
+    if (message.trim() || files.length > 0) {
+      const frontendStartTime = Date.now(); // Record start time on frontend
       const userMessage = { text: message, sender: 'user' };
+      if (files.length > 0) {
+        userMessage.files = files.map(file => ({ name: file.name, type: file.type }));
+      }
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
 
       const conversationHistory = messages.map(msg => ({
@@ -394,13 +398,34 @@ useEffect(() => {
 
       try {
         const token = localStorage.getItem('token');
+        let requestBody;
+        let headers = {
+          'x-auth-token': token,
+        };
+
+        if (files.length > 0) {
+          const formData = new FormData();
+          formData.append('message', message);
+          formData.append('model', selectedModel);
+          formData.append('history', JSON.stringify(conversationHistory));
+          formData.append('conversationId', activeConversationId);
+          formData.append('memories', JSON.stringify(memories));
+          formData.append('workspaceId', activeWorkspace.id);
+          formData.append('language', language);
+          files.forEach((file, index) => {
+            formData.append(`file${index}`, file);
+          });
+          requestBody = formData;
+          // No Content-Type header for FormData, browser sets it automatically
+        } else {
+          headers['Content-Type'] = 'application/json';
+          requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime });
+        }
+
         const response = await fetch('/api/messages', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-auth-token': token,
-          },
-          body: JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language }),
+          headers: headers,
+          body: requestBody,
         });
 
         clearInterval(timerRef.current);
@@ -431,13 +456,14 @@ useEffect(() => {
             sender: msg.role === 'assistant' ? 'ai' : 'user',
             text: msg.content,
             model: msg.model,
-            thinkingTime: msg.thinkingTime,
+            thinkingTime: data.thinkingTime, // Use backend thinking time
             thoughts: msg.thoughts,
             isNew: index === conversationMessages.length - 1,
           }));
           setMessages(mappedMessages);
         } else {
-          setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), aiMessage]);
+          const totalRoundTripTime = (Date.now() - frontendStartTime) / 1000; // Calculate total round-trip time
+          setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { ...aiMessage, thinkingTime: totalRoundTripTime }]);
           // Update the conversations state as well
           setConversations(prevConvos => prevConvos.map(convo => {
             if (convo._id === activeConversationId) {
@@ -623,6 +649,7 @@ useEffect(() => {
                   onNewConversation={handleNewConversation} // Pass new conversation function
                   onTestModal={handleTestModal}
                   onTypingComplete={handleTypingComplete}
+                  language={language}
                 />;
     }
   }
