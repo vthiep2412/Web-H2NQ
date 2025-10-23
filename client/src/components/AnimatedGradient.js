@@ -4,9 +4,9 @@ import './AnimatedGradient.css';
 const AnimatedGradient = () => {
   return (
     <div className="gradient-background">
-      <div className="gradient-container">
+      {/* <div className="gradient-container">
         <div className="gradient"></div>
-      </div>
+      </div> */}
     </div>
   );
 };

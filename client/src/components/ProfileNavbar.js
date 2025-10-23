@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { PersonCircle } from 'react-bootstrap-icons';
+import { PersonCircle, ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import './ProfileNavbar.css';
@@ -24,8 +24,10 @@ const ProfileNavbar = React.memo(({
   selectedBackground,
   onBackgroundChange,
   user,
-  backgroundColor,
-  onBackgroundColorChange,
+  darkBackgroundColor,
+  onDarkBackgroundColorChange,
+  lightBackgroundColor,
+  onLightBackgroundColorChange,
   gradientBackgroundColor1,
   onGradientBackgroundColor1Change,
   gradientBackgroundColor2,
@@ -37,7 +39,9 @@ const ProfileNavbar = React.memo(({
   gradientDirection,
   onGradientDirectionChange,
   isGradientBackgroundAnimated,
-  onGradientBackgroundAnimationToggle
+  onGradientBackgroundAnimationToggle,
+  onRevertAccentGradient,
+  onRevertBackgroundGradient
 }) => {
   const { t } = useTranslation();
 
@@ -56,8 +60,12 @@ const ProfileNavbar = React.memo(({
     onGradientColor2Change(newColor);
   };
 
-  const handleBackgroundColorChange = (e) => {
-    onBackgroundColorChange(e.target.value);
+  const handleDarkBackgroundColorChange = (e) => {
+    onDarkBackgroundColorChange(e.target.value);
+  };
+
+  const handleLightBackgroundColorChange = (e) => {
+    onLightBackgroundColorChange(e.target.value);
   };
 
   return (
@@ -92,7 +100,12 @@ const ProfileNavbar = React.memo(({
       <div className="theme-section">
         <hr></hr>
         <h6 className='themeSectionTitle'>{t('theme')}</h6>
-        <h6 className='ACandGraColor'>{t('AcentColor&GradientColor')}</h6>
+        <div className="d-flex justify-content-between align-items-center">
+          <h6 className='ACandGraColor mb-0'>{t('AcentColor&GradientColor')}</h6>
+          <Button variant="link" onClick={onRevertAccentGradient} title="Revert to default" className={currentTheme === 'dark' ? 'text-white' : 'text-dark'}>
+            <ArrowCounterclockwise size={20} />
+          </Button>
+        </div>
         <div className="theme-and-gradient-container">
           {/* This color picker controls the accent color for UI elements like buttons. */}
           <div className="theme-options fix-primarycolor">
@@ -143,30 +156,39 @@ const ProfileNavbar = React.memo(({
             </div>
           </div>
         </div>
-        <div className="gradient-animation-section">
-            <Form.Check
-                type="switch"
-                id="gradient-animation-switch"
-                label={t('gradientAnimation')}
-                checked={isGradientAnimated}
-                onChange={onGradientAnimationToggle}
-            />
-        </div>
+
         <hr></hr>
-        <h6 className='BGandGraColor'>{t('background&GradientColor')}</h6>
-        <div className="theme-options">
-          <Form.Label htmlFor="background-color-picker">{t('backgroundColor')}</Form.Label>
-          <Form.Control
-            type="color"
-            id="background-color-picker"
-            value={backgroundColor}
-            title={t('chooseYourColor')}
-            onChange={handleBackgroundColorChange}
-          />
+        <div className="d-flex justify-content-between align-items-center">
+          <h6 className='BGandGraColor mb-0'>{t('background&GradientColor')}</h6>
+          <Button variant="link" onClick={onRevertBackgroundGradient} title="Revert to default" className={currentTheme === 'dark' ? 'text-white' : 'text-dark'}>
+            <ArrowCounterclockwise size={20} />
+          </Button>
+        </div>
+        <div className="background-color-pickers-container">
+          <div className="theme-options">
+            <Form.Label htmlFor="dark-background-color-picker">Dark</Form.Label>
+            <Form.Control
+              type="color"
+              id="dark-background-color-picker"
+              value={darkBackgroundColor}
+              title={t('chooseYourDarkColor')}
+              onChange={handleDarkBackgroundColorChange}
+            />
+          </div>
+          <div className="theme-options">
+            <Form.Label htmlFor="light-background-color-picker">Light</Form.Label>
+            <Form.Control
+              type="color"
+              id="light-background-color-picker"
+              value={lightBackgroundColor}
+              title={t('chooseYourLightColor')}
+              onChange={handleLightBackgroundColorChange}
+            />
+          </div>
         </div>
         <div className="gradient-section">
           <Form.Label>{t('gradientBackgroundColor')}</Form.Label>
-          <div className="color-pickers-container">
+          <div className="color-pickers-container background-color-pickers-container">
             <div className="color-picker-item">
               <Form.Check
                 type="switch"
@@ -224,10 +246,10 @@ const ProfileNavbar = React.memo(({
       <h6 className='AniBG'>{t('animatedBackground')}</h6>
       <Form.Select value={selectedBackground} onChange={(e) => onBackgroundChange(e.target.value)}>
         <option value="none">{t('none')}</option>
-        <option value="coloredSnowy">{t('coloredSnowy')}</option>
         <option value="animatedGradient">{t('animatedGradient')}</option>
+        <option value="coloredSnowy">{t('coloredSnowy')}</option>
         <option value="floatingSquares">{t('floatingSquares')}</option>
-        <option value="svgAnimation">{t('svgAnimation')}</option>
+        <option value="waveAnimation">{t('waveAnimation')}</option>
       </Form.Select>
 
       <div className="logout-section">

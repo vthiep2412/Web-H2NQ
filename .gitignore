@@ -1,4 +1,5 @@
 error.log
 .vercel
 package-lock.json
+translations.txt
 node_modules/

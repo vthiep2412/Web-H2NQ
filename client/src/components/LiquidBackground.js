@@ -82,10 +82,6 @@ const LiquidBackground = ({ primaryColor, gradientColor1, gradientColor2, theme 
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-      
-      const baseColor = theme === 'dark' ? '#000000' : '#FFFFFF';
-      ctx.fillStyle = baseColor;
-      ctx.fillRect(0, 0, width, height);
 
       ctx.filter = 'blur(20px)'; // Reduced blur
       balls.forEach(ball => {
