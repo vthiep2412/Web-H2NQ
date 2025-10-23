@@ -374,7 +374,7 @@ function AIPage() {
 
   useEffect(() => {
     const updateCurrentConversation = async () => {
-      if (shouldFetchConversations && activeConversationId) {
+      if (shouldFetchConversations && activeConversationId && activeWorkspace) {
         try {
           const token = localStorage.getItem('token');
           const res = await fetch(`/api/conversations/${activeConversationId}`, {
@@ -399,7 +399,7 @@ function AIPage() {
       }
     };
     updateCurrentConversation();
-  }, [shouldFetchConversations, activeConversationId, user, activeWorkspace.id]);
+  }, [shouldFetchConversations, activeConversationId, user, activeWorkspace]);
 
   const scrollToBottom = () => {
     const el = document.querySelector('.chat-main-view');

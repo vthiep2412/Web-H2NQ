@@ -74,6 +74,7 @@ const ProfileNavbar = React.memo(({
       <div className="theme-section">
         <h6>{t('theme')}</h6>
         <div className="theme-and-gradient-container">
+          {/* This color picker controls the accent color for UI elements like buttons. */}
           <div className="theme-options">
             <Form.Label htmlFor="theme-color-picker">{t('primaryColor')}</Form.Label>
             <Form.Control
