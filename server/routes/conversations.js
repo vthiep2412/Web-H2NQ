@@ -18,11 +18,11 @@ router.post('/', auth, async (req, res) => {
   const userTier = req.user.tier;
 
   try {
-    const conversationCount = await Conversation.countDocuments({ userId });
+    const conversationCount = await Conversation.countDocuments({ userId, workspaceId });
     const maxConversations = userTier === 'free' ? 5 : 10; // 5 for free, 10 for pro/admin
 
     if (conversationCount >= maxConversations) {
-      return res.status(403).json({ msg: `You have reached the maximum of ${maxConversations} conversations for your ${userTier} tier.` });
+      return res.status(403).json({ msg: `You have reached the maximum of ${maxConversations} conversations for your ${userTier} tier in this workspace.` });
     }
 
     const contextSize = calculateContextSize(messages);
@@ -72,7 +72,11 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
   try {
-    const conversation = await Conversation.findOne({ _id: req.params.id, userId: req.user.id });
+    const { workspaceId } = req.query;
+    if (!workspaceId) {
+      return res.status(400).json({ msg: 'Workspace ID is required' });
+    }
+    const conversation = await Conversation.findOne({ _id: req.params.id, userId: req.user.id, workspaceId });
 
     if (!conversation) {
       return res.status(404).json({ msg: 'Conversation not found' });
@@ -90,7 +94,11 @@ router.get('/:id', auth, async (req, res) => {
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
-    const conversation = await Conversation.findOne({ _id: req.params.id, userId: req.user.id });
+    const { workspaceId } = req.query;
+    if (!workspaceId) {
+      return res.status(400).json({ msg: 'Workspace ID is required' });
+    }
+    const conversation = await Conversation.findOne({ _id: req.params.id, userId: req.user.id, workspaceId });
 
     if (!conversation) {
       return res.status(404).json({ msg: 'Conversation not found' });

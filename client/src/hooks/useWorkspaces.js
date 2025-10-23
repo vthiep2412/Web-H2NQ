@@ -162,33 +162,50 @@ const useWorkspaces = () => {
     }
   };
 
-  const updateWorkspaceMemories = async (workspaceId, memories) => {
-    try {
-      const token = localStorage.getItem('token');
+    const updateWorkspaceMemories = async (workspaceId, memories) => {
+      try {
+        const token = localStorage.getItem('token');
       const res = await fetch(`/api/workspaces/${workspaceId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-        body: JSON.stringify({ memories }),
-      });
-      const data = await res.json();
-      setWorkspaces(prev => {
-        const newWorkspaces = prev.map(ws =>
-          ws.id === workspaceId ? { ...ws, memories: data.memories } : ws
-        );
-        if (!deepEqual(prev, newWorkspaces)) {
-          return newWorkspaces;
-        }
-        return prev;
-      });
-    } catch (err) {
-      console.error('Error updating workspace memories:', err);
-    }
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token,
+          },
+          body: JSON.stringify({ memories }),
+        });
+        const data = await res.json();
+        setWorkspaces(prev => {
+          const newWorkspaces = prev.map(ws =>
+            ws.id === workspaceId ? { ...ws, memories: data.memories } : ws
+          );
+          if (!deepEqual(prev, newWorkspaces)) {
+            return newWorkspaces;
+          }
+          return prev;
+        });
+      } catch (err) {
+        console.error('Error updating workspace memories:', err);
+      }
+    };
+
+    const updateLastActiveWorkspace = async (workspaceId) => {
+      try {
+        const token = localStorage.getItem('token');
+        await fetch('/api/users/settings', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token,
+          },
+          body: JSON.stringify({ settings: { lastActiveWorkspace: workspaceId } }),
+        });
+      } catch (err) {
+        console.error('Error updating last active workspace:', err);
+      }
+    };
+
+    return { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace };
   };
 
-  return { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces };
-};
-
 export default useWorkspaces;
+

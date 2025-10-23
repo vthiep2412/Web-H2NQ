@@ -57,7 +57,7 @@ function AIPage() {
   const [selectedBackground, setSelectedBackground] = useState(user?.settings?.selectedBackground || 'none');
 
   // Workspace State
-  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces } = useWorkspaces();
+  const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace } = useWorkspaces();
 
   // AI Memory State
   const activeWorkspace = useMemo(() => {
@@ -70,7 +70,7 @@ function AIPage() {
 
   // Chat State
   const [messages, setMessages] = useState([]);
-  const [conversations, setConversations] = useState([]);
+  const [conversationsByWorkspace, setConversationsByWorkspace] = useState({}); // Changed to object
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [isGreetingShown, setIsGreetingShown] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -78,6 +78,51 @@ function AIPage() {
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
+
+  // State persistence with Local Storage
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    const savedConversationsByWorkspace = localStorage.getItem('chatConversationsByWorkspace'); // Changed key
+    const savedActiveConversationId = localStorage.getItem('activeConversationId');
+    const savedIsGreetingShown = localStorage.getItem('isGreetingShown');
+    const savedSelectedModel = localStorage.getItem('selectedModel');
+
+
+    if (savedMessages) setMessages(JSON.parse(savedMessages));
+    if (savedConversationsByWorkspace) setConversationsByWorkspace(JSON.parse(savedConversationsByWorkspace)); // Changed setter
+    if (savedActiveConversationId) setActiveConversationId(savedActiveConversationId);
+    if (savedIsGreetingShown) setIsGreetingShown(JSON.parse(savedIsGreetingShown));
+    if (savedSelectedModel) setSelectedModel(savedSelectedModel);
+
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem('chatConversationsByWorkspace', JSON.stringify(conversationsByWorkspace));
+  }, [conversationsByWorkspace]);
+
+  useEffect(() => {
+    if (activeConversationId) {
+      localStorage.setItem('activeConversationId', activeConversationId);
+    } else {
+      localStorage.removeItem('activeConversationId');
+    }
+  }, [activeConversationId]);
+
+  useEffect(() => {
+    localStorage.setItem('isGreetingShown', JSON.stringify(isGreetingShown));
+  }, [isGreetingShown]);
+
+  useEffect(() => {
+    localStorage.setItem('selectedModel', selectedModel);
+  }, [selectedModel]);
+
+  useEffect(() => {
+    localStorage.removeItem('activeView');
+  }, []);
 
   useEffect(() => {
     getWorkspaces();
@@ -97,6 +142,7 @@ function AIPage() {
         selectedModel,
         selectedBackground,
         language,
+        lastActiveWorkspace: activeWorkspace?.id,
       };
       const response = await fetch('/api/users/settings', {
         method: 'PUT',
@@ -116,7 +162,7 @@ function AIPage() {
     } catch (error) {
       console.error('Error saving settings:', error);
     }
-  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language]);
+  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, activeWorkspace]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -217,11 +263,24 @@ function AIPage() {
   }, [isGradientAnimated]);
 
 
+  const initialLoadDone = useRef(false);
+
   useEffect(() => {
-    if (workspaces.length > 0 && activeView === 'chat1') {
-      setActiveView(workspaces[0].children[0].id);
+    if (workspaces.length > 0 && !initialLoadDone.current) {
+      const lastActiveWorkspaceId = user?.settings?.lastActiveWorkspace;
+      if (lastActiveWorkspaceId) {
+        const lastActiveWs = workspaces.find(ws => ws.id === lastActiveWorkspaceId);
+        if (lastActiveWs) {
+          setActiveView(`${lastActiveWs.id}-chat`);
+        } else {
+          setActiveView(`${workspaces[0].id}-chat`);
+        }
+      } else {
+        setActiveView(`${workspaces[0].id}-chat`);
+      }
+      initialLoadDone.current = true;
     }
-  }, [workspaces, activeView]);
+  }, [workspaces, user]);
 
   const showGreetingMessage = useCallback(() => {
     const greetingKeys = [
@@ -244,15 +303,32 @@ function AIPage() {
   }, [t]);
 
   const userId = user?._id;
-  const initialFetchDone = useRef(false);
 
   useEffect(() => {
     const fetchConversations = async () => {
-      if (!activeWorkspace) {
+      if (!activeWorkspace || !activeWorkspace.id) {
         return;
       }
-      // Only run initial fetch once
-      if (initialFetchDone.current) {
+
+      // If conversations for this workspace are already loaded, don't fetch again
+      if (conversationsByWorkspace[activeWorkspace.id]) {
+        const workspaceConversations = conversationsByWorkspace[activeWorkspace.id];
+        if (workspaceConversations.length > 0) {
+          setActiveConversationId(workspaceConversations[0]._id);
+          const mappedMessages = workspaceConversations[0].messages.map(msg => ({
+            sender: msg.role === 'assistant' ? 'ai' : 'user',
+            text: msg.content,
+            model: msg.model,
+            thinkingTime: msg.thinkingTime,
+            thoughts: msg.thoughts,
+            isNew: false, // Loaded messages are not new
+          }));
+          setMessages(mappedMessages);
+        } else {
+          showGreetingMessage();
+          setActiveConversationId(null);
+          setMessages([]);
+        }
         return;
       }
 
@@ -264,7 +340,12 @@ function AIPage() {
           },
         });
         const data = await res.json();
-        setConversations(data);
+
+        setConversationsByWorkspace(prev => ({
+          ...prev,
+          [activeWorkspace.id]: data,
+        }));
+
         if (data.length > 0) {
           setActiveConversationId(data[0]._id);
           const mappedMessages = data[0].messages.map(msg => ({
@@ -276,21 +357,20 @@ function AIPage() {
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
-        } else if (!isGreetingShown) {
+        } else {
           showGreetingMessage();
           setActiveConversationId(null);
+          setMessages([]);
         }
       } catch (err) {
         console.error('Initial fetchConversations: Error fetching conversations:', err);
-      } finally {
-        initialFetchDone.current = true; // Mark initial fetch as done
       }
     };
 
     if (user && activeWorkspace) {
       fetchConversations();
     }
-  }, [userId, activeWorkspace, showGreetingMessage, isGreetingShown, user]);
+  }, [userId, activeWorkspace, showGreetingMessage, user, conversationsByWorkspace, isGreetingShown]);
 
   useEffect(() => {
     const updateCurrentConversation = async () => {
@@ -303,9 +383,12 @@ function AIPage() {
             },
           });
           const data = await res.json();
-          setConversations(prevConvos => prevConvos.map(convo => 
-            convo._id === activeConversationId ? data : convo
-          ));
+          setConversationsByWorkspace(prev => ({
+            ...prev,
+            [activeWorkspace.id]: (prev[activeWorkspace.id] || []).map(convo => 
+              convo._id === activeConversationId ? data : convo
+            ),
+          }));
           setShouldFetchConversations(false); // Reset after fetching
         } catch (err) {
           console.error('Error updating current conversation:', err);
@@ -316,7 +399,7 @@ function AIPage() {
       }
     };
     updateCurrentConversation();
-  }, [shouldFetchConversations, activeConversationId, user]);
+  }, [shouldFetchConversations, activeConversationId, user, activeWorkspace.id]);
 
   const scrollToBottom = () => {
     const el = document.querySelector('.chat-main-view');
@@ -449,7 +532,10 @@ useEffect(() => {
         }
 
         if (data.conversation && !activeConversationId) {
-          setConversations(prev => [data.conversation, ...prev]);
+          setConversationsByWorkspace(prev => ({
+            ...prev,
+            [activeWorkspace.id]: [data.conversation, ...(prev[activeWorkspace.id] || [])],
+          }));
           setActiveConversationId(data.conversation._id);
           const conversationMessages = data.conversation.messages;
           const mappedMessages = conversationMessages.map((msg, index) => ({
@@ -465,12 +551,15 @@ useEffect(() => {
           const totalRoundTripTime = (Date.now() - frontendStartTime) / 1000; // Calculate total round-trip time
           setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), { ...aiMessage, thinkingTime: totalRoundTripTime }]);
           // Update the conversations state as well
-          setConversations(prevConvos => prevConvos.map(convo => {
-            if (convo._id === activeConversationId) {
-              const newMessages = [...convo.messages, {role: 'user', content: message}, {role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime}];
-              return { ...convo, messages: newMessages };
-            }
-            return convo;
+          setConversationsByWorkspace(prev => ({
+            ...prev,
+            [activeWorkspace.id]: (prev[activeWorkspace.id] || []).map(convo => {
+              if (convo._id === activeConversationId) {
+                const newMessages = [...convo.messages, { role: 'user', content: message }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime }];
+                return { ...convo, messages: newMessages };
+              }
+              return convo;
+            }),
           }));
         }
       } catch (error) {
@@ -549,6 +638,8 @@ useEffect(() => {
 
   const handleViewChange = (viewId) => {
     setActiveView(viewId);
+    const workspaceId = viewId.split('-')[0];
+    updateLastActiveWorkspace(workspaceId);
     if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
       toggleNavbar(false);
     }
@@ -572,17 +663,20 @@ useEffect(() => {
   };
 
   const handleSelectConversation = (conversationId) => {
+    if (!activeWorkspace || !activeWorkspace.id) return;
+    const conversations = conversationsByWorkspace[activeWorkspace.id] || [];
     const conversation = conversations.find(c => c._id === conversationId);
     if (conversation) {
       setActiveConversationId(conversationId);
-                const mappedMessages = conversation.messages.map(msg => ({
-                  sender: msg.role === 'assistant' ? 'ai' : 'user',
-                  text: msg.content,
-                  model: msg.model,
-                  thinkingTime: msg.thinkingTime,
-                  thoughts: msg.thoughts,
-                  isNew: false, // Loaded messages are not new
-                }));      setMessages(mappedMessages);
+      const mappedMessages = conversation.messages.map(msg => ({
+        sender: msg.role === 'assistant' ? 'ai' : 'user',
+        text: msg.content,
+        model: msg.model,
+        thinkingTime: msg.thinkingTime,
+        thoughts: msg.thoughts,
+        isNew: false, // Loaded messages are not new
+      }));
+      setMessages(mappedMessages);
       if (window.innerWidth < 576) {
         setIsHistoryNavbarVisible(false); // Close history navbar after selection
       }
@@ -600,7 +694,10 @@ useEffect(() => {
       });
 
       if (response.ok) {
-        setConversations(prev => prev.filter(c => c._id !== conversationId));
+        setConversationsByWorkspace(prev => ({
+          ...prev,
+          [activeWorkspace.id]: (prev[activeWorkspace.id] || []).filter(c => c._id !== conversationId),
+        }));
         if (activeConversationId === conversationId) {
           setActiveConversationId(null);
           showGreetingMessage();
@@ -718,7 +815,7 @@ useEffect(() => {
           {renderActiveView()}
         </div>
         <div className={`history-navbar-container ${isHistoryNavbarVisible ? 'visible' : ''}`}>
-          <HistoryNavbar conversations={conversations} onSelectConversation={handleSelectConversation} onDeleteConversation={handleDeleteConversation} onClose={toggleHistoryNavbar} activeConversationId={activeConversationId} />
+          <HistoryNavbar conversations={activeWorkspace ? conversationsByWorkspace[activeWorkspace.id] : []} onSelectConversation={handleSelectConversation} onDeleteConversation={handleDeleteConversation} onClose={toggleHistoryNavbar} activeConversationId={activeConversationId} />
         </div>
         <div className={`profile-navbar-container ${isProfileNavbarVisible ? 'visible' : ''}`}>
           {user && (

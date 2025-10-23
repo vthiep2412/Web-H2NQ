@@ -60,7 +60,7 @@ exports.sendMessage = async (req, res) => {
 
     // We will no longer unshift systemPrompt into fullHistory here.
     // Instead, it will be prepended to the current message for Gemini models.
-    console.log('System Prompt sent to AI:', systemPrompt);
+    // console.log('System Prompt sent to AI:', systemPrompt);
 
     const { history: truncatedHistory, truncated } = truncateHistory(fullHistory, MAX_CONTEXT_LENGTH);
 
@@ -85,7 +85,7 @@ exports.sendMessage = async (req, res) => {
       }
 
       const contents = [...geminiHistory, { role: 'user', parts: [{ text: currentMessageContent }] }];
-      console.log('Contents sent to Gemini AI:', JSON.stringify(contents, null, 2));
+      // console.log('Contents sent to Gemini AI:', JSON.stringify(contents, null, 2));
 
       const config = {
         thinkingConfig: {
@@ -200,10 +200,13 @@ exports.sendMessage = async (req, res) => {
         await conversation.save();
       }
     } else {
-      const conversationCount = await Conversation.countDocuments({ userId });
-      if (conversationCount >= 5) {
-        const oldestConversation = await Conversation.findOne({ userId }).sort({ createdAt: 1 });
-        await oldestConversation.deleteOne();
+      const maxConversations = user.tier === 'free' ? 5 : 10; // Get max conversations based on user tier
+      const conversationCount = await Conversation.countDocuments({ userId, workspaceId });
+      if (conversationCount >= maxConversations) {
+        const oldestConversation = await Conversation.findOne({ userId, workspaceId }).sort({ createdAt: 1 });
+        if (oldestConversation) {
+          await oldestConversation.deleteOne();
+        }
       }
 
       // const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;

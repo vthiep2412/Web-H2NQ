@@ -50,10 +50,13 @@ const VerticalNavbar = React.memo(({
   const [editingName, setEditingName] = useState('');
 
   useEffect(() => {
-    if (workspaces.length > 0 && Object.keys(open).length === 0) {
-      setOpen(prevOpen => ({ ...prevOpen, [workspaces[0].id]: true }));
+    if (activeView && workspaces.length > 0) {
+      const activeWorkspace = workspaces.find(ws => ws.children.some(child => child.id === activeView));
+      if (activeWorkspace) {
+        setOpen(prevOpen => ({ ...prevOpen, [activeWorkspace.id]: true }));
+      }
     }
-  }, [workspaces, open]);
+  }, [activeView, workspaces]);
 
   const toggleWorkspace = (id) => {
     setOpen(prevOpen => ({ ...prevOpen, [id]: !prevOpen[id] }));
@@ -180,19 +183,20 @@ const VerticalNavbar = React.memo(({
                     {child.name}
                   </Nav.Link>
                 ))}
-                                  <Nav.Link 
-                                    onClick={() => {
-                                      toggleHistoryNavbar();
-                                      if (window.innerWidth < 576) {
-                                        toggleNavbar(false);
-                                      }
-                                      getWorkspaces();
-                                    }}
-                                    active={isHistoryNavbarVisible}
-                                    className="flex items-center"
-                                  >
-                                    <span className="mr-2 custom-history-nav"><ClockHistory /></span> {t('history')}
-                                  </Nav.Link>              </div>
+                {/* <Nav.Link 
+                  onClick={() => {
+                    toggleHistoryNavbar();
+                    if (window.innerWidth < 576) {
+                      toggleNavbar(false);
+                    }
+                    getWorkspaces();
+                  }}
+                  active={isHistoryNavbarVisible}
+                  className="flex items-center"
+                >
+                  <span className="mr-2 custom-history-nav"><ClockHistory /></span> {t('history')}
+                </Nav.Link>               */}
+              </div>
             </Collapse>
           </div>
         ))}
@@ -200,6 +204,19 @@ const VerticalNavbar = React.memo(({
 
       <div className="navbar-bottom">
         <Nav className="flex-column">
+          <Nav.Link 
+            onClick={() => {
+              toggleHistoryNavbar();
+              if (window.innerWidth < 576) {
+                toggleNavbar(false);
+              }
+              getWorkspaces();
+            }}
+            active={isHistoryNavbarVisible}
+            className="flex items-center"
+          >
+            <span className="mr-2 custom-history-nav"><ClockHistory /></span> {t('history')}
+          </Nav.Link>
           <Nav.Link 
             active={activeView === 'settings'}
             onClick={() => {

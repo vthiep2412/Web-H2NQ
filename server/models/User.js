@@ -41,6 +41,7 @@ const UserSchema = new mongoose.Schema({
     selectedModel: { type: String, default: 'gemini-2.5-flash' },
     selectedBackground: { type: String, default: 'none' },
     language: { type: String, default: 'en' },
+    lastActiveWorkspace: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', default: null },
   },
 });
 
