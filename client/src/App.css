@@ -963,3 +963,7 @@ h1{
     opacity: 1;
   }
 }
+
+.form-switch, .background-color-pickers-container{
+  margin-bottom: .5rem;
+}

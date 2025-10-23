@@ -38,8 +38,8 @@ const ProfileNavbar = React.memo(({
   onGradientBackgroundColor2Toggle,
   gradientDirection,
   onGradientDirectionChange,
-  isGradientBackgroundAnimated,
-  onGradientBackgroundAnimationToggle,
+  // isGradientBackgroundAnimated,
+  // onGradientBackgroundAnimationToggle,
   onRevertAccentGradient,
   onRevertBackgroundGradient
 }) => {
@@ -156,7 +156,15 @@ const ProfileNavbar = React.memo(({
             </div>
           </div>
         </div>
-
+        <div className="gradient-animation-section">
+            <Form.Check
+                type="switch"
+                id="gradient-animation-switch"
+                label={t('gradientAnimation')}
+                checked={isGradientAnimated}
+                onChange={onGradientAnimationToggle}
+            />
+        </div>
         <hr></hr>
         <div className="d-flex justify-content-between align-items-center">
           <h6 className='BGandGraColor mb-0'>{t('background&GradientColor')}</h6>
@@ -229,15 +237,6 @@ const ProfileNavbar = React.memo(({
             <option value="to left">{t('toLeft')}</option>
             <option value="to right">{t('toRight')}</option>
           </Form.Select>
-        </div>
-        <div className="gradient-animation-section">
-          <Form.Check
-            type="switch"
-            id="gradient-background-animation-switch"
-            label={t('gradientBackgroundAnimation')}
-            checked={isGradientBackgroundAnimated}
-            onChange={onGradientBackgroundAnimationToggle}
-          />
         </div>
       </div>
       <hr></hr>

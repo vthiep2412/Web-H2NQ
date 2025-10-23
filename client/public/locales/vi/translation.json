@@ -36,6 +36,7 @@
   "primaryColor": "Màu chính",
   "chooseYourColor": "Chọn màu của bạn",
   "gradientColor": "Màu, độ chuyển màu",
+  "gradientAnimation": "Hoạt ảnh chuyển màu",
   "animatedBackground": "Nền hoạt ảnh",
   "none": "Không có hoạt ảnh",
   "coloredSnowy": "Tuyết màu",
@@ -50,7 +51,6 @@
   "toTop": "Lên trên",
   "toLeft": "Sang trái",
   "toRight": "Sang phải",
-  "gradientBackgroundAnimation": "Hoạt ảnh nền độ chuyển màu",
   "background&GradientColor": "Màu nền & Độ chuyển màu",
   "AcentColor&GradientColor": "Màu nhấn & Độ chuyển màu"
 }

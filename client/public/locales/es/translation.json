@@ -36,6 +36,7 @@
   "primaryColor": "Color primario",
   "chooseYourColor": "Elige tu color",
   "gradientColor": "Color degradado",
+  "gradientAnimation": "Animación de degradado",
   "animatedBackground": "Fondo animado",
   "none": "Ninguno",
   "coloredSnowy": "Nevado de color",
@@ -50,7 +51,6 @@
   "toTop": "Hacia arriba",
   "toLeft": "Hacia la izquierda",
   "toRight": "Hacia la derecha",
-  "gradientBackgroundAnimation": "Animación de fondo degradado",
   "background&GradientColor": "Fondo y color de degradado",
   "AcentColor&GradientColor": "Color de acento y color de degradado"
 }

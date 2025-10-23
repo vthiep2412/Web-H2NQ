@@ -36,6 +36,7 @@
   "primaryColor": "Primary Color",
   "chooseYourColor": "Choose your color",
   "gradientColor": "Gradient Color",
+  "gradientAnimation": "Gradient Animation",
   "animatedBackground": "Animated Background",
   "none": "None",
   "coloredSnowy": "Colored Snowy",
@@ -50,7 +51,6 @@
   "toTop": "To Top",
   "toLeft": "To Left",
   "toRight": "To Right",
-  "gradientBackgroundAnimation": "Gradient Background Animation",
   "background&GradientColor": "Background & Gradient Color",
   "AcentColor&GradientColor": "Accent Color & Gradient Color"
 }

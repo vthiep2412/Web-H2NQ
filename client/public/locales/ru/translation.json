@@ -36,6 +36,7 @@
   "primaryColor": "Основной цвет",
   "chooseYourColor": "Выберите свой цвет",
   "gradientColor": "Цвет градиента",
+  "gradientAnimation": "Анимация градиента",
   "animatedBackground": "Анимированный фон",
   "none": "Никакой",
   "coloredSnowy": "Цветной снежный",
@@ -50,7 +51,6 @@
   "toTop": "Вверх",
   "toLeft": "Налево",
   "toRight": "Направо",
-  "gradientBackgroundAnimation": "Анимация градиентного фона",
   "background&GradientColor": "Цвет фона и градиента",
   "AcentColor&GradientColor": "Цвет акцента и градиента"
 }

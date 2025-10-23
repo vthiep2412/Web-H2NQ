@@ -36,6 +36,7 @@
   "primaryColor": "Primärfarbe",
   "chooseYourColor": "Wählen Sie Ihre Farbe",
   "gradientColor": "Verlaufsfarbe",
+  "gradientAnimation": "Verlaufs-Animation",
   "animatedBackground": "Animierter Hintergrund",
   "none": "Nichts",
   "coloredSnowy": "Farbig Verschneit",
@@ -50,7 +51,6 @@
   "toTop": "Nach oben",
   "toLeft": "Nach links",
   "toRight": "Nach rechts",
-  "gradientBackgroundAnimation": "Verlaufshintergrund-Animation",
   "background&GradientColor": "Hintergrund- und Verlaufsfarbe",
   "AcentColor&GradientColor": "Akzentfarbe & Verlaufsfarbe"
 }

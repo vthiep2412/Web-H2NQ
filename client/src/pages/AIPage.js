@@ -676,9 +676,9 @@ useEffect(() => {
     setGradientDirection(e.target.value);
   };
 
-  const handleGradientBackgroundAnimationToggle = () => {
-    setIsGradientBackgroundAnimated(prev => !prev);
-  };
+  // const handleGradientBackgroundAnimationToggle = () => {
+  //   setIsGradientBackgroundAnimated(prev => !prev);
+  // };
 
   const handleRevertAccentGradient = () => {
     handleThemeChange.cancel();
@@ -932,7 +932,6 @@ useEffect(() => {
               gradientDirection={gradientDirection}
               onGradientDirectionChange={handleGradientDirectionChange}
               isGradientBackgroundAnimated={isGradientBackgroundAnimated}
-              onGradientBackgroundAnimationToggle={handleGradientBackgroundAnimationToggle}
               onRevertAccentGradient={handleRevertAccentGradient}
               onRevertBackgroundGradient={handleRevertBackgroundGradient}
             />

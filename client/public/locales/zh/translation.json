@@ -36,6 +36,7 @@
   "primaryColor": "原色",
   "chooseYourColor": "选择您的颜色",
   "gradientColor": "渐变颜色",
+  "gradientAnimation": "渐变动画（Gradient Animation）",
   "animatedBackground": "动画背景",
   "none": "没有",
   "coloredSnowy": "彩色雪地",
@@ -50,7 +51,6 @@
   "toTop": "到顶部",
   "toLeft": "到左边",
   "toRight": "到右边",
-  "gradientBackgroundAnimation": "渐变背景动画",
   "background&GradientColor": "背景和渐变颜色",
   "AcentColor&GradientColor": "强调颜色和渐变颜色"
 }

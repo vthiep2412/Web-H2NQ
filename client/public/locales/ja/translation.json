@@ -36,6 +36,7 @@
   "primaryColor": "原色",
   "chooseYourColor": "色を選択してください",
   "gradientColor": "グラデーションカラー",
+  "gradientAnimation": "グラデーションアニメーション",
   "animatedBackground": "アニメーション背景",
   "none": "何一つ",
   "coloredSnowy": "カラードスノーウィー",
@@ -50,7 +51,6 @@
   "toTop": "上へ",
   "toLeft": "左へ",
   "toRight": "右へ",
-  "gradientBackgroundAnimation": "グラデーション背景アニメーション",
   "background&GradientColor": "背景色とグラデーション色",
   "AcentColor&GradientColor": "アクセントカラーとグラデーション色"
 }

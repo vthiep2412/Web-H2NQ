@@ -36,6 +36,7 @@
   "primaryColor": "प्राथमिक रंग",
   "chooseYourColor": "अपना रंग चुनें",
   "gradientColor": "ढाल रंग",
+  "gradientAnimation": "ग्रेडिएंट एनिमेशन",
   "animatedBackground": "एनिमेटेड पृष्ठभूमि",
   "none": "कोई नहीं",
   "coloredSnowy": "रंगीन बर्फीला",
@@ -50,7 +51,6 @@
   "toTop": "ऊपर की ओर",
   "toLeft": "बाईं ओर",
   "toRight": "दाईं ओर",
-  "gradientBackgroundAnimation": "ग्रेडिएंट पृष्ठभूमि एनिमेशन",
   "background&GradientColor": "पृष्ठभूमि और ग्रेडिएंट रंग",
   "AcentColor&GradientColor": "एक्सेंट रंग और ग्रेडिएंट रंग"
 }

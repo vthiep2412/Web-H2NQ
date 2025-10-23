@@ -36,6 +36,7 @@
   "primaryColor": "Primaire kleur",
   "chooseYourColor": "Kies je kleur",
   "gradientColor": "Verloop Kleur",
+  "gradientAnimation": "Gradiënt Animatie",
   "animatedBackground": "Geanimeerde achtergrond",
   "none": "Geen",
   "coloredSnowy": "Gekleurd Besneeuwd",
@@ -50,7 +51,6 @@
   "toTop": "Naar boven",
   "toLeft": "Naar links",
   "toRight": "Naar rechts",
-  "gradientBackgroundAnimation": "Verloop achtergrondanimatie",
   "background&GradientColor": "Achtergrond- & Verloopkleur",
   "AcentColor&GradientColor": "Accentkleur & Verloopkleur"
 }
