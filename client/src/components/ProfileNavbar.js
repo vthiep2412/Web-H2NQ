@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import './ProfileNavbar.css';
 
 
-const ProfileNavbar = React.memo(({ 
-  currentTheme, 
-  customTheme = {}, 
-  onThemeChange, 
-  onLogout, 
+const ProfileNavbar = React.memo(({
+  currentTheme,
+  customTheme = {},
+  onThemeChange,
+  onLogout,
   gradientColor1,
   gradientColor2,
   onGradientColor1Change,
@@ -23,7 +23,21 @@ const ProfileNavbar = React.memo(({
   onGradientAnimationToggle,
   selectedBackground,
   onBackgroundChange,
-  user // Destructure user prop
+  user,
+  backgroundColor,
+  onBackgroundColorChange,
+  gradientBackgroundColor1,
+  onGradientBackgroundColor1Change,
+  gradientBackgroundColor2,
+  onGradientBackgroundColor2Change,
+  isGradientBackgroundColor1Enabled,
+  onGradientBackgroundColor1Toggle,
+  isGradientBackgroundColor2Enabled,
+  onGradientBackgroundColor2Toggle,
+  gradientDirection,
+  onGradientDirectionChange,
+  isGradientBackgroundAnimated,
+  onGradientBackgroundAnimationToggle
 }) => {
   const { t } = useTranslation();
 
@@ -40,6 +54,10 @@ const ProfileNavbar = React.memo(({
   const handleGradientColor2Change = (e) => {
     const newColor = e.target.value;
     onGradientColor2Change(newColor);
+  };
+
+  const handleBackgroundColorChange = (e) => {
+    onBackgroundColorChange(e.target.value);
   };
 
   return (
@@ -72,10 +90,12 @@ const ProfileNavbar = React.memo(({
       </div>
 
       <div className="theme-section">
-        <h6>{t('theme')}</h6>
+        <hr></hr>
+        <h6 className='themeSectionTitle'>{t('theme')}</h6>
+        <h6 className='ACandGraColor'>{t('AcentColor&GradientColor')}</h6>
         <div className="theme-and-gradient-container">
           {/* This color picker controls the accent color for UI elements like buttons. */}
-          <div className="theme-options">
+          <div className="theme-options fix-primarycolor">
             <Form.Label htmlFor="theme-color-picker">{t('primaryColor')}</Form.Label>
             <Form.Control
               type="color"
@@ -132,47 +152,83 @@ const ProfileNavbar = React.memo(({
                 onChange={onGradientAnimationToggle}
             />
         </div>
+        <hr></hr>
+        <h6 className='BGandGraColor'>{t('background&GradientColor')}</h6>
+        <div className="theme-options">
+          <Form.Label htmlFor="background-color-picker">{t('backgroundColor')}</Form.Label>
+          <Form.Control
+            type="color"
+            id="background-color-picker"
+            value={backgroundColor}
+            title={t('chooseYourColor')}
+            onChange={handleBackgroundColorChange}
+          />
+        </div>
+        <div className="gradient-section">
+          <Form.Label>{t('gradientBackgroundColor')}</Form.Label>
+          <div className="color-pickers-container">
+            <div className="color-picker-item">
+              <Form.Check
+                type="switch"
+                id="gradient-background-color1-switch"
+                checked={isGradientBackgroundColor1Enabled}
+                onChange={onGradientBackgroundColor1Toggle}
+              />
+              <Form.Control
+                type="color"
+                id="gradient-background-color1-picker"
+                value={gradientBackgroundColor1}
+                title={t('chooseYourColor')}
+                onChange={onGradientBackgroundColor1Change}
+                disabled={!isGradientBackgroundColor1Enabled}
+              />
+            </div>
+            <div className="color-picker-item">
+              <Form.Check
+                type="switch"
+                id="gradient-background-color2-switch"
+                checked={isGradientBackgroundColor2Enabled}
+                onChange={onGradientBackgroundColor2Toggle}
+              />
+              <Form.Control
+                type="color"
+                id="gradient-background-color2-picker"
+                value={gradientBackgroundColor2}
+                title={t('chooseYourColor')}
+                onChange={onGradientBackgroundColor2Change}
+                disabled={!isGradientBackgroundColor2Enabled}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="gradient-direction-section">
+          <Form.Label>{t('gradientDirection')}</Form.Label>
+          <Form.Select value={gradientDirection} onChange={onGradientDirectionChange}>
+            <option value="to bottom">{t('toBottom')}</option>
+            <option value="to top">{t('toTop')}</option>
+            <option value="to left">{t('toLeft')}</option>
+            <option value="to right">{t('toRight')}</option>
+          </Form.Select>
+        </div>
+        <div className="gradient-animation-section">
+          <Form.Check
+            type="switch"
+            id="gradient-background-animation-switch"
+            label={t('gradientBackgroundAnimation')}
+            checked={isGradientBackgroundAnimated}
+            onChange={onGradientBackgroundAnimationToggle}
+          />
+        </div>
       </div>
-
-      <h6>{t('animatedBackground')}</h6>
-      <div className="background-options">
-        <Button
-          className={`btn-background-option ${selectedBackground === 'none' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('none')}
-        >
-          {t('none')}
-        </Button>
-        <Button
-          className={`btn-background-option ${selectedBackground === 'coloredSnowy' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('coloredSnowy')}
-        >
-          {t('coloredSnowy')}
-        </Button>
-        <Button
-          className={`btn-background-option ${selectedBackground === 'animatedGradient' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('animatedGradient')}
-        >
-          {t('animatedGradient')}
-        </Button>
-        <Button
-          className={`btn-background-option ${selectedBackground === 'floatingSquares' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('floatingSquares')}
-        >
-          {t('floatingSquares')}
-        </Button>
-        <Button
-          className={`btn-background-option ${selectedBackground === 'svgAnimation' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('svgAnimation')}
-        >
-          {t('svgAnimation')}
-        </Button>
-        {/* <Button
-          className={`btn-background-option ${selectedBackground === 'movingSquares' ? 'active' : ''}`}
-          onClick={() => onBackgroundChange('movingSquares')}
-        >
-          Moving Squares
-        </Button> */}
-      </div>
+      <hr></hr>
+      <h6 className='AniBG'>{t('animatedBackground')}</h6>
+      <Form.Select value={selectedBackground} onChange={(e) => onBackgroundChange(e.target.value)}>
+        <option value="none">{t('none')}</option>
+        <option value="coloredSnowy">{t('coloredSnowy')}</option>
+        <option value="animatedGradient">{t('animatedGradient')}</option>
+        <option value="floatingSquares">{t('floatingSquares')}</option>
+        <option value="svgAnimation">{t('svgAnimation')}</option>
+      </Form.Select>
 
       <div className="logout-section">
         <Button variant="danger" onClick={onLogout}>{t('logout')}</Button>

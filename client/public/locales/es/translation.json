@@ -43,5 +43,15 @@
   "animatedGradient": "Degradado animado",
   "floatingSquares": "Cuadrados flotantes",
   "svgAnimation": "Animación SVG",
-  "logout": "Cerrar sesión"
+  "logout": "Cerrar sesión",
+  "backgroundColor": "Color de fondo",
+  "gradientBackgroundColor": "Color de fondo degradado",
+  "gradientDirection": "Dirección de degradado",
+  "toBottom": "Hacia abajo",
+  "toTop": "Hacia arriba",
+  "toLeft": "Hacia la izquierda",
+  "toRight": "Hacia la derecha",
+  "gradientBackgroundAnimation": "Animación de fondo degradado",
+  "background&GradientColor": "Fondo y color de degradado",
+  "AcentColor&GradientColor": "Color de acento y color de degradado"
 }

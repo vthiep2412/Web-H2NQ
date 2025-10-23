@@ -43,5 +43,15 @@
   "animatedGradient": "Sfumatura animata",
   "floatingSquares": "Quadrati fluttuanti",
   "svgAnimation": "Animazione SVG",
-  "logout": "Logout"
+  "logout": "Logout",
+  "backgroundColor": "Colore di sfondo",
+  "gradientBackgroundColor": "Colore di sfondo sfumato",
+  "gradientDirection": "Direzione sfumatura",
+  "toBottom": "Verso il basso",
+  "toTop": "Verso l'alto",
+  "toLeft": "Verso sinistra",
+  "toRight": "Verso destra",
+  "gradientBackgroundAnimation": "Animazione sfondo sfumato",
+  "background&GradientColor": "Colore di sfondo e sfumato",
+  "AcentColor&GradientColor": "Colore accentato e colore sfumato"
 }

@@ -43,5 +43,15 @@
   "animatedGradient": "Animated Gradient",
   "floatingSquares": "Floating Squares",
   "svgAnimation": "SVG Animation",
-  "logout": "Logout"
+  "logout": "Logout",
+  "backgroundColor": "Background Color",
+  "gradientBackgroundColor": "Gradient Background Color",
+  "gradientDirection": "Gradient Direction",
+  "toBottom": "To Bottom",
+  "toTop": "To Top",
+  "toLeft": "To Left",
+  "toRight": "To Right",
+  "gradientBackgroundAnimation": "Gradient Background Animation",
+  "background&GradientColor": "Background & Gradient Color",
+  "AcentColor&GradientColor": "Accent Color & Gradient Color"
 }

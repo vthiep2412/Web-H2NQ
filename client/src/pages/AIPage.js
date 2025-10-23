@@ -55,6 +55,13 @@ function AIPage() {
   const [isGradientAnimated, setIsGradientAnimated] = useState(user?.settings?.isGradientAnimated || false);
   const [hasGradient, setHasGradient] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState(user?.settings?.selectedBackground || 'none');
+  const [backgroundColor, setBackgroundColor] = useState(user?.settings?.backgroundColor || '#ffffff');
+  const [gradientBackgroundColor1, setGradientBackgroundColor1] = useState(user?.settings?.gradientBackgroundColor1 || '#ff0000');
+  const [gradientBackgroundColor2, setGradientBackgroundColor2] = useState(user?.settings?.gradientBackgroundColor2 || '#0000ff');
+  const [isGradientBackgroundColor1Enabled, setIsGradientBackgroundColor1Enabled] = useState(user?.settings?.isGradientBackgroundColor1Enabled || false);
+  const [isGradientBackgroundColor2Enabled, setIsGradientBackgroundColor2Enabled] = useState(user?.settings?.isGradientBackgroundColor2Enabled || false);
+  const [gradientDirection, setGradientDirection] = useState(user?.settings?.gradientDirection || 'to bottom');
+  const [isGradientBackgroundAnimated, setIsGradientBackgroundAnimated] = useState(user?.settings?.isGradientBackgroundAnimated || false);
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace } = useWorkspaces();
@@ -143,6 +150,13 @@ function AIPage() {
         selectedBackground,
         language,
         lastActiveWorkspace: activeWorkspace?.id,
+        backgroundColor,
+        gradientBackgroundColor1,
+        gradientBackgroundColor2,
+        isGradientBackgroundColor1Enabled,
+        isGradientBackgroundColor2Enabled,
+        gradientDirection,
+        isGradientBackgroundAnimated,
       };
       const response = await fetch('/api/users/settings', {
         method: 'PUT',
@@ -162,7 +176,7 @@ function AIPage() {
     } catch (error) {
       console.error('Error saving settings:', error);
     }
-  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, activeWorkspace]);
+  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, activeWorkspace, backgroundColor, gradientBackgroundColor1, gradientBackgroundColor2, isGradientBackgroundColor1Enabled, isGradientBackgroundColor2Enabled, gradientDirection, isGradientBackgroundAnimated]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -624,6 +638,34 @@ useEffect(() => {
     setIsGradientAnimated(prevState => !prevState);
   };
 
+  const handleBackgroundColorChange = useMemo(() => debounce((color) => {
+    setBackgroundColor(color);
+  }, 100), []);
+
+  const handleGradientBackgroundColor1Change = (e) => {
+    setGradientBackgroundColor1(e.target.value);
+  };
+
+  const handleGradientBackgroundColor2Change = (e) => {
+    setGradientBackgroundColor2(e.target.value);
+  };
+
+  const handleGradientBackgroundColor1Toggle = () => {
+    setIsGradientBackgroundColor1Enabled(prev => !prev);
+  };
+
+  const handleGradientBackgroundColor2Toggle = () => {
+    setIsGradientBackgroundColor2Enabled(prev => !prev);
+  };
+
+  const handleGradientDirectionChange = (e) => {
+    setGradientDirection(e.target.value);
+  };
+
+  const handleGradientBackgroundAnimationToggle = () => {
+    setIsGradientBackgroundAnimated(prev => !prev);
+  };
+
   const toggleProfileNavbar = () => {
     setIsProfileNavbarVisible(!isProfileNavbarVisible);
   };
@@ -841,6 +883,20 @@ useEffect(() => {
               selectedBackground={selectedBackground}
               onBackgroundChange={handleBackgroundChange}
               user={user} // Pass user object
+              backgroundColor={backgroundColor}
+              onBackgroundColorChange={handleBackgroundColorChange}
+              gradientBackgroundColor1={gradientBackgroundColor1}
+              onGradientBackgroundColor1Change={handleGradientBackgroundColor1Change}
+              gradientBackgroundColor2={gradientBackgroundColor2}
+              onGradientBackgroundColor2Change={handleGradientBackgroundColor2Change}
+              isGradientBackgroundColor1Enabled={isGradientBackgroundColor1Enabled}
+              onGradientBackgroundColor1Toggle={handleGradientBackgroundColor1Toggle}
+              isGradientBackgroundColor2Enabled={isGradientBackgroundColor2Enabled}
+              onGradientBackgroundColor2Toggle={handleGradientBackgroundColor2Toggle}
+              gradientDirection={gradientDirection}
+              onGradientDirectionChange={handleGradientDirectionChange}
+              isGradientBackgroundAnimated={isGradientBackgroundAnimated}
+              onGradientBackgroundAnimationToggle={handleGradientBackgroundAnimationToggle}
             />
           )}
         </div>

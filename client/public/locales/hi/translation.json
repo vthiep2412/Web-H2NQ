@@ -43,5 +43,15 @@
   "animatedGradient": "एनिमेटेड ढाल",
   "floatingSquares": "फ्लोटिंग स्क्वायर",
   "svgAnimation": "एसवीजी एनिमेशन",
-  "logout": "लॉगआउट"
+  "logout": "लॉगआउट",
+  "backgroundColor": "पृष्ठभूमि का रंग",
+  "gradientBackgroundColor": "ग्रेडिएंट पृष्ठभूमि का रंग",
+  "gradientDirection": "ग्रेडिएंट दिशा",
+  "toBottom": "नीचे की ओर",
+  "toTop": "ऊपर की ओर",
+  "toLeft": "बाईं ओर",
+  "toRight": "दाईं ओर",
+  "gradientBackgroundAnimation": "ग्रेडिएंट पृष्ठभूमि एनिमेशन",
+  "background&GradientColor": "पृष्ठभूमि और ग्रेडिएंट रंग",
+  "AcentColor&GradientColor": "एक्सेंट रंग और ग्रेडिएंट रंग"
 }

@@ -43,5 +43,15 @@
   "animatedGradient": "Gradient hoạt ảnh",
   "floatingSquares": "Hình vuông nổi",
   "svgAnimation": "Hoạt ảnh SVG",
-  "logout": "Đăng xuất"
+  "logout": "Đăng xuất",
+  "backgroundColor": "Màu nền",
+  "gradientBackgroundColor": "Màu nền gradient",
+  "gradientDirection": "Hướng gradient",
+  "toBottom": "Xuống dưới",
+  "toTop": "Lên trên",
+  "toLeft": "Sang trái",
+  "toRight": "Sang phải",
+  "gradientBackgroundAnimation": "Hoạt ảnh nền gradient",
+  "background&GradientColor": "Màu nền & Gradient",
+  "AcentColor&GradientColor": "Màu nhấn & Gradient"
 }

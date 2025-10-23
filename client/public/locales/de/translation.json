@@ -43,5 +43,15 @@
   "animatedGradient": "Animierter Verlauf",
   "floatingSquares": "Schwebende Quadrate",
   "svgAnimation": "SVG-Animation",
-  "logout": "Abmeldung"
+  "logout": "Abmeldung",
+  "backgroundColor": "Hintergrundfarbe",
+  "gradientBackgroundColor": "Verlaufshintergrundfarbe",
+  "gradientDirection": "Verlaufsrichtung",
+  "toBottom": "Nach unten",
+  "toTop": "Nach oben",
+  "toLeft": "Nach links",
+  "toRight": "Nach rechts",
+  "gradientBackgroundAnimation": "Verlaufshintergrund-Animation",
+  "background&GradientColor": "Hintergrund- und Verlaufsfarbe",
+  "AcentColor&GradientColor": "Akzentfarbe & Verlaufsfarbe"
 }

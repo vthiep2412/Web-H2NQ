@@ -43,5 +43,15 @@
   "animatedGradient": "Dégradé animé",
   "floatingSquares": "Carrés flottants",
   "svgAnimation": "SVG Animation",
-  "logout": "Déconnexion"
+  "logout": "Déconnexion",
+  "backgroundColor": "Couleur de l'arrière-plan",
+  "gradientBackgroundColor": "Couleur de l'arrière-plan du dégradé",
+  "gradientDirection": "Direction du dégradé",
+  "toBottom": "Vers le bas",
+  "toTop": "Vers le haut",
+  "toLeft": "Vers la gauche",
+  "toRight": "Vers la droite",
+  "gradientBackgroundAnimation": "Animation de l'arrière-plan du dégradé",
+  "background&GradientColor": "Couleur de l'arrière-plan et du dégradé",
+  "AcentColor&GradientColor": "Couleur d'accent et couleur dégradée"
 }

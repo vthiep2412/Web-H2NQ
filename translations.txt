@@ -1,0 +1,139 @@
+**German (`de/translation.json`)**
+```json
+{
+  "backgroundColor": "Hintergrundfarbe",
+  "gradientBackgroundColor": "Verlaufshintergrundfarbe",
+  "gradientDirection": "Verlaufsrichtung",
+  "toBottom": "Nach unten",
+  "toTop": "Nach oben",
+  "toLeft": "Nach links",
+  "toRight": "Nach rechts",
+  "gradientBackgroundAnimation": "Verlaufshintergrund-Animation"
+}
+```
+
+**Spanish (`es/translation.json`)**
+```json
+{
+  "backgroundColor": "Color de fondo",
+  "gradientBackgroundColor": "Color de fondo degradado",
+  "gradientDirection": "Dirección de degradado",
+  "toBottom": "Hacia abajo",
+  "toTop": "Hacia arriba",
+  "toLeft": "Hacia la izquierda",
+  "toRight": "Hacia la derecha",
+  "gradientBackgroundAnimation": "Animación de fondo degradado"
+}
+```
+
+**French (`fr/translation.json`)**
+```json
+{
+  "backgroundColor": "Couleur de l'arrière-plan",
+  "gradientBackgroundColor": "Couleur de l'arrière-plan du dégradé",
+  "gradientDirection": "Direction du dégradé",
+  "toBottom": "Vers le bas",
+  "toTop": "Vers le haut",
+  "toLeft": "Vers la gauche",
+  "toRight": "Vers la droite",
+  "gradientBackgroundAnimation": "Animation de l'arrière-plan du dégradé"
+}
+```
+
+**Hindi (`hi/translation.json`)**
+```json
+{
+  "backgroundColor": "पृष्ठभूमि का रंग",
+  "gradientBackgroundColor": "ग्रेडिएंट पृष्ठभूमि का रंग",
+  "gradientDirection": "ग्रेडिएंट दिशा",
+  "toBottom": "नीचे की ओर",
+  "toTop": "ऊपर की ओर",
+  "toLeft": "बाईं ओर",
+  "toRight": "दाईं ओर",
+  "gradientBackgroundAnimation": "ग्रेडिएंट पृष्ठभूमि एनिमेशन"
+}
+```
+
+**Italian (`it/translation.json`)**
+```json
+{
+  "backgroundColor": "Colore di sfondo",
+  "gradientBackgroundColor": "Colore di sfondo sfumato",
+  "gradientDirection": "Direzione sfumatura",
+  "toBottom": "Verso il basso",
+  "toTop": "Verso l'alto",
+  "toLeft": "Verso sinistra",
+  "toRight": "Verso destra",
+  "gradientBackgroundAnimation": "Animazione sfondo sfumato"
+}
+```
+
+**Japanese (`ja/translation.json`)**
+```json
+{
+  "backgroundColor": "背景色",
+  "gradientBackgroundColor": "グラデーション背景色",
+  "gradientDirection": "グラデーションの方向",
+  "toBottom": "下へ",
+  "toTop": "上へ",
+  "toLeft": "左へ",
+  "toRight": "右へ",
+  "gradientBackgroundAnimation": "グラデーション背景アニメーション"
+}
+```
+
+**Dutch (`nl/translation.json`)**
+```json
+{
+  "backgroundColor": "Achtergrondkleur",
+  "gradientBackgroundColor": "Verloop achtergrondkleur",
+  "gradientDirection": "Verlooprichting",
+  "toBottom": "Naar beneden",
+  "toTop": "Naar boven",
+  "toLeft": "Naar links",
+  "toRight": "Naar rechts",
+  "gradientBackgroundAnimation": "Verloop achtergrondanimatie"
+}
+```
+
+**Russian (`ru/translation.json`)**
+```json
+{
+  "backgroundColor": "Цвет фона",
+  "gradientBackgroundColor": "Градиентный цвет фона",
+  "gradientDirection": "Направление градиента",
+  "toBottom": "Вниз",
+  "toTop": "Вверх",
+  "toLeft": "Налево",
+  "toRight": "Направо",
+  "gradientBackgroundAnimation": "Анимация градиентного фона"
+}
+```
+
+**Vietnamese (`vi/translation.json`)**
+```json
+{
+  "backgroundColor": "Màu nền",
+  "gradientBackgroundColor": "Màu nền gradient",
+  "gradientDirection": "Hướng gradient",
+  "toBottom": "Xuống dưới",
+  "toTop": "Lên trên",
+  "toLeft": "Sang trái",
+  "toRight": "Sang phải",
+  "gradientBackgroundAnimation": "Hoạt ảnh nền gradient"
+}
+```
+
+**Chinese (`zh/translation.json`)**
+```json
+{
+  "backgroundColor": "背景颜色",
+  "gradientBackgroundColor": "渐变背景颜色",
+  "gradientDirection": "渐变方向",
+  "toBottom": "到底部",
+  "toTop": "到顶部",
+  "toLeft": "到左边",
+  "toRight": "到右边",
+  "gradientBackgroundAnimation": "渐变背景动画"
+}
+```

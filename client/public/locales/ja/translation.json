@@ -43,5 +43,15 @@
   "animatedGradient": "アニメーショングラデーション",
   "floatingSquares": "フローティングスクエア",
   "svgAnimation": "SVGアニメーション",
-  "logout": "ログアウト"
+  "logout": "ログアウト",
+  "backgroundColor": "背景色",
+  "gradientBackgroundColor": "グラデーション背景色",
+  "gradientDirection": "グラデーションの方向",
+  "toBottom": "下へ",
+  "toTop": "上へ",
+  "toLeft": "左へ",
+  "toRight": "右へ",
+  "gradientBackgroundAnimation": "グラデーション背景アニメーション",
+  "background&GradientColor": "背景色とグラデーション色",
+  "AcentColor&GradientColor": "アクセントカラーとグラデーション色"
 }

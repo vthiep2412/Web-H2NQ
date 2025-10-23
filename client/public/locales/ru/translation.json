@@ -43,5 +43,15 @@
   "animatedGradient": "Анимированный градиент",
   "floatingSquares": "Плавающие квадраты",
   "svgAnimation": "Анимация SVG",
-  "logout": "Выход"
+  "logout": "Выход",
+  "backgroundColor": "Цвет фона",
+  "gradientBackgroundColor": "Градиентный цвет фона",
+  "gradientDirection": "Направление градиента",
+  "toBottom": "Вниз",
+  "toTop": "Вверх",
+  "toLeft": "Налево",
+  "toRight": "Направо",
+  "gradientBackgroundAnimation": "Анимация градиентного фона",
+  "background&GradientColor": "Цвет фона и градиента",
+  "AcentColor&GradientColor": "Цвет акцента и градиента"
 }

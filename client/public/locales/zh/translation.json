@@ -43,5 +43,15 @@
   "animatedGradient": "动画渐变（Animated Gradient）",
   "floatingSquares": "浮动方块",
   "svgAnimation": "SVG 动画",
-  "logout": "注销"
+  "logout": "注销",
+  "backgroundColor": "背景颜色",
+  "gradientBackgroundColor": "渐变背景颜色",
+  "gradientDirection": "渐变方向",
+  "toBottom": "到底部",
+  "toTop": "到顶部",
+  "toLeft": "到左边",
+  "toRight": "到右边",
+  "gradientBackgroundAnimation": "渐变背景动画",
+  "background&GradientColor": "背景和渐变颜色",
+  "AcentColor&GradientColor": "强调颜色和渐变颜色"
 }

@@ -101,6 +101,9 @@
   background-color: #1e1e1e;
 }
 
+.profile-navbar{
+  overflow-y: scroll;
+}
 
 
 /* --- Base Layout & Components --- */
@@ -130,11 +133,16 @@
   overflow: hidden;
 }
 
+.form-select{
+  margin-bottom: 1rem;
+}
+
 .profile-navbar-container {
   transition: max-width 0.3s ease-in-out, min-width 0.3s ease-in-out;
   max-width: 300px;
   min-width: 250px;
-  overflow: hidden;
+  overflow: auto;
+  display: contents;
 }
 
 .profile-navbar-container:not(.visible) {
