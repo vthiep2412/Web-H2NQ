@@ -171,7 +171,6 @@ const ProfileNavbar = React.memo(({
               type="color"
               id="dark-background-color-picker"
               value={darkBackgroundColor}
-              title={t('chooseYourDarkColor')}
               onChange={handleDarkBackgroundColorChange}
             />
           </div>
@@ -181,7 +180,6 @@ const ProfileNavbar = React.memo(({
               type="color"
               id="light-background-color-picker"
               value={lightBackgroundColor}
-              title={t('chooseYourLightColor')}
               onChange={handleLightBackgroundColorChange}
             />
           </div>

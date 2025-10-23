@@ -142,7 +142,7 @@
   max-width: 300px;
   min-width: 250px;
   overflow: auto;
-  display: contents;
+  display: grid;
 }
 
 .profile-navbar-container:not(.visible) {
