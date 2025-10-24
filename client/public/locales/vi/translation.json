@@ -52,5 +52,12 @@
   "toLeft": "Sang trái",
   "toRight": "Sang phải",
   "background&GradientColor": "Màu nền & Độ chuyển màu",
-  "AcentColor&GradientColor": "Màu nhấn & Độ chuyển màu"
+  "AcentColor&GradientColor": "Màu nhấn & Độ chuyển màu",
+  "messagePlaceholder": "Nhắn {{modelLabel}}...",
+  "doneThinkingIn": "Suy nghĩ xong trong {{time}}.",
+  "gemini25Pro": "Chị Nguyễn",
+  "gemini25Flash": "Bé Lê",
+  "gemma312b": "Anh Trần",
+  "darkTheme": "Màu chủ đề tối",
+  "lightTheme": "Màu chủ để sáng"
 }

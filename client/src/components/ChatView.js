@@ -9,6 +9,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css'; // ✅ Required for KaTeX styling
 import '../App.css';
+import { useTranslation } from 'react-i18next';
 
 const formatTime = (seconds) => {
   if (seconds < 60) return `${seconds.toFixed(1)} seconds`;
@@ -24,6 +25,8 @@ const cleanMarkdown = (text) => {
 };
 
 const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language }) => {
+  const { t } = useTranslation();
+  
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -39,7 +42,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                   {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
                   <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
                     {msg.sender === 'ai' && msg.thinkingTime && (
-                      <div className="model-name">Done thinking in {formatTime(msg.thinkingTime)}.</div>
+                      <div className="model-name">{t('doneThinkingIn', { time: formatTime(msg.thinkingTime) })}</div>
                     )}
                     {msg.sender === 'ai' && msg.thoughts?.length > 0 && (
                       <details className="thought-box">
@@ -64,8 +67,8 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       {msg.type === 'loading' ? (
                         <div className="loading-container">
                           <span className="thinking-text">Thinking</span>
-                          <span className="thinking-dots" style={{ marginBottom: '1rem' }}><span>.</span><span>.</span><span>...</span></span>
-                          <span style={{ marginBottom: '1rem' }}>{timer.toFixed(1)}s</span>
+                          <span className="thinking-dots"><span>.</span><span>.</span><span>...</span></span>
+                          <span >{timer.toFixed(1)}s</span>
                         </div>
                       ) : msg.sender === 'ai' ? (
                         <div className="markdown-content">
@@ -81,7 +84,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       )}
                     </div>
                     {msg.sender === 'ai' && msg.model && (
-                      <div className="model-name">{getLabelForModel(msg.model)}</div>
+                      <div className="model-name">{getLabelForModel(msg.model, t)}</div>
                     )}
                   </div>
                   {msg.sender === 'user' && <div className="user-avatar"><PersonCircle size={20} /></div>}

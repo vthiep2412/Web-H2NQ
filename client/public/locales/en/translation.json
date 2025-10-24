@@ -52,5 +52,12 @@
   "toLeft": "To Left",
   "toRight": "To Right",
   "background&GradientColor": "Background & Gradient Color",
-  "AcentColor&GradientColor": "Accent Color & Gradient Color"
+  "AcentColor&GradientColor": "Accent Color & Gradient Color",
+  "messagePlaceholder": "Message {{modelLabel}}...",
+  "doneThinkingIn": "Done thinking in {{time}}.",
+  "gemini25Pro": "Miss. Nguyen",
+  "gemini25Flash": "Little Le",
+  "gemma312b": "Mr. Tran",
+  "darkTheme": "Dark Theme",
+  "lightTheme": "Light Theme"
 }

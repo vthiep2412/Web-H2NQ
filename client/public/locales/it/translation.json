@@ -52,5 +52,12 @@
   "toLeft": "Verso sinistra",
   "toRight": "Verso destra",
   "background&GradientColor": "Colore di sfondo e sfumato",
-  "AcentColor&GradientColor": "Colore accentato e colore sfumato"
+  "AcentColor&GradientColor": "Colore accentato e colore sfumato",
+  "messagePlaceholder": "Messaggio {{modelLabel}}...",
+  "doneThinkingIn": "Pensiero terminato in {{time}}.",
+  "gemini25Pro": "Signorina Nguyen",
+  "gemini25Flash": "Piccola Le",
+  "gemma312b": "Il signor Tran",
+  "darkTheme": "Tema scuro",
+  "lightTheme": "Tema chiaro"
 }

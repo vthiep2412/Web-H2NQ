@@ -52,5 +52,12 @@
   "toLeft": "Nach links",
   "toRight": "Nach rechts",
   "background&GradientColor": "Hintergrund- und Verlaufsfarbe",
-  "AcentColor&GradientColor": "Akzentfarbe & Verlaufsfarbe"
+  "AcentColor&GradientColor": "Akzentfarbe & Verlaufsfarbe",
+  "messagePlaceholder": "Nachricht {{modelLabel}}...",
+  "doneThinkingIn": "Fertig gedacht in {{time}}.",
+  "gemini25Pro": "Fräulein Nguyen",
+  "gemini25Flash": "Kleine Le",
+  "gemma312b": "Herr Tran",
+  "darkTheme": "Dunkles Thema",
+  "lightTheme": "Lichtthema"
 }

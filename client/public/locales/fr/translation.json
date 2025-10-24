@@ -52,5 +52,12 @@
   "toLeft": "Vers la gauche",
   "toRight": "Vers la droite",
   "background&GradientColor": "Couleur de l'arrière-plan et du dégradé",
-  "AcentColor&GradientColor": "Couleur d'accent et couleur dégradée"
+  "AcentColor&GradientColor": "Couleur d'accent et couleur dégradée",
+  "messagePlaceholder": "Message {{modelLabel}}...",
+  "doneThinkingIn": "Réflexion terminée en {{time}}.",
+  "gemini25Pro": "Mlle Nguyen",
+  "gemini25Flash": "Petite Le",
+  "gemma312b": "M. Tran",
+  "darkTheme": "Thème sombre",
+  "lightTheme": "Thème Lumière"
 }

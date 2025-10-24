@@ -194,7 +194,7 @@ const AuthPage = () => {
                                 {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
                             </span>
                         </div>
-                        <button type="submit" id="signUpBtn" style={{ marginTop: '10px' }}>Sign Up</button>
+                        <button type="submit" id="signUpBtn" className={styles.authbtn} style={{ marginTop: '10px' }}>Sign Up</button>
                         <span className={styles.mobileToggleLink} onClick={handleSignInClick}>Already have an account? Sign In</span>
                     </form>
                 </div>
@@ -210,7 +210,7 @@ const AuthPage = () => {
                             </span>
                         </div>
                         <a href="/forgot-password" className={styles.forgotPasswordLink}>Forgot your password?</a>
-                        <button type="submit">Sign In</button>
+                        <button type="submit" className={styles.authbtn}>Sign In</button>
                         <span className={styles.mobileToggleLink} onClick={handleSignUpClick}>Don't have an account? Sign Up</span>
                     </form>
                 </div>
@@ -219,12 +219,12 @@ const AuthPage = () => {
                         <div className={`${styles.overlayPanel} ${styles.overlayLeft}`}>
                             <h1>Hello, Friend!</h1>
                             <p>Enter your personal details and start your journey with us</p>
-                            <button className={styles.ghost} onClick={handleSignInClick}>Sign In</button>
+                            <button className={styles.ghost + ' ' + styles.authbtn} onClick={handleSignInClick}>Sign In</button>
                         </div>
                         <div className={`${styles.overlayPanel} ${styles.overlayRight}`}>
                             <h1>Welcome Back!</h1>
                             <p>To keep connected with us please login with your personal info</p>
-                            <button className={styles.ghost} onClick={handleSignUpClick}>Sign Up</button>
+                            <button className={styles.ghost + ' ' + styles.authbtn} onClick={handleSignUpClick}>Sign Up</button>
                         </div>
                     </div>
                 </div>

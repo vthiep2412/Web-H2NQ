@@ -174,7 +174,7 @@ const ProfileNavbar = React.memo(({
         </div>
         <div className="background-color-pickers-container">
           <div className="theme-options">
-            <Form.Label htmlFor="dark-background-color-picker">Dark</Form.Label>
+            <Form.Label htmlFor="dark-background-color-picker">{t('darkTheme')}</Form.Label>
             <Form.Control
               type="color"
               id="dark-background-color-picker"
@@ -183,7 +183,7 @@ const ProfileNavbar = React.memo(({
             />
           </div>
           <div className="theme-options">
-            <Form.Label htmlFor="light-background-color-picker">Light</Form.Label>
+            <Form.Label htmlFor="light-background-color-picker">{t('lightTheme')}</Form.Label>
             <Form.Control
               type="color"
               id="light-background-color-picker"

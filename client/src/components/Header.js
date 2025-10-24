@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
-import { models, getLabelForModel } from '../utils/models';
-// import { useTranslation } from 'react-i18next';
+import { useModels, getLabelForModel } from '../utils/models';
+import { useTranslation } from 'react-i18next';
 import './Header.css';
 
 const languages = [
@@ -46,7 +46,9 @@ const Header = React.memo(({
   language,
   onLanguageChange
 }) => {
-  // const { i18n } = useTranslation();
+  const { t } = useTranslation();
+
+  const models = useModels(); // <-- Get models array using the hook
 
   const changeLanguage = (langCode) => {
     onLanguageChange(langCode);
@@ -66,7 +68,7 @@ const Header = React.memo(({
             <Col className='d-flex align-items-center justify-content-center'>
                 <Dropdown onSelect={handleModelChange}>
                   <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic" className="model-dropdown">
-                    {getLabelForModel(selectedModel)}
+                    {getLabelForModel(selectedModel, t)}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>

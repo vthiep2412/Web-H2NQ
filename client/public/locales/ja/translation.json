@@ -52,5 +52,12 @@
   "toLeft": "左へ",
   "toRight": "右へ",
   "background&GradientColor": "背景色とグラデーション色",
-  "AcentColor&GradientColor": "アクセントカラーとグラデーション色"
+  "AcentColor&GradientColor": "アクセントカラーとグラデーション色",
+  "messagePlaceholder": "メッセージ {{modelLabel}}...",
+  "doneThinkingIn": "{{time}} で考え終わりました。",
+  "gemini25Pro": "グエンさん",
+  "gemini25Flash": "レちゃん",
+  "gemma312b": "チャンさん",
+  "darkTheme": "ダークテーマ",
+  "lightTheme": "ライトテーマ"
 }

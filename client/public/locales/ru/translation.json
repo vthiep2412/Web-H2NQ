@@ -52,5 +52,12 @@
   "toLeft": "Налево",
   "toRight": "Направо",
   "background&GradientColor": "Цвет фона и градиента",
-  "AcentColor&GradientColor": "Цвет акцента и градиента"
+  "AcentColor&GradientColor": "Цвет акцента и градиента",
+  "messagePlaceholder": "Сообщение {{modelLabel}}...",
+  "doneThinkingIn": "Закончил думать за {{time}}.",
+  "gemini25Pro": "Мисс Нгуен",
+  "gemini25Flash": "Маленькая Ле",
+  "gemma312b": "Господин Чан",
+  "darkTheme": "Тёмная тема",
+  "lightTheme": "Светлая тема"
 }

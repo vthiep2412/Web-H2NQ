@@ -52,5 +52,12 @@
   "toLeft": "到左边",
   "toRight": "到右边",
   "background&GradientColor": "背景和渐变颜色",
-  "AcentColor&GradientColor": "强调颜色和渐变颜色"
+  "AcentColor&GradientColor": "强调颜色和渐变颜色",
+  "messagePlaceholder": "消息 {{modelLabel}}...",
+  "doneThinkingIn": "在 {{time}} 内思考完成。",
+  "gemini25Pro": "阮小姐",
+  "gemini25Flash": "小乐",
+  "gemma312b": "陈先生",
+  "darkTheme": "深色主题",
+  "lightTheme": "浅色主题"
 }
