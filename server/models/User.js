@@ -46,6 +46,8 @@ const UserSchema = new mongoose.Schema({
     lightBackgroundColor: { type: String, default: '#ffffff' },
     gradientBackgroundColor1: { type: String, default: '#ff0000' },
     gradientBackgroundColor2: { type: String, default: '#0000ff' },
+    isGradientBackgroundColor1Enabled: { type: Boolean, default: false },
+    isGradientBackgroundColor2Enabled: { type: Boolean, default: false },
     gradientDirection: { type: String, default: 'to bottom' },
   },
 });

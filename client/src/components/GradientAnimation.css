@@ -1,0 +1,28 @@
+.gradient-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10; /* Ensure it's behind all content */
+}
+
+/* Apply animation only when the 'animated' class is present */
+.gradient-background.animated {
+  animation: slow-gradient-animation 15s ease infinite;
+}
+
+@keyframes slow-gradient-animation {
+  0% {
+    /* background-size: 100% 100%; */
+    opacity: 0.4;
+  }
+  50% {
+    /* background-size: 150% 150%; */
+    opacity: 1;
+  }
+  100% {
+    /* background-size: 100% 100%; */
+    opacity: 0.4;
+  }
+}

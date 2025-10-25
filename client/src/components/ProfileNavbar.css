@@ -99,9 +99,12 @@
   margin-bottom: 0.6rem;
 }
 
-/* .theme-options, .background-options {
-    margin-top: -2rem;
-} */
+.theme-options{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .fix-primarycolor{
   margin-top: -2.3rem;
   display: flex;

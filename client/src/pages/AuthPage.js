@@ -141,7 +141,7 @@ const AuthPage = () => {
                     setModalMessage(errorData.msg);
                     setCountdown(errorData.timeLeft || 0);
                 } else if (res.status === 400 && errorData) {
-                    setModalMessage(errorData.msg || 'Wrong email or password');
+                    setModalMessage(errorData.msg || 'Wrong email/username or password');
                 }
                 else {
                     // Fallback for non-JSON responses or other errors

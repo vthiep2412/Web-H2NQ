@@ -37,9 +37,9 @@ const ProfileNavbar = React.memo(({
   isGradientBackgroundColor2Enabled,
   onGradientBackgroundColor2Toggle,
   gradientDirection,
-  onGradientDirectionChange,
-  // isGradientBackgroundAnimated,
-  // onGradientBackgroundAnimationToggle,
+  setGradientDirection,
+  isGradientBackgroundAnimated,
+  onGradientBackgroundAnimationToggle,
   onRevertAccentGradient,
   onRevertBackgroundGradient
 }) => {
@@ -67,7 +67,14 @@ const ProfileNavbar = React.memo(({
   const handleLightBackgroundColorChange = (e) => {
     onLightBackgroundColorChange(e.target.value);
   };
+  const handleGradientBackgroundColor1Change = (e) => {
+    onGradientBackgroundColor1Change(e.target.value);
+  };
 
+  const handleGradientBackgroundColor2Change = (e) => {
+    onGradientBackgroundColor2Change(e.target.value);
+  };
+ 
   return (
     <nav className="profile-navbar">
       <div className="profile-section">
@@ -207,7 +214,7 @@ const ProfileNavbar = React.memo(({
                 id="gradient-background-color1-picker"
                 value={gradientBackgroundColor1}
                 title={t('chooseYourColor')}
-                onChange={onGradientBackgroundColor1Change}
+                onChange={handleGradientBackgroundColor1Change}
                 disabled={!isGradientBackgroundColor1Enabled}
               />
             </div>
@@ -223,7 +230,7 @@ const ProfileNavbar = React.memo(({
                 id="gradient-background-color2-picker"
                 value={gradientBackgroundColor2}
                 title={t('chooseYourColor')}
-                onChange={onGradientBackgroundColor2Change}
+                onChange={handleGradientBackgroundColor2Change}
                 disabled={!isGradientBackgroundColor2Enabled}
               />
             </div>
@@ -231,7 +238,7 @@ const ProfileNavbar = React.memo(({
         </div>
         <div className="gradient-direction-section">
           <Form.Label>{t('gradientDirection')}</Form.Label>
-          <Form.Select value={gradientDirection} onChange={onGradientDirectionChange}>
+          <Form.Select value={gradientDirection} onChange={(e) => setGradientDirection(e.target.value)}>
             <option value="to bottom">{t('toBottom')}</option>
             <option value="to top">{t('toTop')}</option>
             <option value="to left">{t('toLeft')}</option>
@@ -243,7 +250,7 @@ const ProfileNavbar = React.memo(({
       <h6 className='AniBG'>{t('animatedBackground')}</h6>
       <Form.Select value={selectedBackground} onChange={(e) => onBackgroundChange(e.target.value)}>
         <option value="none">{t('none')}</option>
-        <option value="animatedGradient">{t('animatedGradient')}</option>
+        <option value="gradientAnimation">{t('gradientAnimation')}</option>
         <option value="coloredSnowy">{t('coloredSnowy')}</option>
         <option value="floatingSquares">{t('floatingSquares')}</option>
         <option value="waveAnimation">{t('waveAnimation')}</option>

@@ -20,11 +20,11 @@ const SvgAnimation = () => {
                         attributeName="transform"
                         attributeType="XML"
                         type="translate"
-                        dur="10s"
+                        dur="14s"
                         calcMode="spline"
                         values="-270 230; -330 380; -270 230"
                         keyTimes="0; .5; 1"
-                        keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"
                         repeatCount="indefinite" />
                 </use>
                 <use xlinkHref="#wave" opacity=".6"> 
@@ -32,11 +32,11 @@ const SvgAnimation = () => {
                         attributeName="transform"
                         attributeType="XML"
                         type="translate"
-                        dur="8s"
+                        dur="11s"
                         calcMode="spline"
                         values="-370 250; -300 300; -370 250"
                         keyTimes="0; .6; 1"
-                        keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"
                         repeatCount="indefinite" />
                 </use>
                 <use xlinkHref="#wave" opacty=".9"> 
@@ -44,11 +44,11 @@ const SvgAnimation = () => {
                         attributeName="transform"
                         attributeType="XML"
                         type="translate"
-                        dur="6s"
+                        dur="8s"
                         calcMode="spline"
                         values="-400 200; -360 300; -400 200"
                         keyTimes="0; .4; 1"
-                        keySplines="0.42, 0, 0.58, 1.0;0.42, 0, 0.58, 1.0"
+                        keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"
                         repeatCount="indefinite" />
                 </use>
             </g>

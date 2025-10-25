@@ -165,7 +165,7 @@ router.post(
 
         const remaining = MAX_FAILED_ATTEMPTS - currentAttempts;
         return res.status(400).json({
-          msg: `Wrong email or password. ${remaining} attempts remaining.`,
+          msg: `Wrong email/username or password. ${remaining} attempts remaining.`,
         });
       }
 
