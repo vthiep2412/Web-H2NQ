@@ -787,41 +787,6 @@ useEffect(() => {
 
   const userMessages = useMemo(() => messages.filter(msg => msg.sender === 'user').slice(-50), [messages]);
 
-  const renderGradientBackground = () => {
-    const useGradient = isGradientBackgroundColor1Enabled || isGradientBackgroundColor2Enabled;
-    if (!useGradient) return null;
-
-    const colors = [];
-    const baseColor = theme === 'dark' ? darkBackgroundColor : lightBackgroundColor;
-
-    if (isGradientBackgroundColor1Enabled) colors.push(gradientBackgroundColor1);
-    if (isGradientBackgroundColor2Enabled) colors.push(gradientBackgroundColor2);
-
-    let gradientString;
-    if (colors.length === 2) {
-      gradientString = `linear-gradient(${gradientDirection}, ${colors[0]} 0%, ${colors[1]} 50%, ${baseColor} 100%)`;
-    } else if (colors.length === 1) {
-      gradientString = `linear-gradient(${gradientDirection}, ${colors[0]} 0%, ${baseColor} 66%)`;
-    } else {
-      gradientString = `linear-gradient(${gradientDirection}, ${baseColor} 0%, ${baseColor} 100%)`;
-    }
-    
-    let gradientStyle = {
-      background: gradientString
-    };
-
-    // This block is removed as animation is now controlled by GradientAnimation component
-    // if (isGradientBackgroundAnimated) {
-    //   gradientStyle.animation = 'gradient-animation 15s ease infinite';
-    // }
-
-    return (
-      <div
-        className="absolute inset-0 z-[-1]"
-        style={gradientStyle}
-      />
-    );
-  };
 
   const renderActiveView = () => {
     const viewType = activeView.split('-').pop();
@@ -882,7 +847,6 @@ useEffect(() => {
           colors.push(hexToRgba(gradientBackgroundColor2, gentleOpacity));
         }
 
-        const gradientPoints = [...colors, baseColor];
         let gradientString;
 
         if (colors.length === 2) {
