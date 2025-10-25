@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "Colore accentato e colore sfumato",
   "messagePlaceholder": "Messaggio {{modelLabel}}...",
   "doneThinkingIn": "Pensiero terminato in {{time}}.",
-  "gemini25Pro": "Signorina Nguyen",
-  "gemini25Flash": "Piccola Le",
-  "gemma312b": "Il signor Tran",
+  "gemini25Pro": "Signorina Nguyen (Intelligente)",
+  "gemini25Flash": "Piccola Le (Risposta veloce)",
+  "gemma312b": "Il signor Tran (Normale)",
   "darkTheme": "Tema scuro",
   "lightTheme": "Tema chiaro"
 }

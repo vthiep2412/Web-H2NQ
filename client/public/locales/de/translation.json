@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "Akzentfarbe & Verlaufsfarbe",
   "messagePlaceholder": "Nachricht {{modelLabel}}...",
   "doneThinkingIn": "Fertig gedacht in {{time}}.",
-  "gemini25Pro": "Fräulein Nguyen",
-  "gemini25Flash": "Kleine Le",
-  "gemma312b": "Herr Tran",
+  "gemini25Pro": "Fräulein Nguyen (Klug)",
+  "gemini25Flash": "Kleine Le (Schnellere Antwort)",
+  "gemma312b": "Herr Tran (Normal)",
   "darkTheme": "Dunkles Thema",
   "lightTheme": "Lichtthema"
 }

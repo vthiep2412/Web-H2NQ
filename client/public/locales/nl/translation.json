@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "Accentkleur & Verloopkleur",
   "messagePlaceholder": "Bericht {{modelLabel}}...",
   "doneThinkingIn": "Klaar met denken in {{time}}.",
-  "gemini25Pro": "Juffrouw Nguyen",
-  "gemini25Flash": "Kleine Le",
-  "gemma312b": "Meneer Tran",
+  "gemini25Pro": "Juffrouw Nguyen (Intelligent)",
+  "gemini25Flash": "Kleine Le (Sneller)",
+  "gemma312b": "Meneer Tran (Normaal)",
   "darkTheme": "Donker thema",
   "lightTheme": "Licht thema"
 }

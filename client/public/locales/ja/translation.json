@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "アクセントカラーとグラデーション色",
   "messagePlaceholder": "メッセージ {{modelLabel}}...",
   "doneThinkingIn": "{{time}} で考え終わりました。",
-  "gemini25Pro": "グエンさん",
-  "gemini25Flash": "レちゃん",
-  "gemma312b": "チャンさん",
+  "gemini25Pro": "グエンさん (スマート)",
+  "gemini25Flash": "レちゃん (高速)",
+  "gemma312b": "チャンさん (通常)",
   "darkTheme": "ダークテーマ",
   "lightTheme": "ライトテーマ"
 }

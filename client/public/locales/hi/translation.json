@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "एक्सेंट रंग और ग्रेडिएंट रंग",
   "messagePlaceholder": "संदेश {{modelLabel}}...",
   "doneThinkingIn": "{{time}} में सोचना समाप्त।",
-  "gemini25Pro": "मिस न्गुयेन",
-  "gemini25Flash": "छोटी ले",
-  "gemma312b": "श्री त्रान",
+  "gemini25Pro": "मिस न्गुयेन (स्मार्ट)",
+  "gemini25Flash": "छोटी ले (तेज)",
+  "gemma312b": "श्री त्रान (सामान्य)",
   "darkTheme": "डार्क थीम",
   "lightTheme": "लाइट थीम"
 }

@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "Accent Color & Gradient Color",
   "messagePlaceholder": "Message {{modelLabel}}...",
   "doneThinkingIn": "Done thinking in {{time}}.",
-  "gemini25Pro": "Miss. Nguyen",
-  "gemini25Flash": "Little Le",
-  "gemma312b": "Mr. Tran",
+  "gemini25Pro": "Miss. Nguyen (Smart)",
+  "gemini25Flash": "Little Le (Faster)",
+  "gemma312b": "Mr. Tran (Normal)",
   "darkTheme": "Dark Theme",
   "lightTheme": "Light Theme"
 }

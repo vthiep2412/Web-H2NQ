@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "强调颜色和渐变颜色",
   "messagePlaceholder": "消息 {{modelLabel}}...",
   "doneThinkingIn": "在 {{time}} 内思考完成。",
-  "gemini25Pro": "阮小姐",
-  "gemini25Flash": "小乐",
-  "gemma312b": "陈先生",
+  "gemini25Pro": "阮小姐 (智能)",
+  "gemini25Flash": "小乐 (快速)",
+  "gemma312b": "陈先生 (普通)",
   "darkTheme": "深色主题",
   "lightTheme": "浅色主题"
 }

@@ -55,9 +55,9 @@
   "AcentColor&GradientColor": "Цвет акцента и градиента",
   "messagePlaceholder": "Сообщение {{modelLabel}}...",
   "doneThinkingIn": "Закончил думать за {{time}}.",
-  "gemini25Pro": "Мисс Нгуен",
-  "gemini25Flash": "Маленькая Ле",
-  "gemma312b": "Господин Чан",
+  "gemini25Pro": "Мисс Нгуен (Разумный)",
+  "gemini25Flash": "Маленькая Ле (Быстрая)",
+  "gemma312b": "Господин Чан (Обычный)",
   "darkTheme": "Тёмная тема",
   "lightTheme": "Светлая тема"
 }
