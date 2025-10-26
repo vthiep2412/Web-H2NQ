@@ -26,6 +26,16 @@ module.exports = async function (req, res, next) {
       return res.status(404).json({ msg: 'User not found' });
     }
 
+    // Check if password has been changed since token was issued
+    if (decoded.passwordVersion !== undefined && 
+        user.passwordVersion !== undefined && 
+        decoded.passwordVersion < user.passwordVersion) {
+      return res.status(401).json({ 
+        msg: 'Your password has been changed. Please log in again.',
+        requireRelogin: true 
+      });
+    }
+
     req.user = user; // Assign the full user object from the database
     
     // Log user loading only once per user per server uptime

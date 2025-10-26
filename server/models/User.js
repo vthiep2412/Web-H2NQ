@@ -28,7 +28,11 @@ const UserSchema = new mongoose.Schema({
   },
   tokenLeft: {
     type: Number,
-    default: 1000,
+    default: 1000
+  },
+  passwordVersion: {
+    type: Number,
+    default: 0
   },
   settings: {
     theme: { type: String, default: 'dark' },

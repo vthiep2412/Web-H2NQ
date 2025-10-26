@@ -493,7 +493,7 @@ button.ghost {
     cursor: pointer;
     color: #888;
     padding: 5px;
-    margin-left: 10px;
+    margin-left: .5rem;
 }
 
 .dark .editBtn {

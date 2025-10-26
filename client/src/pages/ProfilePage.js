@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { SunFill, MoonFill, EyeFill, EyeSlashFill, PersonCircle, PencilSquare, ArrowLeft } from 'react-bootstrap-icons';
+import { SunFill, MoonFill, EyeFill, EyeSlashFill, PersonCircle, PencilSquare, ArrowLeft, Check2, X } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 import styles from './ProfilePage.module.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 const ProfilePage = React.memo(() => {
     const { user, login } = useAuth();
@@ -15,6 +16,13 @@ const ProfilePage = React.memo(() => {
             navigate('/troll');
         }
     }, [user, navigate]);
+
+    const [isEditingUsername, setIsEditingUsername] = useState(false);
+    const [newUsername, setNewUsername] = useState(user ? user.name : '');
+    const [showUsernameModal, setShowUsernameModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [usernameError, setUsernameError] = useState('');
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
 
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -135,6 +143,124 @@ const ProfilePage = React.memo(() => {
         }
     };
 
+    const [passwordError, setPasswordError] = useState('');
+    const [isPasswordLoading, setIsPasswordLoading] = useState(false);
+
+    const validatePassword = (oldPass, newPass, confirmPass) => {
+        if (!oldPass || !newPass || !confirmPass) {
+            return 'All password fields are required.';
+        }
+        if (newPass.length < 6) {
+            return 'New password must be at least 6 characters long.';
+        }
+        if (newPass !== confirmPass) {
+            return 'New password and confirm password do not match.';
+        }
+        // Additional strength validation can be added here if needed,
+        // but it's already handled by calculatePasswordStrength for visual feedback
+        return '';
+    };
+
+    const validateUsername = (username) => {
+        if (!username || username.trim() === '') {
+            return 'Username cannot be empty';
+        }
+        if (username.length < 3) {
+            return 'Username must be at least 3 characters long';
+        }
+        if (username.length > 30) {
+            return 'Username cannot be longer than 30 characters';
+        }
+        if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+            return 'Username can only contain letters, numbers, underscores and hyphens';
+        }
+        return '';
+    };
+
+    const handleUsernameChange = async () => {
+        setUsernameError('');
+        
+        // Validate username
+        const validationError = validateUsername(newUsername);
+        if (validationError) {
+            setUsernameError(validationError);
+            return;
+        }
+
+        // Check if username is unchanged
+        if (newUsername === user.name) {
+            setUsernameError('New username is the same as current username');
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/users/username', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token,
+                },
+                body: JSON.stringify({ name: newUsername }),
+            });
+
+            const data = await res.json();
+            
+            if (!res.ok) {
+                throw new Error(data.msg || 'Failed to update username');
+            }
+
+            login(token, data); // Update user in AuthContext
+            setIsEditingUsername(false);
+            setShowUsernameModal(false);
+        } catch (error) {
+            setUsernameError(error.message || 'An error occurred while updating username');
+            console.error('Error updating username:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handlePasswordChange = async () => {
+        setPasswordError('');
+        const validationError = validatePassword(oldPassword, newPassword, confirmPassword);
+        if (validationError) {
+            setPasswordError(validationError);
+            return;
+        }
+
+        setIsPasswordLoading(true);
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/users/password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token,
+                },
+                body: JSON.stringify({ oldPassword, newPassword }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.msg || 'Failed to update password');
+            }
+
+            // Clear password fields and close modal on success
+            setOldPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setShowPasswordModal(false);
+        } catch (error) {
+            setPasswordError(error.message || 'An error occurred while updating password');
+            console.error('Error updating password:', error);
+        } finally {
+            setIsPasswordLoading(false);
+        }
+    };
+
     const getPasswordStrengthLabel = () => {
         if (newPassword.length === 0) return '';
         if (passwordStrength <= 2) return 'Weak';
@@ -172,10 +298,49 @@ const ProfilePage = React.memo(() => {
                     </div>
                     <div className={styles.profileInfo}>
                         <div className={styles.infoField}>
-                            <h5>{user ? user.name : t('guest')}</h5>
-                            <button className={styles.editBtn}>
-                                <PencilSquare size={15} />
-                            </button>
+                            {isEditingUsername ? (
+                                <input
+                                    type="text"
+                                    value={newUsername}
+                                    onChange={(e) => setNewUsername(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') setShowUsernameModal(true);
+                                        if (e.key === 'Escape') {
+                                            setIsEditingUsername(false);
+                                            setNewUsername(user.name);
+                                        }
+                                    }}
+                                    className={styles.usernameInput}
+                                    autoFocus
+                                />
+                            ) : (
+                                <h5>{user ? user.name : t('guest')}</h5>
+                            )}
+                            <div className={styles.editUsernameButtons}>
+                                {isEditingUsername ? (
+                                    <>
+                                        <button className={styles.editBtn} onClick={() => {
+                                            if (newUsername !== user.name) {
+                                                setShowUsernameModal(true);
+                                            } else {
+                                                setIsEditingUsername(false);
+                                            }
+                                        }}>
+                                            <Check2 size={15} />
+                                        </button>
+                                        <button className={styles.editBtn} onClick={() => {
+                                            setIsEditingUsername(false);
+                                            setNewUsername(user.name);
+                                        }}>
+                                            <X size={18} />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button className={styles.editBtn} onClick={() => setIsEditingUsername(true)}>
+                                        <PencilSquare size={15} />
+                                    </button>
+                                )}
+                            </div>
                         </div>
                         <div className={styles.infoField}>
                             <p>{user ? user.email : t('guestEmail')}</p>
@@ -234,9 +399,56 @@ const ProfilePage = React.memo(() => {
                             {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
                         </span>
                     </div>
-                    <button type="submit" className={styles.updatePasswordBtn}>{t('Update Password')}</button>
+                    <button type="button" onClick={() => setShowPasswordModal(true)} className={styles.updatePasswordBtn}>{t('Update Password')}</button>
+                    {passwordError && (
+                        <div className="alert alert-danger" role="alert" style={{ marginTop: '10px' }}>
+                            {passwordError}
+                        </div>
+                    )}
                 </div>
             </div>
+            <Modal show={showUsernameModal} onClose={() => {
+                setShowUsernameModal(false);
+                setUsernameError('');
+            }} theme={theme}>
+                <h4>{t('Confirm Username Change')}</h4>
+                <p>{t('Are you sure you want to change your username to')} "{newUsername}" ?</p>
+                {usernameError && (
+                    <div className="alert alert-danger" role="alert">
+                        {usernameError}
+                    </div>
+                )}
+                <div className={styles.modalActions}>
+                    <button
+                        onClick={handleUsernameChange}
+                        className="btn btn-primary"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? t('Updating...') : t('Approve')}
+                    </button>
+                </div>
+            </Modal>
+            <Modal show={showPasswordModal} onClose={() => {
+                setShowPasswordModal(false);
+                setPasswordError('');
+            }} theme={theme}>
+                <h4>{t('Confirm Password Change')}</h4>
+                <p>{t('Are you sure you want to change your password?')}</p>
+                {passwordError && (
+                    <div className="alert alert-danger" role="alert">
+                        {passwordError}
+                    </div>
+                )}
+                <div className={styles.modalActions}>
+                    <button
+                        onClick={handlePasswordChange}
+                        className="btn btn-primary"
+                        disabled={isPasswordLoading}
+                    >
+                        {isPasswordLoading ? t('Updating...') : t('Approve')}
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 });

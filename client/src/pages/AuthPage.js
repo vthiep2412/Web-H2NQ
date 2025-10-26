@@ -75,16 +75,15 @@ const AuthPage = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setShowModal(false);
-    
-        if (password !== confirmPassword) {
-            setModalMessage('Passwords do not match!');
+
+        if (password.length < 6) {
+            setModalMessage('Password must be at least 6 characters long.');
             setShowModal(true);
             return;
         }
 
-        const MIN_PASSWORD_STRENGTH = 3; // Define minimum acceptable strength
-        if (passwordStrength < MIN_PASSWORD_STRENGTH) {
-            setModalMessage('Password is too weak. Please use a stronger password.');
+        if (password !== confirmPassword) {
+            setModalMessage('Passwords do not match!');
             setShowModal(true);
             return;
         }
@@ -195,11 +194,19 @@ const AuthPage = () => {
                             </span>
                         </div>
                         {isSignUp && password.length > 0 && (
-                            <div className={styles.passwordStrengthIndicator}>
-                                Password Strength: {' '}
-                                {passwordStrength <= 2 && <span style={{ color: 'red' }}>Weak</span>}
-                                {passwordStrength > 2 && passwordStrength <= 5 && <span style={{ color: 'orange' }}>Medium</span>}
-                                {passwordStrength > 5 && <span style={{ color: 'green' }}>Strong</span>}
+                            <div className={styles.passwordStrengthContainer}>
+                                <span className={styles.strengthLabel}>
+                                    Password Strength: {' '}
+                                    {passwordStrength <= 2 && <span style={{ color: 'red' }}>Weak</span>}
+                                    {passwordStrength > 2 && passwordStrength <= 4 && <span style={{ color: 'orange' }}>Medium</span>}
+                                    {passwordStrength > 4 && <span style={{ color: 'green' }}>Strong</span>}
+                                </span>
+                                <div className={styles.passwordStrengthIndicator}>
+                                    <div className={styles.strengthBar} style={{ width: `${(passwordStrength / 6) * 100}%`, backgroundColor:
+                                        passwordStrength <= 2 ? 'red' :
+                                        passwordStrength <= 4 ? 'orange' : 'green'
+                                    }}></div>
+                                </div>
                             </div>
                         )}
                         <div className={styles.passwordContainer}>

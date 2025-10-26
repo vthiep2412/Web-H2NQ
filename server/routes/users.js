@@ -18,4 +18,14 @@ router.post('/avatar/signature', auth, userController.getCloudinarySignature);
 // @access  Private
 router.put('/avatar', auth, userController.updateAvatar);
 
+// @route   PUT api/users/username
+// @desc    Update username
+// @access  Private
+router.put('/username', auth, userController.updateUsername);
+
+// @route   PUT api/users/password
+// @desc    Update password
+// @access  Private
+router.put('/password', auth, userController.updatePassword);
+
 module.exports = router;

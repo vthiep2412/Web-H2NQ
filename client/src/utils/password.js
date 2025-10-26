@@ -2,11 +2,11 @@ export const checkPasswordStrength = (password) => {
   let score = 0;
 
   // Length score
-  if (password.length >= 16) {
+  if (password.length >= 12) {
     score += 3;
-  } else if (password.length >= 12) {
+  } else if (password.length >= 9) {
     score += 2;
-  } else if (password.length >= 8) {
+  } else if (password.length >= 6) {
     score += 1;
   }
 

@@ -357,6 +357,31 @@ button.ghost {
     cursor: pointer;
 }
 
+.passwordStrengthContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the strength indicator */
+    margin-top: 5px;
+}
+
+.passwordStrengthIndicator {
+    width: 100%; /* Or a fixed width like 200px if preferred */
+    height: 0.5rem; /* The requested height */
+    background-color: #e0e0e0;
+    border-radius: 5px; /* Add border radius */
+    overflow: hidden;
+    margin-top: 5px;
+    display: flex; /* Make it a flex container */
+    justify-content: center; /* Center the strength bar horizontally */
+}
+
+.strengthBar {
+    height: 100%;
+    border-radius: 5px; /* Add border radius */
+    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
 @media (max-width: 768px) {
     .overlayContainer {
         display: none;
@@ -396,4 +421,27 @@ button.ghost {
     form {
         background-color: transparent !important;
     }
+}
+
+.passwordStrengthContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* To center the strength indicator if its width is less than 100% */
+    margin-top: 5px;
+}
+
+.passwordStrengthIndicator {
+    width: 100%; /* Or a fixed width like 200px if preferred */
+    height: 0.5rem; /* The requested height */
+    background-color: #e0e0e0;
+    border-radius: 5px; /* Add border radius */
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.strengthBar {
+    height: 100%;
+    border-radius: 5px; /* Add border radius */
+    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
