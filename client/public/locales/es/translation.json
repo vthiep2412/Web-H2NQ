@@ -56,8 +56,8 @@
   "doneThinkingIn": "Terminado de pensar en {{time}}.",
   "gemini25Pro": "Señorita Nguyen (Inteligente)",
   "gemini25Flash": "Pequeña Le (Respuesta más rápida)",
-  "gemini25FlashLite": "Señorita Nhu (Estúpida)",
-  "gemma312b": "Sr. Tran (Normal)",
+  "gemini25FlashLite": "Sr. Tam (Demasiado rápido, demasiado peligroso.)",
+  "gemma312b": "Sr. Tran (Tonto)",
   "darkTheme": "Tema oscuro",
   "lightTheme": "Tema claro"
 }

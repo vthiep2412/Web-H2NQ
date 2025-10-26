@@ -118,7 +118,7 @@ const VerticalNavbar = React.memo(({
       <Nav className="flex-column">
         {workspaces.map(ws => (
           <div key={ws.id}>
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center vert-nav-top">
               {editingWorkspaceId === ws.id ? (
                 <InputGroup className="mb-2 flex-grow-1">
                   <Form.Control
@@ -137,14 +137,7 @@ const VerticalNavbar = React.memo(({
               ) : (
                 <>
                   <Nav.Link 
-                    onClick={() => {
-                      toggleWorkspace(ws.id);
-                      onViewChange(ws.children[0]?.id || ws.id);
-                      if (window.innerWidth < 576) {
-                        toggleNavbar(false);
-                      }
-                      getWorkspaces();
-                    }} 
+                    onClick={() => toggleWorkspace(ws.id)} 
                     aria-expanded={open[ws.id]} 
                     className="workspace-toggle flex-grow-1 flex items-center"
                   >
@@ -152,12 +145,12 @@ const VerticalNavbar = React.memo(({
                     <strong>{ws.name}</strong>
                   </Nav.Link>
                   <OverlayTrigger overlay={<Tooltip>{t('edit')}</Tooltip>}>
-                    <Button variant="link" onClick={() => startEditing(ws)} className="p-1 text-dark mb-2 me-1 theme-aware-button">
+                    <Button variant="link" onClick={() => startEditing(ws)} className="p-1 text-dark theme-aware-button">
                       <Pencil size={16} />
                     </Button>
                   </OverlayTrigger>
                   <OverlayTrigger overlay={<Tooltip>{t('delete')}</Tooltip>}>
-                    <Button variant="link" onClick={() => handleDelete(ws.id)} className="p-1 text-dark mb-2 theme-aware-button" disabled={workspaces.length <= 1}>
+                    <Button variant="link" onClick={() => handleDelete(ws.id)} className="p-1 text-dark theme-aware-button" disabled={workspaces.length <= 1}>
                       <Trash size={16} />
                     </Button>
                   </OverlayTrigger>

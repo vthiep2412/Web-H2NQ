@@ -56,8 +56,8 @@
   "doneThinkingIn": "在 {{time}} 内思考完毕。",
   "gemini25Pro": "阮小姐（智能）",
   "gemini25Flash": "小李（更快响应）",
-  "gemini25FlashLite": "努小姐 (笨)",
-  "gemma312b": "陈先生（普通）",
+  "gemini25FlashLite": "谭先生 (太快太危险。)",
+  "gemma312b": "陈先生（笨）",
   "darkTheme": "深色主题",
   "lightTheme": "浅色主题"
 }

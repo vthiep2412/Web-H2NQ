@@ -36,7 +36,6 @@
   "primaryColor": "Colore primario",
   "chooseYourColor": "Scegli il tuo colore",
   "gradientColor": "Colore sfumato",
-  "gradientAnimation": "Animazione sfumata",
   "animatedBackground": "Sfondo animato",
   "none": "Nessuno",
   "coloredSnowy": "Nevoso colorato",
@@ -57,8 +56,8 @@
   "doneThinkingIn": "Finito di pensare in {{time}}.",
   "gemini25Pro": "Signorina Nguyen (Intelligente)",
   "gemini25Flash": "Piccola Le (Risposta più veloce)",
-  "gemini25FlashLite": "Signorina Nhu (Stupida)",
-  "gemma312b": "Signor Tran (Normale)",
+  "gemini25FlashLite": "Signor Tam (Troppo veloce, troppo pericoloso.)",
+  "gemma312b": "Signor Tran (Stupido)",
   "darkTheme": "Tema scuro",
   "lightTheme": "Tema chiaro"
 }
