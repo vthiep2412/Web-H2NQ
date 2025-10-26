@@ -56,14 +56,12 @@
   background-color: #3d3d3d;
   margin-bottom: 0.5rem;
   width: 75%;
-  max-height: 3rem;
-  overflow-y: auto;
-  transition: all 0.3s ease;
+  overflow: hidden;
   min-width: 10rem;
 }
 
 .thought-box[open] {
-  max-height: 25rem; /* Adjust as needed */
+  overflow-y: auto; /* Allow scrolling when open */
 }
 
 [data-bs-theme="light"] .thought-box {

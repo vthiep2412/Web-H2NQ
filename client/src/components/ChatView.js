@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { Robot, PersonCircle } from 'react-bootstrap-icons';
 import ChatInput from './ChatInput';
@@ -26,7 +26,97 @@ const cleanMarkdown = (text) => {
 
 const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language }) => {
   const { t } = useTranslation();
-  
+
+  const detailsRefs = useRef({});
+
+  useEffect(() => {
+    class DetailsAnimator {
+      constructor(details) {
+        this.details = details;
+        this.summary = details.querySelector('summary');
+        this.content = details.querySelector('.thoughts-container');
+        this.animation = null;
+        this.isClosing = false;
+        this.isExpanding = false;
+        this.summary.addEventListener('click', (e) => this.onClick(e));
+      }
+
+      onClick(e) {
+        e.preventDefault();
+        this.details.style.overflow = 'hidden';
+        if (this.isClosing || !this.details.open) {
+          this.open();
+        } else if (this.isExpanding || this.details.open) {
+          this.shrink();
+        }
+      }
+
+      shrink() {
+        this.isClosing = true;
+        const startHeight = `${this.details.offsetHeight}px`;
+        const endHeight = `${this.summary.offsetHeight}px`;
+
+        if (this.animation) {
+          this.animation.cancel();
+        }
+
+        this.animation = this.details.animate({
+          height: [startHeight, endHeight]
+        }, {
+          duration: 300,
+          easing: 'ease-out'
+        });
+
+        this.animation.onfinish = () => this.onAnimationFinish(false);
+        this.animation.oncancel = () => this.isClosing = false;
+      }
+
+      open() {
+        this.details.style.height = `${this.details.offsetHeight}px`;
+        this.details.open = true;
+        window.requestAnimationFrame(() => this.expand());
+      }
+
+      expand() {
+        this.isExpanding = true;
+        const startHeight = `${this.details.offsetHeight}px`;
+        const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`;
+
+        if (this.animation) {
+          this.animation.cancel();
+        }
+
+        this.animation = this.details.animate({
+          height: [startHeight, endHeight]
+        }, {
+          duration: 300,
+          easing: 'ease-out'
+        });
+        this.animation.onfinish = () => this.onAnimationFinish(true);
+        this.animation.oncancel = () => this.isExpanding = false;
+      }
+
+      onAnimationFinish(open) {
+        this.details.open = open;
+        this.isClosing = false;
+        this.isExpanding = false;
+        this.details.style.height = this.details.style.overflow = '';
+      }
+    }
+
+    const detailsElements = detailsRefs.current;
+    const animators = {};
+
+    Object.keys(detailsElements).forEach(key => {
+      const details = detailsElements[key];
+      if (details && !details.animator) {
+        animators[key] = new DetailsAnimator(details);
+        details.animator = true; 
+      }
+    });
+
+  }, [messages]);
+
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -45,7 +135,10 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                       <div className="model-name">{t('doneThinkingIn', { time: formatTime(msg.thinkingTime) })}</div>
                     )}
                     {msg.sender === 'ai' && msg.thoughts?.length > 0 && (
-                      <details className="thought-box">
+                      <details
+                        ref={el => { if (el) detailsRefs.current[msg.id] = el; }}
+                        className="thought-box"
+                      >
                         <summary>Show Thoughts</summary>
                         <div className="thoughts-container">
                           {msg.thoughts.map((thought, i) => (
