@@ -59,10 +59,11 @@
   max-height: 3rem;
   overflow-y: auto;
   transition: all 0.3s ease;
+  min-width: 10rem;
 }
 
 .thought-box[open] {
-  max-height: 400px; /* Adjust as needed */
+  max-height: 25rem; /* Adjust as needed */
 }
 
 [data-bs-theme="light"] .thought-box {

@@ -36,7 +36,6 @@
   "primaryColor": "प्राथमिक रंग",
   "chooseYourColor": "अपना रंग चुनें",
   "gradientColor": "ग्रेडिएंट रंग",
-  "gradientAnimation": "ग्रेडिएंट एनीमेशन",
   "animatedBackground": "एनिमेटेड पृष्ठभूमि",
   "none": "कोई नहीं",
   "coloredSnowy": "रंगीन बर्फीला",
@@ -57,6 +56,7 @@
   "doneThinkingIn": "{{time}} में सोचना समाप्त हुआ।",
   "gemini25Pro": "मिस गुयेन (स्मार्ट)",
   "gemini25Flash": "लिटिल ले (तेज़ प्रतिक्रिया)",
+  "gemini25FlashLite": "मिस न्हु (मूर्ख)",
   "gemma312b": "मिस्टर ट्रान (सामान्य)",
   "darkTheme": "गहरा थीम",
   "lightTheme": "हल्का थीम"

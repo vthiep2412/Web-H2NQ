@@ -38,6 +38,7 @@
   "gradientColor": "Couleur du dégradé",
   "gradientAnimation": "Animation de dégradé",
   "animatedBackground": "Fond animé",
+
   "none": "Aucun",
   "coloredSnowy": "Neige colorée",
   "gradientAnimation": "Animation de dégradé",
@@ -57,6 +58,7 @@
   "doneThinkingIn": "Terminé de réfléchir en {{time}}.",
   "gemini25Pro": "Mlle Nguyen (Intelligent)",
   "gemini25Flash": "Petite Le (Réponse plus rapide)",
+  "gemini25FlashLite": "Mlle Nhu (Stupide)",
   "gemma312b": "M. Tran (Normal)",
   "darkTheme": "Thème sombre",
   "lightTheme": "Thème clair"

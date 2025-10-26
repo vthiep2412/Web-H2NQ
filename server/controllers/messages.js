@@ -216,7 +216,7 @@ exports.sendMessage = async (req, res) => {
       // });
 
       let title = 'New Conversation'; // Default title
-      const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash' });
+      const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
       const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
 
       for (let i = 0; i < 3; i++) { // Retry up to 3 times

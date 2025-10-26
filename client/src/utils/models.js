@@ -5,6 +5,7 @@ export const useModels = () => {
   return [
     { eventKey: "gemini-2.5-pro", label: t("gemini25Pro") }, // chi nguyen
     { eventKey: "gemini-2.5-flash", label: t("gemini25Flash") }, // be le
+    { eventKey: "gemini-2.5-flash-lite", label: t("gemini25FlashLite") },
     { isDivider: true },
     // { eventKey: "openrouter/deepseek/deepseek-r1-distill-llama-70b:free", label: "Deepseek R1 Llama 70b" },
     // { eventKey: "openrouter/deepseek/deepseek-chat-v3.1:free", label: "Deepseek v3.1" },
@@ -25,6 +26,7 @@ export const getLabelForModel = (modelKey, t) => {
   const models = [
     { eventKey: "gemini-2.5-pro", label: t("gemini25Pro") },
     { eventKey: "gemini-2.5-flash", label: t("gemini25Flash") },
+    { eventKey: "gemini-2.5-flash-lite", label: t("gemini25FlashLite") },
     { isDivider: true },
     { eventKey: "openrouter/google/gemma-3-12b-it:free", label: t("gemma312b") },
   ];

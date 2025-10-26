@@ -57,6 +57,7 @@
   "doneThinkingIn": "{{time}}で思考完了。",
   "gemini25Pro": "グエンさん（スマート）",
   "gemini25Flash": "リトル・レ（高速応答）",
+  "gemini25FlashLite": "ニューさん (愚か)",
   "gemma312b": "トランさん（ノーマル）",
   "darkTheme": "ダークテーマ",
   "lightTheme": "ライトテーマ"

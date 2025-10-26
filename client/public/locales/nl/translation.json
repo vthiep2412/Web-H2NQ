@@ -36,7 +36,6 @@
   "primaryColor": "Primaire kleur",
   "chooseYourColor": "Kies je kleur",
   "gradientColor": "Verloop Kleur",
-  "gradientAnimation": "Gradiënt Animatie",
   "animatedBackground": "Geanimeerde achtergrond",
   "none": "Geen",
   "coloredSnowy": "Gekleurd Besneeuwd",
@@ -57,6 +56,7 @@
   "doneThinkingIn": "Klaar met denken in {{time}}.",
   "gemini25Pro": "Juffrouw Nguyen (Intelligent)",
   "gemini25Flash": "Kleine Le (Sneller)",
+  "gemini25FlashLite": "Juffrouw Nhu (Dom)",
   "gemma312b": "Meneer Tran (Normaal)",
   "darkTheme": "Donker thema",
   "lightTheme": "Licht thema"
