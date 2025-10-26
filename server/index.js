@@ -33,6 +33,22 @@ app.use('/api/conversations', conversationsRouter);
 app.use('/api/workspaces', workspacesRouter);
 app.use('/api/users', usersRouter);
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('There was an uncaught error', err);
+  process.exit(1); //mandatory (as per the Node.js docs)
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Application specific logging, throwing an error, or other logic here
+});
+
 module.exports = app;
 
 if (!process.env.VERCEL) {

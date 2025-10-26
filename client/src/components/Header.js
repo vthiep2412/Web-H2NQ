@@ -3,6 +3,7 @@ import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import { PersonCircle, List, SunFill, MoonFill } from 'react-bootstrap-icons';
 import { useModels, getLabelForModel } from '../utils/models';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 import './Header.css';
 
 const languages = [
@@ -47,6 +48,7 @@ const Header = React.memo(({
   onLanguageChange
 }) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   const models = useModels(); // <-- Get models array using the hook
 
@@ -87,7 +89,7 @@ const Header = React.memo(({
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     {languages.map(lang => (
-                      <Dropdown.Item key={lang.code} eventKey={lang.code} className="flex items-center">
+                      <Dropdown.Item key={lang.code} eventKey={lang.code} className="flex items-.center">
                         <img src={`https://flagicons.lipis.dev/flags/4x3/${getCountryCode(lang.code)}.svg`} alt={`${lang.name} flag`} className="flag-icon mr-2" /> {lang.nativeName}
                       </Dropdown.Item>
                     ))}
@@ -96,7 +98,11 @@ const Header = React.memo(({
                 <Button onClick={toggleTheme} variant="link" className="theme-toggle-btn">
                     {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
                 </Button>
-                <PersonCircle size={30} className="ms-3" onClick={toggleProfileNavbar} style={{ cursor: 'pointer' }} />
+                {user && user.avatarUrl ? (
+                    <img src={user.avatarUrl} alt="User Avatar" className="header-avatar" onClick={toggleProfileNavbar} style={{ cursor: 'pointer' }} />
+                ) : (
+                    <PersonCircle size={30} className="ms-3" onClick={toggleProfileNavbar} style={{ cursor: 'pointer' }} />
+                )}
             </Col>
         </Row>
     </header>

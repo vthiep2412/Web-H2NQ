@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { SunFill, MoonFill, EyeFill, EyeSlashFill, PersonCircle, PencilSquare } from 'react-bootstrap-icons';
+import React, { useState, useEffect, useRef } from 'react';
+import { SunFill, MoonFill, EyeFill, EyeSlashFill, PersonCircle, PencilSquare, ArrowLeft } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 import styles from './ProfilePage.module.css';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = React.memo(() => {
-    const { user } = useAuth();
+    const { user, login } = useAuth();
+    const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/troll');
+        }
+    }, [user, navigate]);
+
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -51,6 +61,80 @@ const ProfilePage = React.memo(() => {
         return 'grey';
     };
 
+    const handleReturn = () => {
+        navigate('/ai');
+    };
+
+    const handleAvatarClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            // 1. Get signature from backend
+            const token = localStorage.getItem('token');
+            const sigRes = await fetch('/api/users/avatar/signature', {
+                method: 'POST',
+                headers: {
+                    'x-auth-token': token,
+                },
+            });
+
+            if (!sigRes.ok) {
+                throw new Error('Failed to get upload signature');
+            }
+
+            const { timestamp, signature, upload_preset, transformation } = await sigRes.json();
+
+            // 2. Upload to Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('timestamp', timestamp);
+            formData.append('signature', signature);
+            formData.append('upload_preset', upload_preset);
+            formData.append('transformation', transformation);
+            formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+
+            const cloudName = process.env.REACT_APP_CLOUD_NAME;
+            const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+            const uploadRes = await fetch(cloudinaryUrl, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!uploadRes.ok) {
+                throw new Error('Failed to upload image to Cloudinary');
+            }
+
+            const uploadData = await uploadRes.json();
+            const imageUrl = uploadData.secure_url;
+
+            // 3. Update user avatar in backend
+            const userRes = await fetch('/api/users/avatar', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token,
+                },
+                body: JSON.stringify({ avatarUrl: imageUrl }),
+            });
+
+            if (!userRes.ok) {
+                throw new Error('Failed to update avatar');
+            }
+
+            const updatedUser = await userRes.json();
+            login(token, updatedUser); // Update user in AuthContext
+
+        } catch (error) {
+            console.error('Error updating avatar:', error);
+        }
+    };
+
     const getPasswordStrengthLabel = () => {
         if (newPassword.length === 0) return '';
         if (passwordStrength <= 2) return 'Weak';
@@ -61,6 +145,16 @@ const ProfilePage = React.memo(() => {
 
     return (
         <div className={`${styles.authBody} ${theme === 'dark' ? styles.dark : ''}`}>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept="image/*"
+            />
+            <button onClick={handleReturn} className={styles.returnBtnAuth}>
+                <ArrowLeft size={20} />
+            </button>
             <button onClick={toggleTheme} className={styles.themeToggleBtnAuth}>
                 {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
             </button>
@@ -72,7 +166,7 @@ const ProfilePage = React.memo(() => {
                         ) : (
                             <PersonCircle size={100} />
                         )}
-                        <button className={`${styles.editBtn} ${styles.avatarEditBtn}`}>
+                        <button className={`${styles.editBtn} ${styles.avatarEditBtn}`} onClick={handleAvatarClick}>
                             <PencilSquare size={15} />
                         </button>
                     </div>

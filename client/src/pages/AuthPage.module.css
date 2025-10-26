@@ -10,10 +10,37 @@
     position: relative;
 }
 
+.returnBtnAuth {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: none;
+    border: 1px solid #000; /* Black border for light theme */
+    border-radius: 5px;
+    padding: 5px 8px;
+    cursor: pointer;
+    color: #000;
+    scale: 1.2;
+    transition: all 0.3s ease;
+}
+
+.dark .returnBtnAuth {
+    color: #fff;
+    border: 1px solid #fff; /* White border for dark theme */
+}
+
+.returnBtnAuth:hover{
+    background-color: #f1f3f5;
+}
+
+.dark .returnBtnAuth:hover{
+    background-color: #343a40;
+}
+
 .themeToggleBtnAuth {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 30px;
+    right: 30px;
     background: none;
     border: 1px solid #000; /* Black border for light theme */
     border-radius: 5px;

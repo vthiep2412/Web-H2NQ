@@ -1,9 +1,18 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './TrollPage.css';
 
 const TrollPage = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate('/ai');
+        }
+    }, [user, navigate]);
     return (
         <div className="troll-container">
             <div className="troll-box">

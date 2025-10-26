@@ -1,10 +1,10 @@
 import { checkPasswordStrength } from '../utils/password'; // Import password strength checker
 import React, { useState, useEffect } from 'react';
-import { SunFill, MoonFill, EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
+import { SunFill, MoonFill, EyeFill, EyeSlashFill, ArrowLeft } from 'react-bootstrap-icons';
 import styles from './AuthPage.module.css'; // Import CSS module
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 import Modal from '../components/Modal'; // Import the Modal component
-import { useLocation } from 'react-router-dom';
+import { useLocation , useNavigate} from 'react-router-dom';
 
 const AuthPage = () => {
     const location = useLocation();
@@ -22,7 +22,14 @@ const AuthPage = () => {
             ? 'dark'
             : 'light'
     );
-    const { login } = useAuth(); // Use login from AuthContext
+    const { login , user } = useAuth(); // Use login from AuthContext
+
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user) {
+            navigate('/ai');
+        }
+    }, [user, navigate]);
 
     // Modal states
     const [showModal, setShowModal] = useState(false);
@@ -162,8 +169,15 @@ const AuthPage = () => {
         }
     };
 
+    const handleReturn = () => {
+        navigate('/');
+    };
+
     return (
         <div className={`${styles.authBody} ${theme === 'dark' ? styles.dark : ''}`}>
+            <button onClick={handleReturn} className={styles.returnBtnAuth}>
+                <ArrowLeft size={20} />
+            </button>
              <button onClick={toggleTheme} className={styles.themeToggleBtnAuth}>
                 {theme === 'light' ? <MoonFill size={20} /> : <SunFill size={20} />}
             </button>
