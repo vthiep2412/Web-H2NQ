@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import debounce from 'lodash.debounce';
 import Header from '../components/Header';
-import VerticalNavbar from '../components/VerticalNavbar';
+import WorkspaceNavbar from '../components/WorkspaceNavbar';
 import ProfileNavbar from '../components/ProfileNavbar'; // New
 import ChatView from '../components/ChatView';
 import IDEPage from './IDEPage';
@@ -857,8 +857,8 @@ useEffect(() => {
         onLanguageChange={handleLanguageChange}
       />
       <div style={{ display: 'flex', flex: '1 1 auto', overflow: 'hidden' }}>
-        <div ref={navbarRef} className={`navbar-container ${isNavbarVisible ? 'visible' : ''}`}>
-          <VerticalNavbar 
+        <div ref={navbarRef} className={`workspace-navbar-container ${isNavbarVisible ? 'visible' : ''}`}>
+          <WorkspaceNavbar
             activeView={activeView} 
             onViewChange={handleViewChange}
             workspaces={workspaces}

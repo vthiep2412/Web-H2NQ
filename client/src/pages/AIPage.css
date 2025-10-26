@@ -22,13 +22,13 @@ html{
 }
 
 [data-bs-theme="light"] .app-header,
-[data-bs-theme="light"] .vertical-navbar,
+[data-bs-theme="light"] .workspace-navbar,
 [data-bs-theme="light"] .profile-navbar {
   background-color: transparent !important;
 }
 
 [data-bs-theme="dark"] .app-header,
-[data-bs-theme="dark"] .vertical-navbar,
+[data-bs-theme="dark"] .workspace-navbar,
 [data-bs-theme="dark"] .profile-navbar {
   background-color: transparent !important;
 }
