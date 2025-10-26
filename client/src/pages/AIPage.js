@@ -659,7 +659,9 @@ useEffect(() => {
     setActiveView(viewId);
     const workspaceId = viewId.split('-')[0];
     updateLastActiveWorkspace(workspaceId);
-    setIsNavbarVisible(false);
+    if(window.innerWidth <= 576){
+      setIsNavbarVisible(false);
+    }
     // Check if the new view is an AI Chat view
     if (viewId.endsWith('-chat')) {
       // Delay scrolling to ensure the ChatView component has rendered and messages are in place
@@ -701,9 +703,13 @@ useEffect(() => {
   };
 
   const handleDeleteConversation = async (conversationId) => {
+    if (!activeWorkspace || !activeWorkspace.id) {
+      console.error('No active workspace found, cannot delete conversation');
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/conversations/${conversationId}`, {
+      const response = await fetch(`/api/conversations/${conversationId}?workspaceId=${activeWorkspace.id}`, {
         method: 'DELETE',
         headers: {
           'x-auth-token': token,

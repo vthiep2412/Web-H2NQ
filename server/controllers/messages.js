@@ -216,19 +216,63 @@ exports.sendMessage = async (req, res) => {
       // });
 
       let title = 'New Conversation'; // Default title
-      const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
-      const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
+      // const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash' });
+      const titleModel = 'gemini-2.5-flash'
+      const titlePrompt = `You are a title generator, not a chatbot.
 
+Your task is to generate a short, concise title (maximum 5 words) for a conversation that begins with this message: "${message}"
+IMPORTANT:
+- Return ONLY the title.
+- Do NOT include greetings, explanations, punctuation, or extra text.
+- Do NOT wrap the title in quotes.
+- Do NOT start a conversation.
+- If you cannot follow these instructions, return nothing.
+- Do NOT say something obvious like "Hello chat", "New Conversation", "Just Saying Hey",etc. Say something more specific such as ("Conversation about...", "Discussion about...")(for some chat that very small), ("Inital chat", "Reaching Out")(for just saying hi), other chat that is specific like a seek for problem solve should have a creative title, it on to you for that.
+`;
+      const contents = [{
+          role: 'user',
+          parts: [{
+              text: titlePrompt,
+            },
+          ],
+        },
+      ];
       for (let i = 0; i < 3; i++) { // Retry up to 3 times
         try {
-          const titleResult = await titleModel.generateContent(titlePrompt);
-          const titleResponse = await titleResult.response;
-          if (titleResponse && titleResponse.candidates && titleResponse.candidates.length > 0 && titleResponse.candidates[0].content && titleResponse.candidates[0].content.parts && titleResponse.candidates[0].content.parts.length > 0) {
-            title = titleResponse.candidates[0].content.parts[0].text.trim().replace(/"/g, '');
+          // const titleResult = await titleModel.generateContent(titlePrompt);
+          // const titleResponse = await titleResult.response;
+          const titleResponse = await genAI.models.generateContentStream({
+            model: 'gemini-2.5-flash',
+            contents,
+          });
+          for await (const chunk of titleResponse) {
+            if (!chunk.candidates || !chunk.candidates[0].content || !chunk.candidates[0].content.parts) {
+              continue;
+            }
+            if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
+              const fileName = `ENTER_FILE_NAME_${fileIndex++}`;
+              const inlineData = chunk.candidates[0].content.parts[0].inlineData;
+              const fileExtension = mime.getExtension(inlineData.mimeType || '');
+              const buffer = Buffer.from(inlineData.data || '', 'base64');
+              saveBinaryFile(`${fileName}.${fileExtension}`, buffer);
+            }
+            else {
+              // console.log('Title chunk:', chunk.text);
+              title = chunk.text
+              break;
+            }
+          }
+          if(title) {
             break; // Success, exit loop
           } else {
             console.warn(`Title generation attempt ${i + 1} failed: No valid response from AI.`);
           }
+          // if (titleResponse && titleResponse.candidates && titleResponse.candidates.length > 0 && titleResponse.candidates[0].content && titleResponse.candidates[0].content.parts && titleResponse.candidates[0].content.parts.length > 0) {
+          //   title = titleResponse.candidates[0].content.parts[0].text.trim().replace(/"/g, '');
+          //   break; // Success, exit loop
+          // } else {
+          //   console.warn(`Title generation attempt ${i + 1} failed: No valid response from AI.`);
+          // }
         } catch (titleError) {
           console.error(`Title generation attempt ${i + 1} failed:`, titleError);
         }
