@@ -111,7 +111,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
       const details = detailsElements[key];
       if (details && !details.animator) {
         animators[key] = new DetailsAnimator(details);
-        details.animator = true; 
+        details.animator = true;
       }
     });
 
@@ -136,7 +136,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
                     )}
                     {msg.sender === 'ai' && msg.thoughts?.length > 0 && (
                       <details
-                        ref={el => { if (el) detailsRefs.current[msg.id] = el; }}
+                        ref={el => { if (el) detailsRefs.current[msg.id || index] = el; }}
                         className="thought-box"
                       >
                         <summary>Show Thoughts</summary>

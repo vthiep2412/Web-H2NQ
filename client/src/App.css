@@ -55,7 +55,7 @@
   border-radius: 1rem;
   background-color: #3d3d3d;
   margin-bottom: 0.5rem;
-  width: 75%;
+  width: 80%;
   overflow: hidden;
   min-width: 10rem;
 }
@@ -118,18 +118,16 @@
 }
 
 .navbar-container {
-  width: max-content;
-  max-width: 100%;
-  transition: margin-left 0.5s ease, max-width 0.8s ease;
-  overflow: hidden;
-  height: -webkit-fill-available;
-  margin-left: 0;
+  transition: max-width 0.3s ease-in-out, min-width 0.3s ease-in-out;
+  max-width: 300px;
+  min-width: 250px;
+  overflow: auto;
+  display: grid;
 }
 
 .navbar-container:not(.visible) {
-  /* max-width: 0; */
-  /* margin-left: -268px; */
-  overflow: hidden;
+  max-width: 0;
+  min-width: 0;
 }
 
 .form-select{
@@ -223,7 +221,7 @@
 }
 
 .chat-main-view {
-  padding: 2.5rem;
+  padding: 2.5rem 2.5rem 2.5rem 2.5rem;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -525,7 +523,7 @@
 }
 
 .chat-footer {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 .workspace-btn:hover {
@@ -569,33 +567,10 @@
   filter: brightness(150%);
 }
 
-/* [data-bs-theme="dark"] .theme-aware-image {
-  filter: invert(1);
-} */
-
 th {
   border-radius: 15px !important;
 }
 
-@media (max-width: 655px) {
-  .navbar-container {
-    position: absolute;
-    z-index: 10;
-    width: 100%;
-    /* height: 100%; */
-    background-color: var(--bs-body-bg);
-  }
-
-  .navbar-container:not(.visible) {
-    max-width: 0;
-    margin-left: 0px;
-    overflow: hidden;
-  }
-
-  .chat-footer{
-    margin-bottom: 30px
-  }
-}
 
 .thinking-dots span {
   animation: blink 1.4s infinite both;
@@ -788,6 +763,22 @@ th {
   .navbar-nav .btn {
     width: 96%;
   }
+  .navbar-container{
+    min-width: 100vw;
+    transition: all 0.35s ease;
+  }
+  .navbar-container:not(.visible){
+    transform: translateX(-100%);
+    transition: all 0.35s ease;
+  }
+  .history-navbar-container{
+    min-width: 100vw;
+    transition: all 0.35s ease;
+  }
+  .chat-main-view{
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 @media (max-width: 992px) {
   .navbar-collapse {
@@ -801,6 +792,10 @@ th {
   }
   .navbar-nav .btn {
     width: 100%;
+  }
+  .chat-main-view{
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 

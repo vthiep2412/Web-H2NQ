@@ -22,7 +22,6 @@ const VerticalNavbar = React.memo(({
   deleteWorkspace,
   toggleHistoryNavbar,
   isHistoryNavbarVisible,
-  toggleNavbar, // Added toggleNavbar prop
   getWorkspaces
 }) => {
   const { t } = useTranslation();
@@ -31,18 +30,7 @@ const VerticalNavbar = React.memo(({
     getWorkspaces();
   }, [getWorkspaces]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 576) {
-        toggleNavbar(false);
-      }
-    };
 
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [toggleNavbar]);
   const [open, setOpen] = useState({});
   const [isAdding, setIsAdding] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
@@ -165,9 +153,6 @@ const VerticalNavbar = React.memo(({
                     active={activeView === child.id}
                     onClick={() => {
                       onViewChange(child.id);
-                      if (window.innerWidth < 576) {
-                        toggleNavbar(false);
-                      }
                       getWorkspaces();
                     }}
                     className="flex items-center"
@@ -200,9 +185,6 @@ const VerticalNavbar = React.memo(({
           <Nav.Link 
             onClick={() => {
               toggleHistoryNavbar();
-              if (window.innerWidth < 576) {
-                toggleNavbar(false);
-              }
               getWorkspaces();
             }}
             active={isHistoryNavbarVisible}

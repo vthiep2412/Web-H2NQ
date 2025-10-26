@@ -41,14 +41,13 @@ function AIPage() {
   // UI State
   const [theme, setTheme] = useState(user?.settings?.theme || 'dark');
   const [language, setLanguage] = useState(user?.settings?.language || 'en');
-  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(window.innerWidth >= 800);
   const [isProfileNavbarVisible, setIsProfileNavbarVisible] = useState(false);
   const [isHistoryNavbarVisible, setIsHistoryNavbarVisible] = useState(false); // New state for history navbar
-  const [manualNavOpen, setManualNavOpen] = useState(false);
-  const [manualNavClose, setManualNavClose] = useState(false);
+
   const [activeView, setActiveView] = useState('chat1');
   const navbarRef = useRef(null);
-  const screenSizeRef = useRef(window.innerWidth < 992 ? 'small' : 'large');
+
   const isInitialMount = useRef(true);
 
   // New Theme State
@@ -223,27 +222,13 @@ function AIPage() {
     }
   };
 
-  const toggleNavbar = useCallback((forceState) => {
-    const isManualToggle = forceState === null || forceState === undefined;
-    const nextState = isManualToggle ? !isNavbarVisible : forceState;
-
-    if (isNavbarVisible && !nextState && navbarRef.current) { // Closing
-      const width = navbarRef.current.offsetWidth;
-      navbarRef.current.style.setProperty('margin-left', -width + 'px');
-      if (isManualToggle) {
-        setManualNavOpen(false);
-        setManualNavClose(true);
-      }
-    } else if (!isNavbarVisible && nextState && navbarRef.current) { // Opening
-      navbarRef.current.style.setProperty('margin-left', 0);
-      if (isManualToggle) {
-        setManualNavOpen(true);
-        setManualNavClose(false);
-      }
+  const toggleNavbar = () => {
+    setIsNavbarVisible(!isNavbarVisible);
+    if(window.innerWidth < 800){
+      setIsProfileNavbarVisible(false);
+      setIsHistoryNavbarVisible(false);
     }
-
-    setIsNavbarVisible(nextState);
-  }, [isNavbarVisible]);
+  };
 
   // Effect for new custom theme
   useEffect(() => {
@@ -430,46 +415,6 @@ function AIPage() {
 useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const newScreenSize = window.innerWidth < 992 ? 'small' : 'large';
-      if (newScreenSize !== screenSizeRef.current) {
-        setManualNavOpen(false);
-        setManualNavClose(false);
-      }
-
-      if (newScreenSize === 'small') {
-        if (isNavbarVisible && !manualNavOpen) toggleNavbar(false);
-      } else {
-        if (!isNavbarVisible && !manualNavClose) toggleNavbar(true);
-      }
-
-      screenSizeRef.current = newScreenSize;
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-}, [isNavbarVisible, manualNavOpen, manualNavClose, toggleNavbar]);
-
-  useEffect(() => {
-    if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
-      toggleNavbar(false);
-    }
-  }, [activeView, isNavbarVisible, manualNavOpen, toggleNavbar]);
-
-  /*useEffect(() => {
-    const setPageHeight = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-
-    window.addEventListener('resize', setPageHeight);
-    setPageHeight();
-
-    return () => window.removeEventListener('resize', setPageHeight);
-  }, []);*/
 
   // Handlers
   const handleSubmit = async (message, files = []) => {
@@ -689,10 +634,16 @@ useEffect(() => {
 
   const toggleProfileNavbar = () => {
     setIsProfileNavbarVisible(!isProfileNavbarVisible);
+    if(window.innerWidth <= 800){
+      setIsNavbarVisible(false);
+    }
   };
 
   const toggleHistoryNavbar = () => {
     setIsHistoryNavbarVisible(!isHistoryNavbarVisible);
+    if(window.innerWidth <= 800){
+      setIsNavbarVisible(false);
+    }
   };
 
   const handleGradientDirectionChange = useCallback((event) => {
@@ -708,9 +659,7 @@ useEffect(() => {
     setActiveView(viewId);
     const workspaceId = viewId.split('-')[0];
     updateLastActiveWorkspace(workspaceId);
-    if (window.innerWidth < 992 && isNavbarVisible && !manualNavOpen) {
-      toggleNavbar(false);
-    }
+    setIsNavbarVisible(false);
     // Check if the new view is an AI Chat view
     if (viewId.endsWith('-chat')) {
       // Delay scrolling to ensure the ChatView component has rendered and messages are in place
@@ -912,8 +861,7 @@ useEffect(() => {
             deleteWorkspace={deleteWorkspace}
             toggleHistoryNavbar={toggleHistoryNavbar}
             isHistoryNavbarVisible={isHistoryNavbarVisible}
-            screenSizeRef={screenSizeRef}
-            toggleNavbar={toggleNavbar}
+            // screenSizeRef={screenSizeRef}
             getWorkspaces={getWorkspaces}
           />
         </div>

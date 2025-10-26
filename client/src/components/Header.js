@@ -62,7 +62,7 @@ const Header = React.memo(({
     <header className="app-header">
         <Row className='d-flex align-items-center'>
             <Col className="d-flex align-items-center">
-                <Button variant="link" onClick={() => toggleNavbar(null)} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
+                <Button variant="link" onClick={toggleNavbar} className="p-0 me-3 navbar-toggle-btn" id='navbar-toggle-btn'>
                     <List size={24} />
                 </Button>
                 <img src="/H2NQ-SVG.svg" alt="H2NQ-AI Logo" className="theme-aware-image" />
