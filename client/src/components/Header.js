@@ -75,7 +75,7 @@ const Header = React.memo(({
                     {getLabelForModel(selectedModel, t)}
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
+                  <Dropdown.Menu className="model-dropdown-menu">
                     {models.map((model, index) => (
                       model.isDivider ? 
                       <Dropdown.Divider key={index} /> : 

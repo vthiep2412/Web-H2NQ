@@ -78,12 +78,6 @@ exports.sendMessage = async (req, res) => {
     let text;
     let thoughts = [];
     if (model.startsWith('gemini')) {
-      // let systemInstructionContent = truncatedHistory.find(msg => msg.role === 'system')?.content;
-      // let systemInstruction = systemInstructionContent ? { parts: [{ text: systemInstructionContent }] } : undefined;
-      // const historyWithoutSystem = truncatedHistory.filter(msg => msg.role !== 'system');
-      
-      // For Gemini, we will prepend the systemPrompt directly to the current message
-      // and not use the systemInstruction parameter.
       const geminiHistory = truncatedHistory.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }],
@@ -111,8 +105,6 @@ exports.sendMessage = async (req, res) => {
         model: model,
         config,
         contents,
-        // systemInstruction is no longer used here for Gemini
-        // systemInstruction: systemInstruction, 
       });
 
       let accumulatedText = "";
@@ -222,15 +214,7 @@ exports.sendMessage = async (req, res) => {
         }
       }
 
-      // const titlePrompt = `Generate a short, concise title for a conversation that starts with this message: "${message}". The title should be no more than 5 words.`;
-      // const titleResult = await genAI.models.generateContent({
-      //   model: 'gemini-1.0-pro',
-      //   contents: [{ role: 'user', parts: [{ text: titlePrompt }] }],
-      // });
-
       let title = 'New Conversation'; // Default title
-      // const titleModel = genAI2.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      const titleModel = 'gemini-2.5-flash'
       const titlePrompt = `You are a title generator, not a chatbot.
 
 Your task is to generate a short, concise title (maximum 5 words) for a conversation that begins with this message: "${message}"
@@ -252,10 +236,8 @@ IMPORTANT:
       ];
       for (let i = 0; i < 3; i++) { // Retry up to 3 times
         try {
-          // const titleResult = await titleModel.generateContent(titlePrompt);
-          // const titleResponse = await titleResult.response;
           const titleResponse = await genAI.models.generateContentStream({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             contents,
           });
           for await (const chunk of titleResponse) {

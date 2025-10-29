@@ -943,3 +943,7 @@ h1{
 .vert-nav-top{
   gap: .25rem;
 }
+
+.model-dropdown-menu{
+  inset: 0px 0px auto 0px !important;
+}
