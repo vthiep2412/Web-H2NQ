@@ -10,13 +10,13 @@
 
 /* Apply animation only when the 'animated' class is present */
 .gradient-background.animated {
-  animation: slow-gradient-animation 15s ease infinite;
+  animation: slow-gradient-animation 10s ease infinite;
 }
 
 @keyframes slow-gradient-animation {
   0% {
     /* background-size: 100% 100%; */
-    opacity: 0.4;
+    opacity: 0.3;
   }
   50% {
     /* background-size: 150% 150%; */
@@ -24,6 +24,6 @@
   }
   100% {
     /* background-size: 100% 100%; */
-    opacity: 0.4;
+    opacity: 0.3;
   }
 }

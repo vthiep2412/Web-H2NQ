@@ -74,6 +74,8 @@ function AIPage() {
   const [isGradientBackgroundColor1Enabled, setIsGradientBackgroundColor1Enabled] = useState(user?.settings?.isGradientBackgroundColor1Enabled || false);
   const [isGradientBackgroundColor2Enabled, setIsGradientBackgroundColor2Enabled] = useState(user?.settings?.isGradientBackgroundColor2Enabled || false);
   const [gradientDirection, setGradientDirection] = useState(user?.settings?.gradientDirection || 'to bottom');
+  const [aiTemperature, setAiTemperature] = useState(user?.settings?.temperature !== undefined ? user.settings.temperature : 1);
+  const [thinkToggle, setThinkToggle] = useState(user?.settings?.thinking !== undefined ? user.settings.thinking : true);
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace } = useWorkspaces();
@@ -170,6 +172,8 @@ function AIPage() {
         isGradientBackgroundColor1Enabled,
         isGradientBackgroundColor2Enabled,
         gradientDirection,
+        temperature: aiTemperature,
+        thinking: thinkToggle,
       };
       const response = await fetch('/api/users/settings', {
         method: 'PUT',
@@ -188,7 +192,28 @@ function AIPage() {
     } catch (error) {
       console.error('Error saving settings:', error);
     }
-  }, [updateUser, theme, customTheme.primaryColor, gradientColor1, gradientColor2, isGradientColor1Enabled, isGradientColor2Enabled, isGradientAnimated, selectedModel, selectedBackground, language, activeWorkspace, darkBackgroundColor, lightBackgroundColor, gradientBackgroundColor1, gradientBackgroundColor2, isGradientBackgroundColor1Enabled, isGradientBackgroundColor2Enabled, gradientDirection]);
+  }, [updateUser, 
+    theme, 
+    customTheme.primaryColor, 
+    gradientColor1, 
+    gradientColor2, 
+    isGradientColor1Enabled,
+    isGradientColor2Enabled,
+    isGradientAnimated,
+    selectedModel,
+    selectedBackground,
+    language,
+    activeWorkspace,
+    darkBackgroundColor,
+    lightBackgroundColor,
+    gradientBackgroundColor1, 
+    gradientBackgroundColor2, 
+    isGradientBackgroundColor1Enabled, 
+    isGradientBackgroundColor2Enabled, 
+    gradientDirection, 
+    aiTemperature,
+    thinkToggle
+  ]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -464,7 +489,8 @@ useEffect(() => {
           // No Content-Type header for FormData, browser sets it automatically
         } else {
           headers['Content-Type'] = 'application/json';
-          requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime });
+          requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime, thinking: user?.settings?.thinking });
+          console.log('Sending to server:', JSON.parse(requestBody));
         }
 
         const response = await fetch('/api/messages', {
@@ -517,7 +543,7 @@ useEffect(() => {
             ...prev,
             [activeWorkspace.id]: (prev[activeWorkspace.id] || []).map(convo => {
               if (convo._id === activeConversationId) {
-                const newMessages = [...convo.messages, { role: 'user', content: message }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime }];
+                const newMessages = [...convo.messages, { role: 'user', content: message }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts }];
                 return { ...convo, messages: newMessages };
               }
               return convo;
@@ -756,7 +782,12 @@ useEffect(() => {
       case 'mem':
         return <AIMemoryPage memories={memories} addMemory={addMemory} deleteMemory={deleteMemory} />;
       case 'settings':
-        return <SettingsPage />;
+        return <SettingsPage 
+          aiTemperature={aiTemperature} 
+          setAiTemperature={setAiTemperature} 
+          thinkToggle={thinkToggle} 
+          setThinkToggle={setThinkToggle} 
+        />;
       case 'chat':
       default:
         return <ChatView 

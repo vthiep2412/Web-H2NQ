@@ -33,7 +33,7 @@ const truncateHistory = (history, maxLength) => {
 
 exports.sendMessage = async (req, res) => {
   console.log("Received message, sending to AI...");
-  const { message, model, history, conversationId, memories, workspaceId, language } = req.body;
+  const { message, model, history, conversationId, memories, workspaceId, language, thinking } = req.body;
   const userId = req.user.id;
 
   // Fetch user settings
@@ -42,7 +42,7 @@ exports.sendMessage = async (req, res) => {
     return res.status(404).json({ error: 'User not found' });
   }
   const aiTemperature = user.settings.temperature !== undefined ? user.settings.temperature : 1;
-  const aiThinking = user.settings.thinking !== undefined ? user.settings.thinking : true;
+  const aiThinking = thinking !== undefined ? thinking : (user.settings.thinking !== undefined ? user.settings.thinking : true);
 
   try {
     const { GoogleGenAI } = await import('@google/genai');

@@ -1,11 +1,10 @@
 // Happy coding :D!
 // Happy coding :D
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { InfoCircle, ArrowCounterclockwise } from 'react-bootstrap-icons';
+import { useTranslation } from 'react-i18next';
 import './SettingsPage.css';
-import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
 
 // Debounce function
 const debounce = (func, delay) => {
@@ -17,39 +16,16 @@ const debounce = (func, delay) => {
   };
 };
 
-const SettingsPage = React.memo(() => {
-  const { user, updateUser } = useAuth();
-  const [aiTemperature, setAiTemperature] = useState(user?.settings?.temperature !== undefined ? user.settings.temperature : 1);
-  const [thinkToggle, setThinkToggle] = useState(user?.settings?.thinking !== undefined ? user.settings.thinking : true);
-
-  const debouncedSave = useRef(
-    debounce(async (temp, think) => {
-      try {
-        const response = await axios.post('/api/settings', {
-          temperature: temp,
-          thinking: think,
-        });
-        if (response.data.user) {
-          updateUser(response.data.user);
-        }
-        // console.log('Settings saved automatically.');
-      } catch (error) {
-        console.error('Error saving settings automatically:', error);
-      }
-    }, 100)
-  ).current;
-
-  useEffect(() => {
-    debouncedSave(aiTemperature, thinkToggle);
-  }, [aiTemperature, thinkToggle, debouncedSave]);
+const SettingsPage = React.memo(({ aiTemperature, setAiTemperature, thinkToggle, setThinkToggle }) => {
+  const { t } = useTranslation();
 
   const resetTemperature = () => {
     setAiTemperature(1);
   };
 
-  const handleTemperatureChange = (event) => {
+  const handleTemperatureChange = useMemo(() => debounce((event) => {
     setAiTemperature(parseFloat(event.target.value));
-  };
+  }, 100), [setAiTemperature]);
 
   const handleThinkToggle = (event) => {
     setThinkToggle(event.target.checked);
@@ -63,20 +39,20 @@ const SettingsPage = React.memo(() => {
 
   return (
     <div className="settings-page-container p-4">
-      <h1>Settings</h1>
+      <h1>{t('settingsPageTitle')}</h1>
 
       <div className="settings-grid">
         <div className="ai-settings-section">
-          <h2>AI Settings</h2>
+          <h2>{t('settingsPageAiSettingsTitle')}</h2>
 
           {/* AI Temperature Control */}
           <div className="setting-item">
             <div className="d-flex align-items-center mb-2">
-              <h5 className="mb-0">AI Temperature</h5>
+              <h5 className="mb-0">{t('settingsPageAiSettingsTemperatureLabel')}</h5>
               <OverlayTrigger
                 placement="right"
                 delay={{ show: 250, hide: 400 }}
-                overlay={renderTooltip('Controls the randomness of AI responses. Lower values produce more focused and deterministic responses, while higher values result in more creative and diverse outputs.')}
+                overlay={renderTooltip(t('settingsPageAiSettingsTemperatureTooltip'))}
               >
                 <Button variant="link" className="info-button">
                   <InfoCircle size={16} />
@@ -96,7 +72,7 @@ const SettingsPage = React.memo(() => {
               <Button
                 variant="link"
                 onClick={resetTemperature}
-                title="Revert to default"
+                title={t('settingsPageAiSettingsTemperatureResetTooltip')}
                 className="reset-button ms-3"
               >
                 <ArrowCounterclockwise size={20} />
@@ -107,7 +83,7 @@ const SettingsPage = React.memo(() => {
           {/* Think Toggle */}
           <div className="setting-item mt-4">
             <div className="d-flex align-items-center mb-2">
-              <h5>Think Mode</h5>
+              <h5>{t('settingsPageAiSettingsThinkModeLabel')}</h5>
               <Form.Check
                 type="switch"
                 id="think-toggle-switch"
@@ -117,7 +93,7 @@ const SettingsPage = React.memo(() => {
               <OverlayTrigger
                 placement="right"
                 delay={{ show: 250, hide: 400 }}
-                overlay={renderTooltip('Enable AI thinking for potentially better results.')}
+                overlay={renderTooltip(t('settingsPageAiSettingsThinkModeTooltip'))}
               >
                 <Button variant="link" className="info-button">
                   <InfoCircle size={16} />
