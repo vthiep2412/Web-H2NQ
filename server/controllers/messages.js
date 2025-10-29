@@ -77,7 +77,7 @@ exports.sendMessage = async (req, res) => {
     const startTime = Date.now();
     let text;
     let thoughts = [];
-    if (model.startsWith('gemini')) {
+    if (model.startsWith('gemini') || model.startsWith('gemma')) {
       const geminiHistory = truncatedHistory.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: msg.content }],
@@ -96,10 +96,13 @@ exports.sendMessage = async (req, res) => {
           thinkingBudget: -1,
           includeThoughts: true,
         } : undefined,
-        tools: [{ googleSearch: {} }],
         candidateCount: 1,
         temperature: aiTemperature,
       };
+
+      if (!model.startsWith('gemma')) {
+        config.tools = [{ googleSearch: {} }];
+      }
 
       const responseStream = await genAI.models.generateContentStream({
         model: model,
