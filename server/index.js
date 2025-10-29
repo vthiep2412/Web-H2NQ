@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 require('dotenv').config();
 

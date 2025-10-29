@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 /** @type {import('tailwindcss').Config} */
 module.exports = {

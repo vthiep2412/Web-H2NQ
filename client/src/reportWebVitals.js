@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 const reportWebVitals = onPerfEntry => {
   if (onPerfEntry && onPerfEntry instanceof Function) {

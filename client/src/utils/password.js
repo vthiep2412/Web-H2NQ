@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 export const checkPasswordStrength = (password) => {
   let score = 0;

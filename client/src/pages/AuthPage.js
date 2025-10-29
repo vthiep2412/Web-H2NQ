@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 import { checkPasswordStrength } from '../utils/password'; // Import password strength checker
 import React, { useState, useEffect } from 'react';

@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 import { useTranslation } from 'react-i18next';
 

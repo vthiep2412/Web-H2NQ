@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 const OpenAI = require('openai');
 const axios = require('axios');

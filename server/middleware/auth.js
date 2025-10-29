@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 
 const jwt = require('jsonwebtoken');

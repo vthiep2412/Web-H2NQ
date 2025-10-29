@@ -1,3 +1,4 @@
+// Happy coding :D!
 // Happy coding :D
 import React, { useState, useEffect, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
