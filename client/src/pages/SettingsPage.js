@@ -1,6 +1,6 @@
 // Happy coding :D!
 // Happy coding :D
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { InfoCircle, ArrowCounterclockwise } from 'react-bootstrap-icons';
 import './SettingsPage.css';
@@ -22,24 +22,26 @@ const SettingsPage = React.memo(() => {
   const [aiTemperature, setAiTemperature] = useState(user?.settings?.temperature !== undefined ? user.settings.temperature : 1);
   const [thinkToggle, setThinkToggle] = useState(user?.settings?.thinking !== undefined ? user.settings.thinking : true);
 
-  const saveSettings = useCallback(debounce(async (temp, think) => {
-    try {
-      const response = await axios.post('/api/settings', {
-        temperature: temp,
-        thinking: think,
-      });
-      if (response.data.user) {
-        updateUser(response.data.user);
+  const debouncedSave = useRef(
+    debounce(async (temp, think) => {
+      try {
+        const response = await axios.post('/api/settings', {
+          temperature: temp,
+          thinking: think,
+        });
+        if (response.data.user) {
+          updateUser(response.data.user);
+        }
+        // console.log('Settings saved automatically.');
+      } catch (error) {
+        console.error('Error saving settings automatically:', error);
       }
-      console.log('Settings saved automatically.');
-    } catch (error) {
-      console.error('Error saving settings automatically:', error);
-    }
-  }, 500), [updateUser]); // Debounce for 500ms
+    }, 100)
+  ).current;
 
   useEffect(() => {
-    saveSettings(aiTemperature, thinkToggle);
-  }, [aiTemperature, thinkToggle, saveSettings]);
+    debouncedSave(aiTemperature, thinkToggle);
+  }, [aiTemperature, thinkToggle, debouncedSave]);
 
   const resetTemperature = () => {
     setAiTemperature(1);
