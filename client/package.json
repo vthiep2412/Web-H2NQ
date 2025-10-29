@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
+    "axios": "^1.6.2",
     "@types/jest": "^30.0.0",
     "bootstrap": "^5.3.8",
     "html-parse-stringify": "^3.0.1",
