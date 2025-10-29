@@ -1,3 +1,4 @@
+// Happy coding :D
 import React from 'react';
 import './FloatingSquares.css';
 

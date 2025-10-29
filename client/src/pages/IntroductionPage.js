@@ -1,3 +1,4 @@
+// Happy coding :D
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IntroHeader from '../components/IntroHeader';
@@ -7,7 +8,7 @@ import VercelIcon from '../components/icons/intro/VercelIcon';
 import GithubIcon from '../components/icons/intro/GithubIcon';
 import GitflowIcon from '../components/icons/intro/GitflowIcon';
 import BrainCircuitIcon from '../components/icons/intro/BrainCircuitIcon';
-import WhiteboardIcon from '../components/icons/intro/WhiteboardIcon';
+// import WhiteboardIcon from '../components/icons/intro/WhiteboardIcon';
 import MemoryIcon from '../components/icons/intro/MemoryIcon';
 import UIIcon from '../components/icons/intro/UIIcon';
 import ChatIcon from '../components/icons/intro/ChatIcon';
@@ -116,11 +117,12 @@ const IntroductionPage = () => {
   ];
   
   const features = [
-    {
-      icon: <WhiteboardIcon className="w-full h-full" />,
-      title: 'Freeform Whiteboard',
-      description: "Our core is a dynamic, infinite whiteboard where you can drop notes, embed images, sketch diagrams, and connect concepts freely. It's the perfect canvas for visual brainstorming, mind-mapping, and immersive studying sessions without creative limits.",
-    },
+    // Commented out Freeform Whiteboard feature
+    // {
+    //   icon: <WhiteboardIcon className="w-full h-full" />,
+    //   title: 'Freeform Whiteboard',
+    //   description: "Our core is a dynamic, infinite whiteboard where you can drop notes, embed images, sketch diagrams, and connect concepts freely. It's the perfect canvas for visual brainstorming, mind-mapping, and immersive studying sessions without creative limits.",
+    // },
     {
       icon: <MemoryIcon className="w-full h-full" />,
       title: 'AI Memory Customize',

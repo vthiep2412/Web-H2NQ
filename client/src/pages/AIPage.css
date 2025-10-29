@@ -1,3 +1,4 @@
+/* Happy coding :D */
 body::-webkit-scrollbar,html::-webkit-scrollbar {
   display: none;
 }
@@ -35,5 +36,4 @@ html{
 
 .message-text {
   white-space: pre-wrap;
-  /* margin-bottom: 1rem; */
 }

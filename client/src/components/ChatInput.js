@@ -1,3 +1,4 @@
+// Happy coding :D
 import React, { useState } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { Paperclip, SendFill, Camera, PlusCircle, Trash, FileEarmark } from 'react-bootstrap-icons';

@@ -1,3 +1,4 @@
+// Happy coding :D
 
 const mongoose = require('mongoose');
 require('dotenv').config();

@@ -1,3 +1,4 @@
+// Happy coding :D
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SunIcon from './icons/intro/SunIcon';

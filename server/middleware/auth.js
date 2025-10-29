@@ -1,3 +1,4 @@
+// Happy coding :D
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Import the User model

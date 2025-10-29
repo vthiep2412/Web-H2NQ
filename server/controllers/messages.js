@@ -1,3 +1,4 @@
+// Happy coding :D
 const OpenAI = require('openai');
 const axios = require('axios');
 const { InferenceClient } = require('@huggingface/inference');
@@ -34,12 +35,20 @@ exports.sendMessage = async (req, res) => {
   const { message, model, history, conversationId, memories, workspaceId, language } = req.body;
   const userId = req.user.id;
 
+  // Fetch user settings
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  const aiTemperature = user.settings.temperature !== undefined ? user.settings.temperature : 1;
+  const aiThinking = user.settings.thinking !== undefined ? user.settings.thinking : true;
+
   try {
     const { GoogleGenAI } = await import('@google/genai');
     const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     const user = await User.findById(userId);
-    if (!user || user.tokenLeft <= 0) {
+    if (user.tokenLeft <= 0) {
       return res.status(403).json({ error: 'You have no tokens left.' });
     }
 
@@ -88,13 +97,13 @@ exports.sendMessage = async (req, res) => {
       // console.log('Contents sent to Gemini AI:', JSON.stringify(contents, null, 2));
 
       const config = {
-        thinkingConfig: {
+        thinkingConfig: aiThinking ? {
           thinkingBudget: -1,
           includeThoughts: true,
-        },
+        } : undefined,
         tools: [{ googleSearch: {} }],
         candidateCount: 1,
-        temperature: 1,
+        temperature: aiTemperature,
       };
 
       const responseStream = await genAI.models.generateContentStream({
@@ -144,6 +153,7 @@ exports.sendMessage = async (req, res) => {
           const completion = await openai.chat.completions.create({
             messages: openAIMessages,
             model,
+            temperature: aiTemperature,
           });
           if (!completion || !completion.choices || completion.choices.length === 0) {
             throw new Error('OpenAI API returned an unexpected response format (no choices).');
@@ -167,12 +177,13 @@ exports.sendMessage = async (req, res) => {
         {
           model: model.replace('openrouter/', ''),
           messages: openRouterMessages,
+          temperature: aiTemperature,
         },
         {
           headers: {
             Authorization: `Bearer ${OPENROUTER_API_KEY}`,
           },
-        }
+        },
       );
       text = response.data.choices[0].message.content;
       // console.log('OpenRouter AI response text:', text);
@@ -182,6 +193,7 @@ exports.sendMessage = async (req, res) => {
       const chatCompletion = await hf.chatCompletion({
         model: model.replace('huggingface/', ''),
         messages: hfMessages,
+        temperature: aiTemperature,
       });
       text = chatCompletion.choices[0].message.content;
       // console.log('HuggingFace AI response text:', text);
@@ -250,15 +262,13 @@ IMPORTANT:
               continue;
             }
             if (chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData) {
-              const fileName = `ENTER_FILE_NAME_${fileIndex++}`;
-              const inlineData = chunk.candidates[0].content.parts[0].inlineData;
-              const fileExtension = mime.getExtension(inlineData.mimeType || '');
-              const buffer = Buffer.from(inlineData.data || '', 'base64');
-              saveBinaryFile(`${fileName}.${fileExtension}`, buffer);
+              // This block handles binary data, which is not expected for title generation.
+              // Log a warning or handle appropriately if this case is not intended.
+              console.warn("Unexpected inlineData in title generation response.");
+              continue;
             }
             else {
-              // console.log('Title chunk:', chunk.text);
-              title = chunk.text
+              title = chunk.text;
               break;
             }
           }
@@ -267,12 +277,6 @@ IMPORTANT:
           } else {
             console.warn(`Title generation attempt ${i + 1} failed: No valid response from AI.`);
           }
-          // if (titleResponse && titleResponse.candidates && titleResponse.candidates.length > 0 && titleResponse.candidates[0].content && titleResponse.candidates[0].content.parts && titleResponse.candidates[0].content.parts.length > 0) {
-          //   title = titleResponse.candidates[0].content.parts[0].text.trim().replace(/"/g, '');
-          //   break; // Success, exit loop
-          // } else {
-          //   console.warn(`Title generation attempt ${i + 1} failed: No valid response from AI.`);
-          // }
         } catch (titleError) {
           console.error(`Title generation attempt ${i + 1} failed:`, titleError);
         }

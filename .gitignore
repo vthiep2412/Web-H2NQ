@@ -3,3 +3,4 @@ error.log
 package-lock.json
 translations.txt
 node_modules/
+.kilocode/

@@ -1,3 +1,4 @@
+// Happy coding :D
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -53,6 +54,8 @@ const UserSchema = new mongoose.Schema({
     isGradientBackgroundColor1Enabled: { type: Boolean, default: false },
     isGradientBackgroundColor2Enabled: { type: Boolean, default: false },
     gradientDirection: { type: String, default: 'to bottom' },
+    temperature: { type: Number, default: 1 },
+    thinking: { type: Boolean, default: true },
   },
 });
 

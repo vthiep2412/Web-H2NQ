@@ -1,3 +1,4 @@
+// Happy coding :D
 require('dotenv').config();
 
 const express = require('express');
@@ -14,6 +15,7 @@ const authRouter = require('./routes/auth');
 const conversationsRouter = require('./routes/conversations');
 const workspacesRouter = require('./routes/workspaces');
 const usersRouter = require('./routes/users');
+const settingsRouter = require('./routes/settings');
 
 app.use(cors());
 app.use(express.json());
@@ -32,6 +34,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/conversations', conversationsRouter);
 app.use('/api/workspaces', workspacesRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/settings', settingsRouter);
 
 // Global error handler
 app.use((err, req, res, next) => {

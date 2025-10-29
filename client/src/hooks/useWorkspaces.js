@@ -1,3 +1,4 @@
+// Happy coding :D
 import { useState, useCallback, useRef } from 'react';
 import { ChatDots, Cpu, JournalCode, Hdd } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +57,7 @@ const useWorkspaces = () => {
               children: [
                 { id: `${data._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
                 { id: `${data._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
-                { id: `${data._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
+                // { id: `${data._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> }, // Commented out
                 { id: `${data._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
               ]
           };
@@ -94,7 +95,7 @@ const useWorkspaces = () => {
         children: [
           { id: `${ws._id}-chat`, name: t('aiChat'), icon: <ChatDots className="me-2" /> },
           { id: `${ws._id}-mem`, name: t('aiMemory'), icon: <Cpu className="me-2" /> },
-          { id: `${ws._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> },
+          // { id: `${ws._id}-ide`, name: t('freeformWhiteboard'), icon: <JournalCode className="me-2" /> }, // Commented out
           { id: `${ws._id}-store`, name: t('storage'), icon: <Hdd className="me-2" /> },
         ]
       }));

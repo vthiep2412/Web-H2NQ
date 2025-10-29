@@ -13,6 +13,9 @@
   right: -25px;
   z-index: 10;
   border-radius: 50%;
+}
+
+[data-bs-theme="dark"] .history-toggle-btn {
   background-color: #343a40;
   color: white;
 }
@@ -254,11 +257,11 @@
 }
 
 .message-bubble.user{
-  padding-bottom: 12px !important;
+  padding-bottom: 12px;
 }
 
 .message-bubble.ai p{
-  margin-bottom: 0.2rem !important;
+  margin-bottom: 0.2rem;
 }
 
 .ai-avatar,
@@ -311,19 +314,19 @@
 .attach-btn, .send-btn {
   border: none;
   padding: 0 15px;
-  margin-top: .5rem !important;
-  margin-bottom: .5rem !important;
-  border-radius: 5rem !important
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 5rem !important;
 }
 
 .attach-btn{
-  margin-left: .5rem !important;
-  margin-right: 0rem !important;
+  margin-left: .5rem;
+  margin-right: 0rem;
 }
 
 .send-btn{
-  margin-left: .5rem !important;
-  margin-right: .5rem !important;
+  margin-left: .5rem;
+  margin-right: .5rem;
 }
 
 .chat-input {
@@ -614,16 +617,11 @@ th {
   padding-left: 2rem !important;
 }
 
-/* .thinking-text {
-  margin-bottom: 1rem;
-} */
-
 /* Markdown Styles */
 .message-bubble table {
   width: 100%;
   border-collapse: collapse;
   margin: 0.5em 0;
-  /* border-radius: 10px; */
   overflow: hidden;
 }
 
@@ -645,8 +643,6 @@ th {
 
 .code-block-container {
   position: relative;
-  /* margin-top: 1em; */
-  /* margin-bottom: 1em; */
 }
 
 .code-block-header {
@@ -690,7 +686,6 @@ th {
 }
 
 .message-bubble pre {
-  /* background-color: #eee; */
   padding: 10px;
   border-radius: 5px;
   white-space: pre-wrap;
@@ -740,16 +735,11 @@ th {
     border-color: color-mix(in srgb, var(--primary-color) 80%, black);
 }
 
-/* [data-bs-theme="dark"] .theme-aware-image {
-  filter: invert(1);
-} */
-
 .theme-aware-image{
   height: 72px;
 }
 
 .btn{
-  /* margin: .5rem !important; */
   border-radius: 8px;
 }
 
@@ -830,19 +820,7 @@ body.gradient-animated .user-avatar {
   font-weight: 500;
 }
 
-/* .history-item.active {
-  background-color: var(--bs-primary);
-  color: var(--bs-light);
-} */
-
-/* .history-item.active:hover { */
-  /* background-color: var(--bs-primary); */
-  /* color: var(--bs-light); */
-/* } */
-
 .profile-button{
-  /* background-color: var(--primary-color); */
-  /* border-color: var(--primary-color); */
   margin-bottom: 1rem;
   margin-top: -1rem;
 }

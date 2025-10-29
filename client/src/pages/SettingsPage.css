@@ -1,0 +1,91 @@
+.settings-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.ai-settings-section {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.ai-settings-section h2{
+    font-weight: 500 !important;
+    font-size: 1.5rem;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.setting-item h5 {
+  margin-right: 10px;
+}
+
+.setting-item .form-switch{
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+#ai-temperature{
+    display: flex;
+}
+
+.info-button {
+  background: none;
+  border: none;
+  color: #007bff; /* Bootstrap primary blue */
+  padding: 0;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.info-button:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
+
+.reset-button {
+  background: none;
+  border: none;
+  color: #6c757d; /* Bootstrap secondary grey */
+  padding: 0;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  color: #5a6268; /* Darker grey on hover */
+}
+
+/* Styling for the switch toggle */
+.form-switch .form-check-input {
+  width: 3em;
+  height: 1.5em;
+  margin-left: 0;
+  margin-right: 0.5em;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba%280, 0, 0, 0.25%29'/%3e%3c/svg%3e");
+  background-position: left center;
+  border-radius: 1.5em;
+  transition: background-position 0.15s ease-in-out;
+}
+
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+/* Ensure the label is aligned with the switch */
+.form-check-label {
+  display: flex;
+  align-items: center;
+}

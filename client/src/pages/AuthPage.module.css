@@ -54,7 +54,7 @@ button{
     transition: all 0.3s ease !important;
 }
 button:hover{
-    background-color: #295ef0;;
+    background-color: #295ef0;
 }
 .dark .themeToggleBtnAuth {
     color: #fff;
@@ -322,10 +322,6 @@ button.ghost {
     border-color: #fff;
 }
 
-/* .dark .authLogo {
-    filter: invert(1);
-} */
-
 .mobileToggleLink {
     display: none; /* Hidden by default */
     margin-top: 15px;
@@ -426,7 +422,7 @@ button.ghost {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* To center the strength indicator if its width is less than 100% */
+    align-items: center;
     margin-top: 5px;
 }
 

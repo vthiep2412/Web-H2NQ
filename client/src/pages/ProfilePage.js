@@ -1,3 +1,4 @@
+// Happy coding :D
 import React, { useState, useEffect, useRef } from 'react';
 import { SunFill, MoonFill, EyeFill, EyeSlashFill, PersonCircle, PencilSquare, ArrowLeft, Check2, X } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
@@ -49,12 +50,20 @@ const ProfilePage = React.memo(() => {
 
     const calculatePasswordStrength = (password) => {
         let strength = 0;
-        if (password.length > 7) strength++;
-        if (password.length > 10) strength++;
-        if (password.match(/[a-z]/)) strength++;
-        if (password.match(/[A-Z]/)) strength++;
-        if (password.match(/[0-9]/)) strength++;
-        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+        if (password.length >= 7) strength++; // At least 7 characters
+        if (password.length >= 10) strength++; // At least 10 characters
+        
+        let characterTypeCount = 0;
+        if (/[a-z]/.test(password)) characterTypeCount++;
+        if (/[A-Z]/.test(password)) characterTypeCount++;
+        if (/[0-9]/.test(password)) characterTypeCount++;
+        if (/[^A-Za-z0-9]/.test(password)) characterTypeCount++;
+
+        strength += characterTypeCount; // Add score for each type present
+        
+        if (characterTypeCount >= 3) strength++; // Bonus for 3+ types
+        if (characterTypeCount === 4) strength++; // Additional bonus for all 4 types
+
         return strength;
     };
 

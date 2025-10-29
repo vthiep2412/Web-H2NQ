@@ -1,3 +1,4 @@
+// Happy coding :D
 const User = require('../models/User');
 const cloudinary = require('cloudinary').v2;
 const bcrypt = require('bcryptjs');

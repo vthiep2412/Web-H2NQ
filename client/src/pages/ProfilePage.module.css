@@ -428,12 +428,12 @@ button.ghost {
 
 .passwordSection h4 {
     text-align: center;
-    margin-bottom: 1rem; /* Increased margin */
-    padding-bottom: 10px; /* Add padding below */
-    border-bottom: 1px solid #eee; /* Add a separator line */
-    font-weight: 600; /* Make it bolder */
-    color: #555; /* Change color */
-    font-size: 1.2em; /* Increase font size */
+    margin-bottom: 1rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    color: #555;
+    font-size: 1.2em;
 }
 
 .dark .passwordSection h4 {
@@ -448,20 +448,17 @@ button.ghost {
 .passwordStrengthIndicator {
     height: 5px;
     width: 100%;
-    /* background-color: #fff; */
-    background-color: #eee; 
+    background-color: #eee;
     border-radius: 5px;
     overflow: hidden;
 }
 
 .dark .passwordStrengthIndicator {
-    /* background-color: #1e1e1e; */
-    background-color: #444; 
+    background-color: #444;
 }
 
 .strengthLabel {
     display: block;
-    /* margin-bottom: 5px; */
     font-size: 0.9em;
     color: #888;
     text-align: left;

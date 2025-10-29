@@ -1,3 +1,4 @@
+// Happy coding :D
 import React, { useState, useEffect, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import WaitingPage from './pages/WaitingPage';
