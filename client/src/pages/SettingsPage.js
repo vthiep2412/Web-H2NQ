@@ -1,6 +1,6 @@
 // Happy coding :D!
 // Happy coding :D
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { InfoCircle, ArrowCounterclockwise } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
