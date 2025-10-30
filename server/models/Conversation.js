@@ -37,6 +37,9 @@ const ConversationSchema = new mongoose.Schema({
       thoughts: {
         type: [mongoose.Schema.Types.Mixed],
       },
+      imageUrls: {
+        type: [String],
+      },
     },
   ],
   createdAt: {

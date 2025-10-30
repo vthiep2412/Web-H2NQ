@@ -7,5 +7,6 @@ const auth = require('../middleware/auth');
 
 router.get('/', messagesController.getMessages);
 router.post('/', auth, messagesController.sendMessage);
+router.post('/image-signature', auth, messagesController.getChatImageUploadSignature);
 
 module.exports = router;

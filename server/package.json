@@ -27,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "lru-cache": "^6.0.0",
     "mongoose": "^8.18.3",
+    "multer": "^2.0.2",
     "openai": "^5.22.0",
     "sqlite3": "^5.1.7"
   },

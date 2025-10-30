@@ -20,6 +20,35 @@ exports.getMessages = (req, res) => {
   res.json(messages);
 };
 
+// Configure Cloudinary (if not already configured globally)
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+exports.getChatImageUploadSignature = (req, res) => {
+  const timestamp = Math.round(new Date().getTime() / 1000);
+  const upload_preset = 'Avartar-Upload'; // Using existing avatar preset temporarily
+  const transformation = 'f_auto'; // Or any specific transformation for chat images
+
+  try {
+    const signature = cloudinary.utils.api_sign_request(
+      {
+        timestamp: timestamp,
+        upload_preset: upload_preset,
+        transformation: transformation,
+      },
+      process.env.CLOUDINARY_API_SECRET
+    );
+    res.json({ timestamp, signature, upload_preset, transformation });
+  } catch (err) {
+    console.error('Error generating Cloudinary signature for chat image:', err.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+};
+
 const truncateHistory = (history, maxLength) => {
   let totalLength = history.reduce((sum, msg) => sum + msg.content.length, 0);
   let truncated = false;
@@ -33,7 +62,7 @@ const truncateHistory = (history, maxLength) => {
 
 exports.sendMessage = async (req, res) => {
   console.log("Received message, sending to AI...");
-  const { message, model, history, conversationId, memories, workspaceId, language, thinking } = req.body;
+  const { message, model, history, conversationId, memories, workspaceId, language, thinking, imageUrls } = req.body;
   const userId = req.user.id;
 
   // Fetch user settings
@@ -83,12 +112,33 @@ exports.sendMessage = async (req, res) => {
         parts: [{ text: msg.content }],
       }));
 
+      const parts = [{ text: message }];
+      if (imageUrls && imageUrls.length > 0) {
+        for (const imageUrl of imageUrls) {
+          try {
+            const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+            const mimeType = response.headers['content-type'];
+            const imageData = Buffer.from(response.data).toString('base64');
+            
+            parts.push({
+              inline_data: {
+                mime_type: mimeType,
+                data: imageData,
+              },
+            });
+          } catch (error) {
+            console.error('Error fetching or processing image for AI:', error.message);
+            // Optionally, you can inform the user that an image failed to process
+          }
+        }
+      }
+
       let currentMessageContent = message;
       if (systemPrompt) {
         currentMessageContent = `${systemPrompt}\n\n${message}`;
       }
-
-      const contents = [...geminiHistory, { role: 'user', parts: [{ text: currentMessageContent }] }];
+      
+      const contents = [...geminiHistory, { role: 'user', parts }];
       // console.log('Contents sent to Gemini AI:', JSON.stringify(contents, null, 2));
 
       const config = {
@@ -203,7 +253,7 @@ exports.sendMessage = async (req, res) => {
     if (conversationId) {
       conversation = await Conversation.findById(conversationId);
       if (conversation) {
-        conversation.messages.push({ role: 'user', content: message });
+        conversation.messages.push({ role: 'user', content: message, imageUrls });
         conversation.messages.push({ role: 'assistant', content: text, model, thinkingTime, thoughts });
         await conversation.save();
       }
@@ -273,7 +323,7 @@ IMPORTANT:
         workspaceId,
         title,
         messages: [
-          { role: 'user', content: message },
+          { role: 'user', content: message, imageUrls },
           { role: 'assistant', content: text, model, thinkingTime, thoughts },
         ],
       });
