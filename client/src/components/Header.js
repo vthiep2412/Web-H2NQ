@@ -47,12 +47,13 @@ const Header = React.memo(({
   selectedModel,
   handleModelChange,
   language,
-  onLanguageChange
+  onLanguageChange,
+  developmentMode
 }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
 
-  const models = useModels(); // <-- Get models array using the hook
+  const models = useModels(developmentMode); // <-- Get models array using the hook
 
   const changeLanguage = (langCode) => {
     onLanguageChange(langCode);

@@ -81,5 +81,8 @@
   "profilePageUpdating": "अद्यतन किया जा रहा है...",
   "profilePageApprove": "स्वीकृत करें",
   "profilePageConfirmPasswordChange": "पासवर्ड परिवर्तन की पुष्टि करें",
-  "profilePageConfirmPasswordChangeMessage": "क्या आप वाकई अपना पासवर्ड बदलना चाहते हैं?"
+  "profilePageConfirmPasswordChangeMessage": "क्या आप वाकई अपना पासवर्ड बदलना चाहते हैं?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "डेवलपमेंट मोड",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "विकास में शामिल सभी मॉडलों तक पहुंचने के लिए सक्षम करें।",
+  "gemma312b": "Gemma 3 12B IT"
 }

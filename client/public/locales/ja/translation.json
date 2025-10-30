@@ -81,5 +81,8 @@
   "profilePageUpdating": "更新中...",
   "profilePageApprove": "承認する",
   "profilePageConfirmPasswordChange": "パスワードの変更を確認する",
-  "profilePageConfirmPasswordChangeMessage": "パスワードを変更してもよろしいですか？"
+  "profilePageConfirmPasswordChangeMessage": "パスワードを変更してもよろしいですか？",
+  "settingsPageAiSettingsDevelopmentModeLabel": "開発モード",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "開発中のモデルを含む、すべてのモデルにアクセスできるようにします。",
+  "gemma312b": "Gemma 3 12B IT"
 }

@@ -81,5 +81,8 @@
   "profilePageUpdating": "Bijwerken...",
   "profilePageApprove": "Goedkeuren",
   "profilePageConfirmPasswordChange": "Wachtwoordwijziging bevestigen",
-  "profilePageConfirmPasswordChangeMessage": "Weet u zeker dat u uw wachtwoord wilt wijzigen?"
+  "profilePageConfirmPasswordChangeMessage": "Weet u zeker dat u uw wachtwoord wilt wijzigen?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Ontwikkelingsmodus",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Schakel in om toegang te krijgen tot alle modellen, inclusief die in ontwikkeling.",
+  "gemma312b": "Gemma 3 12B IT"
 }

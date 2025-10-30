@@ -60,5 +60,8 @@
   "gemma327bit": "陈先生（笨）",
   "darkTheme": "深色主题",
   "lightTheme": "浅色主题",
-  "myProfile": "我的个人资料"
+  "myProfile": "我的个人资料",
+  "settingsPageAiSettingsDevelopmentModeLabel": "发展模式",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "启用开发模式以访问所有模型，包括正在开发的模型。",
+  "gemma312b": "Gemma 3 12B IT"
 }

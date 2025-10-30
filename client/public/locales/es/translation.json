@@ -81,5 +81,8 @@
   "profilePageUpdating": "Actualizando...",
   "profilePageApprove": "Aprobar",
   "profilePageConfirmPasswordChange": "Confirmar cambio de contraseña",
-  "profilePageConfirmPasswordChangeMessage": "¿Estás seguro de que quieres cambiar tu contraseña?"
+  "profilePageConfirmPasswordChangeMessage": "¿Estás seguro de que quieres cambiar tu contraseña?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Modo de desarrollo",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Habilitar para acceder a todos los modelos, incluidos los en desarrollo.",
+  "gemma312b": "Gemma 3 12B IT"
 }

@@ -16,7 +16,7 @@ const debounce = (func, delay) => {
   };
 };
 
-const SettingsPage = React.memo(({ aiTemperature, setAiTemperature, thinkToggle, setThinkToggle }) => {
+const SettingsPage = React.memo(({ aiTemperature, setAiTemperature, thinkToggle, setThinkToggle, developmentMode, setDevelopmentMode }) => {
   const { t } = useTranslation();
 
   const resetTemperature = () => {
@@ -94,6 +94,28 @@ const SettingsPage = React.memo(({ aiTemperature, setAiTemperature, thinkToggle,
                 placement="right"
                 delay={{ show: 250, hide: 400 }}
                 overlay={renderTooltip(t('settingsPageAiSettingsThinkModeTooltip'))}
+              >
+                <Button variant="link" className="info-button">
+                  <InfoCircle size={16} />
+                </Button>
+              </OverlayTrigger>
+            </div>
+          </div>
+
+          {/* Development Mode Toggle */}
+          <div className="setting-item mt-4">
+            <div className="d-flex align-items-center mb-2">
+              <h5>{t('settingsPageAiSettingsDevelopmentModeLabel')}</h5>
+              <Form.Check
+                type="switch"
+                id="development-mode-toggle-switch"
+                checked={developmentMode}
+                onChange={(e) => setDevelopmentMode(e.target.checked)}
+              />
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip(t('settingsPageAiSettingsDevelopmentModeTooltip'))}
               >
                 <Button variant="link" className="info-button">
                   <InfoCircle size={16} />

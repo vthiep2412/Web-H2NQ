@@ -81,5 +81,8 @@
   "profilePageUpdating": "Обновление...",
   "profilePageApprove": "Утвердить",
   "profilePageConfirmPasswordChange": "Подтвердить изменение пароля",
-  "profilePageConfirmPasswordChangeMessage": "Вы уверены, что хотите изменить свой пароль?"
+  "profilePageConfirmPasswordChangeMessage": "Вы уверены, что хотите изменить свой пароль?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Режим разработки",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Включите для доступа ко всем моделям, включая те, которые находятся в разработке.",
+  "gemma312b": "Gemma 3 12B IT"
 }

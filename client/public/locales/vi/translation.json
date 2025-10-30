@@ -81,5 +81,8 @@
   "profilePageUpdating": "Đang cập nhật...",
   "profilePageApprove": "Chấp thuận",
   "profilePageConfirmPasswordChange": "Xác nhận đổi mật khẩu",
-  "profilePageConfirmPasswordChangeMessage": "Bạn có chắc chắn muốn thay đổi mật khẩu của mình không?"
+  "profilePageConfirmPasswordChangeMessage": "Bạn có chắc chắn muốn thay đổi mật khẩu của mình không?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Chế độ nhà phát triển",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Bật chế độ phát triển để có quyền truy cập vào tất cả các mô hình, bao gồm cả những mô hình đang trong quá trình phát triển.",
+  "gemma312b": "Gemma 3 12B IT"
 }

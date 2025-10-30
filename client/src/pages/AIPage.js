@@ -122,6 +122,7 @@ function AIPage() {
   const [gradientDirection, setGradientDirection] = useState(user?.settings?.gradientDirection || 'to bottom');
   const [aiTemperature, setAiTemperature] = useState(user?.settings?.temperature !== undefined ? user.settings.temperature : 1);
   const [thinkToggle, setThinkToggle] = useState(user?.settings?.thinking !== undefined ? user.settings.thinking : true);
+  const [developmentMode, setDevelopmentMode] = useState(user?.settings?.developmentMode || false);
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace } = useWorkspaces();
@@ -133,7 +134,7 @@ function AIPage() {
   const memories = activeWorkspace ? activeWorkspace.memories : [];
 
   // Model State
-  const [selectedModel, setSelectedModel] = useState(user?.settings?.selectedModel || 'gemini-2.5-flash');
+  const [selectedModel, setSelectedModel] = useState(user?.settings?.selectedModel || 'gemini-flash-latest');
 
   // Chat State
   const [messages, setMessages] = useState([]);
@@ -220,6 +221,7 @@ function AIPage() {
         gradientDirection,
         temperature: aiTemperature,
         thinking: thinkToggle,
+        developmentMode,
       };
       const response = await fetch('/api/users/settings', {
         method: 'PUT',
@@ -258,7 +260,8 @@ function AIPage() {
     isGradientBackgroundColor2Enabled, 
     gradientDirection, 
     aiTemperature,
-    thinkToggle
+    thinkToggle,
+    developmentMode
   ]);
 
   useEffect(() => {
@@ -850,6 +853,8 @@ useEffect(() => {
           setAiTemperature={setAiTemperature} 
           thinkToggle={thinkToggle} 
           setThinkToggle={setThinkToggle} 
+          developmentMode={developmentMode}
+          setDevelopmentMode={setDevelopmentMode}
         />;
       case 'chat':
       default:
@@ -951,6 +956,7 @@ useEffect(() => {
         handleModelChange={handleModelChange}
         language={language}
         onLanguageChange={handleLanguageChange}
+        developmentMode={developmentMode}
       />
       <div style={{ display: 'flex', flex: '1 1 auto', overflow: 'hidden' }}>
         <div ref={navbarRef} className={`workspace-navbar-container ${isNavbarVisible ? 'visible' : ''}`}>

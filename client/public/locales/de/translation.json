@@ -81,5 +81,8 @@
   "profilePageUpdating": "Wird aktualisiert...",
   "profilePageApprove": "Genehmigen",
   "profilePageConfirmPasswordChange": "Passwortänderung bestätigen",
-  "profilePageConfirmPasswordChangeMessage": "Möchten Sie Ihr Passwort wirklich ändern?"
+  "profilePageConfirmPasswordChangeMessage": "Möchten Sie Ihr Passwort wirklich ändern?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Entwicklungsmodus",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Aktivieren, um auf alle Modelle zuzugreifen, einschließlich derer in Entwicklung.",
+  "gemma312b": "Gemma 3 12B IT"
 }

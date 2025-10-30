@@ -81,5 +81,8 @@
   "profilePageUpdating": "Updating...",
   "profilePageApprove": "Approve",
   "profilePageConfirmPasswordChange": "Confirm Password Change",
-  "profilePageConfirmPasswordChangeMessage": "Are you sure you want to change your password?"
+  "profilePageConfirmPasswordChangeMessage": "Are you sure you want to change your password?",
+  "settingsPageAiSettingsDevelopmentModeLabel": "Development Mode",
+  "settingsPageAiSettingsDevelopmentModeTooltip": "Enable to access all models, including those in development.",
+  "gemma312b": "Gemma 3 12B IT"
 }
