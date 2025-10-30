@@ -289,6 +289,18 @@ function AIPage() {
     };
   }, [theme, darkBackgroundColor, lightBackgroundColor]);
 
+  // Handles accent color gradient animation
+  useEffect(() => {
+    if (isGradientAnimated) {
+      document.body.classList.add('gradient-animated');
+    } else {
+      document.body.classList.remove('gradient-animated');
+    }
+    return () => {
+      document.body.classList.remove('gradient-animated');
+    };
+  }, [isGradientAnimated]);
+
 
   const initialLoadDone = useRef(false);
 

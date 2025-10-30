@@ -12,7 +12,7 @@
 .gradient-background.animated {
   animation: slow-gradient-animation 10s ease infinite;
 }
-
+/* this is for the background gradient not accent */
 @keyframes slow-gradient-animation {
   0% {
     /* background-size: 100% 100%; */

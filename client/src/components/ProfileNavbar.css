@@ -207,6 +207,7 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 0.5rem;
+    justify-content: space-around;
 }
 
 .background-color-pickers-container {

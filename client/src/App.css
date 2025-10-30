@@ -944,6 +944,10 @@ h1{
   gap: .25rem;
 }
 
-.model-dropdown-menu{
+/* .model-dropdown-menu{
   inset: 0px 0px auto 0px !important;
+} */
+
+.form-switch{
+  padding-left: 0 !important;
 }
