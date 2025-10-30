@@ -258,8 +258,14 @@
 
 .message-bubble.user{
   padding-bottom: 12px;
+  width: fit-content;
 }
 
+.user-message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 .message-bubble.ai p{
   margin-bottom: 0.2rem;
 }
@@ -950,4 +956,8 @@ h1{
 
 .form-switch{
   padding-left: 0 !important;
+}
+
+.message-images{
+  display: flex;
 }

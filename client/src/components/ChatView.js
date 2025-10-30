@@ -130,11 +130,25 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
               };
 
               return (
-                <div key={`${msg.sender}-${index}-${msg.text?.length ?? 0}`} className={`message-bubble-container ${msg.sender}`}>
+                <div key={msg.id || index} className={`message-bubble-container ${msg.sender}`}>
+                  {/* {msg.sender === 'user' && msg.imageUrls && msg.imageUrls.length > 0 && (
+                    <div className="message-images" style={{ marginBottom: '10px', textAlign: 'right' }}>
+                      {msg.imageUrls.map((url, i) => (
+                        <img key={i} src={url} alt={`user upload ${i}`} style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px', marginLeft: '8px' }} />
+                      ))}
+                    </div>
+                  )} */}
                   {msg.sender === 'ai' && <div className="ai-avatar"><Robot size={20} /></div>}
-                  <div className={msg.sender === 'ai' ? 'ai-message-content' : ''}>
+                  <div className={msg.sender === 'ai' ? 'ai-message-content' : 'user-message-content'}>
                     {msg.sender === 'ai' && msg.thinkingTime && (
                       <div className="model-name">{t('doneThinkingIn', { time: formatTime(msg.thinkingTime) })}</div>
+                    )}
+                    {msg.sender === 'user' && msg.imageUrls && msg.imageUrls.length > 0 && (
+                      <div className="message-images" style={{ marginBottom: '10px', textAlign: 'right' }}>
+                        {msg.imageUrls.map((url, i) => (
+                          <img key={i} src={url} alt={`user upload ${i}`} style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px', marginLeft: '8px' }} />
+                        ))}
+                      </div>
                     )}
                     {msg.sender === 'ai' && msg.thoughts?.length > 0 && (
                       <details

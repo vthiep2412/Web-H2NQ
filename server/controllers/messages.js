@@ -121,8 +121,8 @@ exports.sendMessage = async (req, res) => {
             const imageData = Buffer.from(response.data).toString('base64');
             
             parts.push({
-              inline_data: {
-                mime_type: mimeType,
+              inlineData: {
+                mimeType: mimeType,
                 data: imageData,
               },
             });

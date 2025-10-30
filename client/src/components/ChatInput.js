@@ -40,80 +40,12 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
     setInput(e.target.value);
   };
 
-  const uploadImagesToCloudinary = async (files) => {
-    const uploaders = files.map(async (file) => {
-      // 1. Get signature from backend
-      const token = localStorage.getItem('token');
-      const sigRes = await fetch('/api/messages/image-signature', {
-        method: 'POST',
-        headers: {
-          'x-auth-token': token,
-        },
-      });
-
-      if (!sigRes.ok) {
-        throw new Error('Failed to get upload signature');
-      }
-
-      const { timestamp, signature, upload_preset, transformation } = await sigRes.json();
-
-      // 2. Upload to Cloudinary
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('timestamp', timestamp);
-      formData.append('signature', signature);
-      formData.append('upload_preset', upload_preset);
-      formData.append('transformation', transformation);
-      formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
-
-      const cloudName = process.env.REACT_APP_CLOUD_NAME;
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-      const uploadRes = await fetch(cloudinaryUrl, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error('Failed to upload image to Cloudinary');
-      }
-
-      const uploadData = await uploadRes.json();
-      return uploadData.secure_url;
-    });
-
-    return await Promise.all(uploaders);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const trimmedInput = input.trim();
-    let imageUrls = [];
 
-    if (selectedFiles.length > 0) {
-      imageUrls = await uploadImagesToCloudinary(selectedFiles);
-    }
-
-    if (trimmedInput.startsWith('/chat')) {
-      const regex = /^\/chat\s+"(.*?)"\s+"(ai|me)"$/;
-      const match = trimmedInput.match(regex);
-
-      if (match) {
-        const message = match[1];
-        const sender = match[2];
-        onLocalChat(message, sender === 'me' ? 'user' : 'ai');
-        setInput('');
-      } else {
-        // Handle invalid command format
-        const errorMessage = 'Invalid /chat command format. Use /chat "[message]" "[ai/me]"';
-        console.error(errorMessage);
-        onLocalChat(errorMessage, 'ai');
-      }
-    } else if (trimmedInput === '/testmodal') {
-      onTestModal();
-      setInput('');
-    } else if (trimmedInput || imageUrls.length > 0) {
-      onSubmit(trimmedInput, imageUrls); // Pass the array of selected files
+    if (trimmedInput || selectedFiles.length > 0) {
+      onSubmit(trimmedInput, selectedFiles); // Pass the array of selected files
       setInput('');
       setSelectedFiles([]); // Clear selected files after submission
       setHistoryIndex(-1);

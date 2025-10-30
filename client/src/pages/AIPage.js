@@ -36,7 +36,53 @@ const hexToRgba = (hex, alpha) => {
   return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')},${alpha})`;
 };
 
+const uploadImagesToCloudinary = async (files) => {
+  const uploaders = files.map(async (file) => {
+    // 1. Get signature from backend
+    const token = localStorage.getItem('token');
+    const sigRes = await fetch('/api/messages/image-signature', {
+      method: 'POST',
+      headers: {
+        'x-auth-token': token,
+      },
+    });
+
+    if (!sigRes.ok) {
+      throw new Error('Failed to get upload signature');
+    }
+
+    const { timestamp, signature, upload_preset, transformation } = await sigRes.json();
+
+    // 2. Upload to Cloudinary
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('timestamp', timestamp);
+    formData.append('signature', signature);
+    formData.append('upload_preset', upload_preset);
+    formData.append('transformation', transformation);
+    formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+
+    const cloudName = process.env.REACT_APP_CLOUD_NAME;
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+    const uploadRes = await fetch(cloudinaryUrl, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!uploadRes.ok) {
+      throw new Error('Failed to upload image to Cloudinary');
+    }
+
+    const uploadData = await uploadRes.json();
+    return uploadData.secure_url;
+  });
+
+  return await Promise.all(uploaders);
+};
+
 function AIPage() {
+
   const { t, i18n } = useTranslation();
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
 
@@ -355,11 +401,13 @@ function AIPage() {
         if (workspaceConversations.length > 0) {
           setActiveConversationId(workspaceConversations[0]._id);
           const mappedMessages = workspaceConversations[0].messages.map(msg => ({
+            id: msg._id,
             sender: msg.role === 'assistant' ? 'ai' : 'user',
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
             thoughts: msg.thoughts,
+            imageUrls: msg.imageUrls,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -388,11 +436,13 @@ function AIPage() {
         if (data.length > 0) {
           setActiveConversationId(data[0]._id);
           const mappedMessages = data[0].messages.map(msg => ({
+            id: msg._id,
             sender: msg.role === 'assistant' ? 'ai' : 'user',
             text: msg.content,
             model: msg.model,
             thinkingTime: msg.thinkingTime,
             thoughts: msg.thoughts,
+            imageUrls: msg.imageUrls,
             isNew: false, // Loaded messages are not new
           }));
           setMessages(mappedMessages);
@@ -459,9 +509,29 @@ useEffect(() => {
   const handleSubmit = async (message, files = []) => {
     if (message.trim() || files.length > 0) {
       const frontendStartTime = Date.now(); // Record start time on frontend
-      const userMessage = { text: message, sender: 'user' };
+
+      // Start timer immediately
+      timerRef.current = setInterval(() => {
+        setTimer((Date.now() - frontendStartTime) / 1000);
+      }, 100);
+
+      let imageUrls = [];
       if (files.length > 0) {
-        userMessage.files = files.map(file => ({ name: file.name, type: file.type }));
+        try {
+          imageUrls = await uploadImagesToCloudinary(files);
+        } catch (error) {
+          console.error('handleSubmit: Error uploading images:', error);
+          clearInterval(timerRef.current);
+          setTimer(0);
+          const errorMessage = { text: `Error uploading images: ${error.message}`, sender: 'ai', type: 'error' };
+          setMessages(prevMessages => [...prevMessages, errorMessage]);
+          return;
+        }
+      }
+
+      const userMessage = { id: `user-${Date.now()}`, text: message, sender: 'user' };
+      if (imageUrls.length > 0) {
+        userMessage.imageUrls = imageUrls;
       }
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
 
@@ -473,37 +543,15 @@ useEffect(() => {
       setMessages([...messages, userMessage, loadingMessage]);
       setShouldFetchConversations(false); // Prevent premature fetch
 
-      const startTime = Date.now();
-      timerRef.current = setInterval(() => {
-        setTimer((Date.now() - startTime) / 1000);
-      }, 100);
-
       try {
         const token = localStorage.getItem('token');
-        let requestBody;
-        let headers = {
+        const requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime, thinking: user?.settings?.thinking, imageUrls });
+        const headers = {
           'x-auth-token': token,
+          'Content-Type': 'application/json',
         };
 
-        if (files.length > 0) {
-          const formData = new FormData();
-          formData.append('message', message);
-          formData.append('model', selectedModel);
-          formData.append('history', JSON.stringify(conversationHistory));
-          formData.append('conversationId', activeConversationId);
-          formData.append('memories', JSON.stringify(memories));
-          formData.append('workspaceId', activeWorkspace.id);
-          formData.append('language', language);
-          files.forEach((file, index) => {
-            formData.append(`file${index}`, file);
-          });
-          requestBody = formData;
-          // No Content-Type header for FormData, browser sets it automatically
-        } else {
-          headers['Content-Type'] = 'application/json';
-          requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime, thinking: user?.settings?.thinking });
-          console.log('Sending to server:', JSON.parse(requestBody));
-        }
+        console.log('Sending to server:', JSON.parse(requestBody));
 
         const response = await fetch('/api/messages', {
           method: 'POST',
@@ -525,7 +573,7 @@ useEffect(() => {
         if (data.truncated) {
           setShowModal(true);
         }
-        const aiMessage = { text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts, isNew: true }; // New AI messages are new
+        const aiMessage = { id: `ai-${Date.now()}`, text: data.text, sender: 'ai', model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts, isNew: true }; // New AI messages are new
 
         if (data.user) {
           updateUser(data.user);
@@ -539,11 +587,13 @@ useEffect(() => {
           setActiveConversationId(data.conversation._id);
           const conversationMessages = data.conversation.messages;
           const mappedMessages = conversationMessages.map((msg, index) => ({
+            id: msg._id,
             sender: msg.role === 'assistant' ? 'ai' : 'user',
             text: msg.content,
             model: msg.model,
             thinkingTime: data.thinkingTime, // Use backend thinking time
             thoughts: msg.thoughts,
+            imageUrls: msg.imageUrls,
             isNew: index === conversationMessages.length - 1,
           }));
           setMessages(mappedMessages);
@@ -555,7 +605,7 @@ useEffect(() => {
             ...prev,
             [activeWorkspace.id]: (prev[activeWorkspace.id] || []).map(convo => {
               if (convo._id === activeConversationId) {
-                const newMessages = [...convo.messages, { role: 'user', content: message }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts }];
+                const newMessages = [...convo.messages, { role: 'user', content: message, imageUrls }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts }];
                 return { ...convo, messages: newMessages };
               }
               return convo;
@@ -567,7 +617,6 @@ useEffect(() => {
         clearInterval(timerRef.current);
         setTimer(0);
         setMessages(prevMessages => prevMessages.filter(m => m.id !== 'loading'));
-      } finally {
       }
     }
   };
@@ -728,11 +777,13 @@ useEffect(() => {
     if (conversation) {
       setActiveConversationId(conversationId);
       const mappedMessages = conversation.messages.map(msg => ({
+        id: msg._id,
         sender: msg.role === 'assistant' ? 'ai' : 'user',
         text: msg.content,
         model: msg.model,
         thinkingTime: msg.thinkingTime,
         thoughts: msg.thoughts,
+        imageUrls: msg.imageUrls,
         isNew: false, // Loaded messages are not new
       }));
       setMessages(mappedMessages);
