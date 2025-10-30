@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema({
     isGradientColor1Enabled: { type: Boolean, default: false },
     isGradientColor2Enabled: { type: Boolean, default: false },
     isGradientAnimated: { type: Boolean, default: false },
-    selectedModel: { type: String, default: 'gemini-2.5-flash' },
+    selectedModel: { type: String, default: 'gemini-flash-latest' },
     selectedBackground: { type: String, default: 'none' },
     language: { type: String, default: 'en' },
     lastActiveWorkspace: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', default: null },
