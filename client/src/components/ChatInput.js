@@ -15,7 +15,6 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
   const [tempInput, setTempInput] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]); // Changed to an array for multiple files
   const { t } = useTranslation();
-  let modelLabel = getLabelForModel(selectedModel, t)
 
   React.useEffect(() => {
     const handleKeyPress = (event) => {
@@ -154,7 +153,6 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
             ref={textareaRef} // Add this ref
             minRows={1}
             maxRows={2}
-            // placeholder={`Message ${getLabelForModel(selectedModel, t)}...`}
             placeholder={t('messagePlaceholder')}
             value={input}
             onChange={handleInputChange}

@@ -1,7 +1,7 @@
 // Happy coding :D!
 // Happy coding :D
 import { useState, useCallback, useRef } from 'react';
-import { ChatDots, Cpu, Hdd } from 'react-bootstrap-icons';
+import { ChatDots, Cpu } from 'react-bootstrap-icons';
 import { useTranslation } from 'react-i18next';
 
 // Basic deep comparison utility for arrays of objects
