@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { Paperclip, SendFill, Camera, PlusCircle, Trash, FileEarmark } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
-import { getLabelForModel } from '../utils/models';
 import { useTranslation } from 'react-i18next';
 
 const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation, onTestModal }) => {
