@@ -52,7 +52,7 @@
   "toRight": "Vers la droite",
   "background&GradientColor": "Couleur de fond et de dégradé",
   "AcentColor&GradientColor": "Couleur d'accentuation et de dégradé",
-  "messagePlaceholder": "Message {{modelLabel}}...",
+  "messagePlaceholder": "Appuyez sur '/' pour taper...",
   "doneThinkingIn": "Terminé de réfléchir en {{time}}.",
   "gemini25Pro": "Mlle Nguyen (Intelligent)",
   "gemini25Flash": "Petite Le (Réponse plus rapide)",

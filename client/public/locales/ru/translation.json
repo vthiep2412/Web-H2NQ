@@ -52,7 +52,7 @@
   "toRight": "Вправо",
   "background&GradientColor": "Цвет фона и градиента",
   "AcentColor&GradientColor": "Цвет акцента и градиента",
-  "messagePlaceholder": "Сообщение {{modelLabel}}...",
+  "messagePlaceholder": "Нажмите '/' для ввода...",
   "doneThinkingIn": "Закончил думать за {{time}}.",
   "gemini25Pro": "Мисс Нгуен (Умная)",
   "gemini25Flash": "Маленькая Ле (Быстрый ответ)",

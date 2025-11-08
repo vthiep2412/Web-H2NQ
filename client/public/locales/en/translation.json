@@ -52,7 +52,7 @@
   "toRight": "To Right",
   "background&GradientColor": "Background & Gradient Color",
   "AcentColor&GradientColor": "Accent Color & Gradient Color",
-  "messagePlaceholder": "Message {{modelLabel}}...",
+  "messagePlaceholder": "Press '/' to type...",
   "doneThinkingIn": "Done thinking in {{time}}.",
   "gemini25Pro": "Miss Nguyen (Smart)",
   "gemini25Flash": "Little Le (Faster Response)",

@@ -52,7 +52,7 @@
   "toRight": "Naar rechts",
   "background&GradientColor": "Achtergrond- & Verloopkleur",
   "AcentColor&GradientColor": "Accentkleur & Verloopkleur",
-  "messagePlaceholder": "Bericht {{modelLabel}}...",
+  "messagePlaceholder": "Druk op '/' om te typen...",
   "doneThinkingIn": "Klaar met denken in {{time}}.",
   "gemini25Pro": "Juffrouw Nguyen (Intelligent)",
   "gemini25Flash": "Kleine Le (Sneller)",

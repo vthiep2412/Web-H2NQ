@@ -52,7 +52,7 @@
   "toRight": "Sang phải",
   "background&GradientColor": "Màu nền & chuyển sắc",
   "AcentColor&GradientColor": "Màu nhấn & chuyển sắc",
-  "messagePlaceholder": "Tin nhắn {{modelLabel}}...",
+  "messagePlaceholder": "Nhấn '/' để nhập...",
   "doneThinkingIn": "Hoàn thành suy nghĩ trong {{time}}.",
   "gemini25Pro": "Chị Nguyễn (Thông minh)",
   "gemini25Flash": "Bé Lê (Phản hồi nhanh hơn)",

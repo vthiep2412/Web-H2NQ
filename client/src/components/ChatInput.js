@@ -10,11 +10,28 @@ import { useTranslation } from 'react-i18next';
 const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation, onTestModal }) => {
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
+  const textareaRef = React.useRef(null); // Add this ref
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [tempInput, setTempInput] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]); // Changed to an array for multiple files
   const { t } = useTranslation();
   let modelLabel = getLabelForModel(selectedModel, t)
+
+  React.useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+        textareaRef.current.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
   const handleAttachClick = () => {
     fileInputRef.current.click();
   };
@@ -134,10 +151,11 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
             multiple // Allow multiple file selection
           />
           <TextareaAutosize
+            ref={textareaRef} // Add this ref
             minRows={1}
             maxRows={2}
             // placeholder={`Message ${getLabelForModel(selectedModel, t)}...`}
-            placeholder={t('messagePlaceholder', { modelLabel })}
+            placeholder={t('messagePlaceholder')}
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}

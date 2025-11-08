@@ -52,7 +52,7 @@
   "toRight": "दाईं ओर",
   "background&GradientColor": "पृष्ठभूमि और ग्रेडिएंट रंग",
   "AcentColor&GradientColor": "एक्सेंट रंग और ग्रेडिएंट रंग",
-  "messagePlaceholder": "संदेश {{modelLabel}}...",
+  "messagePlaceholder": "टाइप करने के लिए '/' दबाएँ...",
   "doneThinkingIn": "{{time}} में सोचना समाप्त हुआ।",
   "gemini25Pro": "मिस गुयेन (स्मार्ट)",
   "gemini25Flash": "लिटिल ले (तेज़ प्रतिक्रिया)",

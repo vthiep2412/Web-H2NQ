@@ -52,7 +52,7 @@
   "toRight": "右へ",
   "background&GradientColor": "背景とグラデーションカラー",
   "AcentColor&GradientColor": "アクセントカラーとグラデーションカラー",
-  "messagePlaceholder": "メッセージ {{modelLabel}}...",
+  "messagePlaceholder": "'/'を押して入力...",
   "doneThinkingIn": "{{time}}で思考完了。",
   "gemini25Pro": "グエンさん（スマート）",
   "gemini25Flash": "リトル・レ（高速応答）",

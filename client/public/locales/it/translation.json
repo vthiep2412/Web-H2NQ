@@ -52,7 +52,7 @@
   "toRight": "A destra",
   "background&GradientColor": "Colore di sfondo e sfumatura",
   "AcentColor&GradientColor": "Colore accento e sfumatura",
-  "messagePlaceholder": "Messaggio {{modelLabel}}...",
+  "messagePlaceholder": "Premi '/' per digitare...",
   "doneThinkingIn": "Finito di pensare in {{time}}.",
   "gemini25Pro": "Signorina Nguyen (Intelligente)",
   "gemini25Flash": "Piccola Le (Risposta più veloce)",

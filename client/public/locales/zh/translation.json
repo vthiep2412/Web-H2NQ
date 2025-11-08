@@ -52,7 +52,7 @@
   "toRight": "到右边",
   "background&GradientColor": "背景和渐变色",
   "AcentColor&GradientColor": "强调色和渐变色",
-  "messagePlaceholder": "消息 {{modelLabel}}...",
+  "messagePlaceholder": "按'/'输入...",
   "doneThinkingIn": "在 {{time}} 内思考完毕。",
   "gemini25Pro": "阮小姐（智能）",
   "gemini25Flash": "小李（更快响应）",
