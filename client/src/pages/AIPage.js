@@ -462,7 +462,7 @@ function AIPage() {
     if (user && activeWorkspace) {
       fetchConversations();
     }
-  }, [userId, activeWorkspace, showGreetingMessage, user, conversationsByWorkspace, isGreetingShown]);
+  }, [userId, activeWorkspace, showGreetingMessage, user, conversationsByWorkspace]);
 
   useEffect(() => {
     const updateCurrentConversation = async () => {
@@ -493,21 +493,56 @@ function AIPage() {
     updateCurrentConversation();
   }, [shouldFetchConversations, activeConversationId, user, activeWorkspace]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = (snapPercentage = 0) => {
     const el = document.querySelector('.chat-main-view');
     if (el) {
+      const destination = el.scrollHeight;
+
+      // For short scrolls or when no snap is needed, just do a normal smooth scroll.
+      if (snapPercentage <= 0) {
+        el.scrollTo({ top: destination, behavior: 'smooth' });
+        return;
+      }
+
+      const currentPosition = el.scrollTop;
+      const clientHeight = el.clientHeight;
+      const distanceToTravel = destination - clientHeight - currentPosition;
+
+      if (distanceToTravel <= 0) return;
+
+      const snapAmount = distanceToTravel * snapPercentage;
+      const snapPosition = currentPosition + snapAmount;
+
       el.scrollTo({
-        top: el.scrollHeight,
-        behavior: 'smooth',
+        top: snapPosition,
+        behavior: 'auto',
+      });
+
+      requestAnimationFrame(() => {
+        el.scrollTo({
+          top: destination,
+          behavior: 'smooth',
+        });
       });
     }
-    // messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => {
+    const messageCount = messages.length;
+    let snapPercentage = 0;
 
+    if (messageCount > 50) { // Extra Long
+      snapPercentage = 0.90;
+    } else if (messageCount > 30) { // Long
+      snapPercentage = 0.80;
+    } else if (messageCount > 15) { // Medium
+      snapPercentage = 0.60;
+    } else if (messageCount > 10) { // Small
+      snapPercentage = 0.40;
+    }
+
+    scrollToBottom(snapPercentage);
+  }, [messages]);
   // Handlers
   const handleSubmit = async (message, files = []) => {
     if (message.trim() || files.length > 0) {
@@ -827,7 +862,10 @@ useEffect(() => {
 
   const handleNewConversation = () => {
     setActiveConversationId(null);
-    showGreetingMessage();
+    setMessages([]); // Clear messages immediately
+    setTimeout(() => {
+      showGreetingMessage();
+    }, 0);
   };
 
   const handleTestModal = useCallback(() => {
