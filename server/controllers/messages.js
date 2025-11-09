@@ -112,7 +112,12 @@ exports.sendMessage = async (req, res) => {
         parts: [{ text: msg.content }],
       }));
 
-      const parts = [{ text: message }];
+      let currentMessageContent = message;
+      if (systemPrompt) {
+        currentMessageContent = `${systemPrompt}\n\n${message}`;
+      }
+
+      const parts = [{ text: currentMessageContent }];
       if (imageUrls && imageUrls.length > 0) {
         for (const imageUrl of imageUrls) {
           try {
@@ -131,11 +136,6 @@ exports.sendMessage = async (req, res) => {
             // Optionally, you can inform the user that an image failed to process
           }
         }
-      }
-
-      let currentMessageContent = message;
-      if (systemPrompt) {
-        currentMessageContent = `${systemPrompt}\n\n${message}`;
       }
       
       const contents = [...geminiHistory, { role: 'user', parts }];
