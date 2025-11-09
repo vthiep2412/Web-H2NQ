@@ -129,7 +129,9 @@ function AIPage() {
 
   // AI Memory State
   const activeWorkspace = useMemo(() => {
-    return workspaces.find(ws => ws.children.some(child => child.id === activeView));
+    if (!activeView) return null;
+    const workspaceId = activeView.split('-')[0];
+    return workspaces.find(ws => ws.id === workspaceId);
   }, [workspaces, activeView]);
   const memories = activeWorkspace ? activeWorkspace.memories : [];
 
@@ -546,31 +548,11 @@ function AIPage() {
   // Handlers
   const handleSubmit = async (message, files = []) => {
     if (message.trim() || files.length > 0) {
-      const frontendStartTime = Date.now(); // Record start time on frontend
+      const frontendStartTime = Date.now();
 
-      // Start timer immediately
-      timerRef.current = setInterval(() => {
-        setTimer((Date.now() - frontendStartTime) / 1000);
-      }, 100);
-
-      let imageUrls = [];
-      if (files.length > 0) {
-        try {
-          imageUrls = await uploadImagesToCloudinary(files);
-        } catch (error) {
-          console.error('handleSubmit: Error uploading images:', error);
-          clearInterval(timerRef.current);
-          setTimer(0);
-          const errorMessage = { text: `Error uploading images: ${error.message}`, sender: 'ai', type: 'error' };
-          setMessages(prevMessages => [...prevMessages, errorMessage]);
-          return;
-        }
-      }
-
-      const userMessage = { id: `user-${Date.now()}`, text: message, sender: 'user' };
-      if (imageUrls.length > 0) {
-        userMessage.imageUrls = imageUrls;
-      }
+      // Create local object URLs for immediate UI update
+      const localImageUrls = files.map(file => URL.createObjectURL(file));
+      const userMessage = { id: `user-${Date.now()}`, text: message, sender: 'user', imageUrls: localImageUrls };
       const loadingMessage = { id: 'loading', sender: 'ai', type: 'loading' };
 
       const conversationHistory = messages.map(msg => ({
@@ -578,12 +560,35 @@ function AIPage() {
         content: msg.text,
       }));
 
+      // Update UI immediately
       setMessages([...messages, userMessage, loadingMessage]);
-      setShouldFetchConversations(false); // Prevent premature fetch
+      setShouldFetchConversations(false);
+
+      // Start timer
+      timerRef.current = setInterval(() => {
+        setTimer((Date.now() - frontendStartTime) / 1000);
+      }, 100);
+
+      let finalImageUrls = [];
+      if (files.length > 0) {
+        try {
+          finalImageUrls = await uploadImagesToCloudinary(files);
+          // Clean up local URLs after upload
+          localImageUrls.forEach(url => URL.revokeObjectURL(url));
+        } catch (error) {
+          console.error('handleSubmit: Error uploading images:', error);
+          clearInterval(timerRef.current);
+          setTimer(0);
+          const errorMessage = { text: `Error uploading images: ${error.message}`, sender: 'ai', type: 'error' };
+          setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), errorMessage]);
+          return;
+        }
+      }
 
       try {
         const token = localStorage.getItem('token');
-        const requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime, thinking: user?.settings?.thinking, imageUrls });
+        // Use finalImageUrls for the backend request
+        const requestBody = JSON.stringify({ message, model: selectedModel, history: conversationHistory, conversationId: activeConversationId, memories, workspaceId: activeWorkspace.id, language, frontendStartTime, thinking: thinkToggle, imageUrls: finalImageUrls });
         const headers = {
           'x-auth-token': token,
           'Content-Type': 'application/json',
@@ -643,7 +648,7 @@ function AIPage() {
             ...prev,
             [activeWorkspace.id]: (prev[activeWorkspace.id] || []).map(convo => {
               if (convo._id === activeConversationId) {
-                const newMessages = [...convo.messages, { role: 'user', content: message, imageUrls }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts }];
+                const newMessages = [...convo.messages, { role: 'user', content: message, imageUrls: finalImageUrls }, { role: 'assistant', content: data.text, model: data.model, thinkingTime: data.thinkingTime, thoughts: data.thoughts }];
                 return { ...convo, messages: newMessages };
               }
               return convo;
@@ -866,6 +871,7 @@ function AIPage() {
     setTimeout(() => {
       showGreetingMessage();
     }, 0);
+    // coderabbit thought this a bug! lol
   };
 
   const handleTestModal = useCallback(() => {

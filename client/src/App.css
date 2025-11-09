@@ -266,6 +266,17 @@
   flex-direction: column;
   align-items: flex-end;
 }
+
+.message-bubble.ai{
+  /* max-width: 67vw !important; */
+  transition: all 0.3s ease;
+  border-top-left-radius: 0px;
+}
+
+.message-bubble.user{
+  border-top-right-radius: 0px; 
+}
+
 .message-bubble.ai p{
   margin-bottom: 0.2rem;
 }
@@ -790,8 +801,13 @@ th {
     width: 100%;
   }
   .chat-main-view{
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .message-bubble.ai{
+    max-width: 100vw !important;
+    width: 72vw !important;
   }
 }
 
@@ -873,8 +889,8 @@ h1{
 }
 
 .file-preview-image {
-  max-width: 80px;
-  max-height: 80px;
+  /* max-width: 80px; */
+  /* max-height: 80px; */
   border-radius: 4px;
   margin-bottom: 5px;
 }
@@ -960,4 +976,8 @@ h1{
 
 .message-images{
   display: flex;
+}
+
+[data-bs-theme="light"] .action-button:hover{
+  background-color: #dddddd !important;
 }

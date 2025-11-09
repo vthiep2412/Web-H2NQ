@@ -126,7 +126,7 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
           <div className="message-list">
             {messages.map((msg, index) => {
               const aiMessageBubbleStyle = {
-                maxWidth: isNavbarVisible ? 'calc(72vw - 268px)' : '72vw',
+                maxWidth: isNavbarVisible ? 'calc(60vw - 268px)' : '60vw',
               };
 
               return (

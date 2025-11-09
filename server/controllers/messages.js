@@ -61,7 +61,7 @@ const truncateHistory = (history, maxLength) => {
 };
 
 exports.sendMessage = async (req, res) => {
-  console.log("Received message, sending to AI...");
+  console.log(`Received message from user: ${req.user.id}. Memories included: ${req.body.memories && req.body.memories.length > 0}. Thoughts enabled: ${req.body.thinking}. Sending to AI...`);
   const { message, model, history, conversationId, memories, workspaceId, language, thinking, imageUrls } = req.body;
   const userId = req.user.id;
 
@@ -245,6 +245,8 @@ exports.sendMessage = async (req, res) => {
       // console.log('HuggingFace AI response text:', text);
     }
     const thinkingTime = (Date.now() - startTime) / 1000;
+
+    console.log(`Received AI response for user: ${userId}. Thoughts included: ${thoughts && thoughts.length > 0}.`);
 
     user.tokenLeft -= 1;
     await user.save();
