@@ -87,7 +87,8 @@ exports.sendMessage = async (req, res) => {
     let fullHistory = [...history];
     let systemPrompt = 'THIS IS SYSTEM INSTRUCTIONS:\n';
     if (language) {
-      systemPrompt += `You MUST respond in the language that the conversation uses, but if the conversation is unclear you MUST respond in ${language}.\n`;    }
+      systemPrompt += `You MUST respond in the language that the conversation uses, but if the conversation is unclear you MUST respond in ${language}.\n`;
+    }
     if (memories && memories.length > 0) {
       systemPrompt += `YOU MUST follow these instructions:\n${memories.map(mem => `- ${mem.text}`).join('\n')}`;
     }

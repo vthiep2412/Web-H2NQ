@@ -165,7 +165,7 @@ function AIPage() {
       const now = Date.now();
       const activeWorkspaceId = localStorage.getItem('lastActiveWorkspace');
 
-      for (let i = 0; i < localStorage.length; i++) {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
         if (key && key.startsWith('chatInput-')) {
           const workspaceId = key.substring('chatInput-'.length);

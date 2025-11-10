@@ -286,9 +286,10 @@ const ChatInput = React.memo(({ config, actions }) => {
               addToast('This is a warning test toast.', 'warning');
             } else if (type === 'error') {
               addToast('This is an error test toast.', 'error');
-            }
-            else {
+            } else if (!type) {
               addToast('This is a default test toast.', 'success');
+            } else {
+              addToast(`Unknown toast type: ${type}. Use: info, success, warning, or error`, 'warning');
             }
           } else {
             addToast('Usage: /test [modal|toast [info|success|warning|error]]', 'info');
