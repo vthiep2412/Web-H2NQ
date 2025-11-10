@@ -149,50 +149,15 @@ function AIPage() {
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
 
-  // State persistence with Local Storage
   useEffect(() => {
-    const savedMessages = localStorage.getItem('chatMessages');
-    const savedConversationsByWorkspace = localStorage.getItem('chatConversationsByWorkspace'); // Changed key
-    const savedActiveConversationId = localStorage.getItem('activeConversationId');
-    const savedIsGreetingShown = localStorage.getItem('isGreetingShown');
     const savedSelectedModel = localStorage.getItem('selectedModel');
-
-
-    if (savedMessages) setMessages(JSON.parse(savedMessages));
-    if (savedConversationsByWorkspace) setConversationsByWorkspace(JSON.parse(savedConversationsByWorkspace)); // Changed setter
-    if (savedActiveConversationId) setActiveConversationId(savedActiveConversationId);
-    if (savedIsGreetingShown) setIsGreetingShown(JSON.parse(savedIsGreetingShown));
     if (savedSelectedModel) setSelectedModel(savedSelectedModel);
-
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
-    localStorage.setItem('chatConversationsByWorkspace', JSON.stringify(conversationsByWorkspace));
-  }, [conversationsByWorkspace]);
-
-  useEffect(() => {
-    if (activeConversationId) {
-      localStorage.setItem('activeConversationId', activeConversationId);
-    } else {
-      localStorage.removeItem('activeConversationId');
-    }
-  }, [activeConversationId]);
-
-  useEffect(() => {
-    localStorage.setItem('isGreetingShown', JSON.stringify(isGreetingShown));
-  }, [isGreetingShown]);
 
   useEffect(() => {
     localStorage.setItem('selectedModel', selectedModel);
   }, [selectedModel]);
 
-  useEffect(() => {
-    localStorage.removeItem('activeView');
-  }, []);
 
   useEffect(() => {
     getWorkspaces();
@@ -916,6 +881,8 @@ function AIPage() {
           onTestModal={handleTestModal}
           onTypingComplete={handleTypingComplete}
           language={language}
+          activeConversationId={activeConversationId}
+          workspaceId={activeWorkspace?.id}
         />;
     }
   }
