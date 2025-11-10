@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [user, setUser] = useState(null);
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // New state
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,15 +31,21 @@ export const AuthProvider = ({ children }) => {
                         setToken(null);
                         localStorage.removeItem('token');
                         setUser(null);
+                        setIsLoggingOut(false); // Ensure this is false if token becomes invalid
+                        // console.log("Token invalid, logging out.    1");
                     }
                 } catch (error) {
                     console.error("Error fetching user:", error);
                     setToken(null);
                     localStorage.removeItem('token');
                     setUser(null);
+                    setIsLoggingOut(false); // Ensure this is false on error
+                    // console.log("Error occurred, logging out.    2");
                 }
             } else {
                 setUser(null);
+                // setIsLoggingOut(false); // this is wrong
+                // console.log("Token invalid, logging out.    3");
             }
         };
 
@@ -54,10 +61,11 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         console.log("Logging out...");
+        setIsLoggingOut(true); // Set flag to true
         setToken(null);
         setUser(null);
         localStorage.removeItem('token');
-        window.location.href = '/auth'; // Force full page reload to /auth
+        // window.location.href = '/auth';
     };
 
     const updateUser = useCallback((newUserData) => {
@@ -65,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ token, user, login, logout, updateUser }}>
+        <AuthContext.Provider value={{ token, user, login, logout, updateUser, isLoggingOut }}>
             {children}
         </AuthContext.Provider>
     );

@@ -6,11 +6,19 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-    const { token } = useAuth();
+    const { token, isLoggingOut } = useAuth(); // Get isLoggingOut
 
     if (!token) {
-        // If no token, redirect to the /troll page
-        return <Navigate to="/troll" />;
+        if (isLoggingOut) {
+            // If no token and logging out, redirect to /auth
+            console.log("Redirecting to /auth after logout.");
+            // window.location.href = '/auth';
+            return <Navigate to="/auth" />;
+        } else {
+            // If no token and not logging out, redirect to the /troll page (unauthorized access)
+            console.log("Bro? really?");
+            return <Navigate to="/troll" />;
+        }
     }
 
     return children;

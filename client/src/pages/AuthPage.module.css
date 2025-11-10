@@ -50,10 +50,10 @@
     scale: 1.2;
     transition: all 0.3s ease;
 }
-button{
+.authBody button{
     transition: all 0.3s ease !important;
 }
-button:hover{
+.authBody button:hover{
     background-color: #295ef0;
 }
 .dark .themeToggleBtnAuth {
@@ -89,11 +89,11 @@ button:hover{
     margin: 20px 0 30px;
 }
 
-span {
+.authBody span {
     font-size: 12px;
 }
 
-a {
+.authBody a {
     color: #333;
     font-size: 14px;
     text-decoration: none;
@@ -166,11 +166,11 @@ a {
     transition: transform 80ms ease-in;
 }
 
-button:active {
+.authBody button:active {
     transform: scale(0.95);
 }
 
-button:focus {
+.authBody button:focus {
     outline: none;
 }
 
@@ -322,6 +322,11 @@ button.ghost {
     border-color: #fff;
 }
 
+button.ghost:hover{
+    background-color: white;
+    color: #007bff;
+}
+
 .mobileToggleLink {
     display: none; /* Hidden by default */
     margin-top: 15px;
@@ -413,7 +418,7 @@ button.ghost {
     .mobileToggleLink {
         display: block; /* Visible on mobile */
     }
-    form {
+    .authBody form {
         background-color: transparent !important;
     }
 }
