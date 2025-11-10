@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "パスワードを変更してもよろしいですか？",
   "settingsPageAiSettingsDevelopmentModeLabel": "開発モード",
   "settingsPageAiSettingsDevelopmentModeTooltip": "開発中のモデルを含む、すべてのモデルにアクセスできるようにします。",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "画像 '{{fileName}}' は一時的に自動保存するには大きすぎます。更新しても復元されません。",
+  "imageConversionFailed": "一時的な自動保存のために画像 '{{fileName}}' を変換できませんでした。",
+  "fileTooLarge": "ファイル '{{fileName}}' は大きすぎます。お使いのティアの最大サイズは {{maxSize}} MBです。",
+  "fileLostReattach": "ファイルが失われました。再添付してください。",
+  "imageLimitReached": "最大で{{limit}}枚の画像しか添付できません。'{{fileName}}' は追加されませんでした。",
+  "gemmaThinkingWarning": "思考モードは {{modelName}} ではサポートされていません。一時的に無効になります。"
 }

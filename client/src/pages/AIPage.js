@@ -17,9 +17,11 @@ import FloatingSquares from '../components/FloatingSquares';
 import SvgAnimation from '../components/SvgAnimation';
 import MovingSquares from '../components/MovingSquares';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useToast } from '../context/ToastContext'; // Import useToast
 import HistoryNavbar from '../components/HistoryNavbar';
 import { useTranslation } from 'react-i18next';
 import Modal from '../components/Modal';
+import { getLabelForModel } from '../utils/models'; // Import getLabelForModel
 import '../App.css';
 import './AIPage.css';
 import '../gradient.css';
@@ -85,6 +87,7 @@ function AIPage() {
 
   const { t, i18n } = useTranslation();
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
+  const { addToast } = useToast(); // Get addToast from useToast  const { addToast } = useToast(); // Get addToast from useToast
 
   // UI State
   const [theme, setTheme] = useState(user?.settings?.theme || 'dark');
@@ -122,7 +125,13 @@ function AIPage() {
   const [gradientDirection, setGradientDirection] = useState(user?.settings?.gradientDirection || 'to bottom');
   const [aiTemperature, setAiTemperature] = useState(user?.settings?.temperature !== undefined ? user.settings.temperature : 1);
   const [thinkToggle, setThinkToggle] = useState(user?.settings?.thinking !== undefined ? user.settings.thinking : true);
-  const [developmentMode, setDevelopmentMode] = useState(user?.settings?.developmentMode || false);
+  const [developmentMode, setDevelopmentMode] = useState(() => {
+    const savedDevMode = localStorage.getItem('developmentMode');
+    if (savedDevMode !== null) {
+      return JSON.parse(savedDevMode);
+    }
+    return false;
+  });
 
   // Workspace State
   const { workspaces, addWorkspace, editWorkspace, deleteWorkspace, updateWorkspaceMemories, getWorkspaces, updateLastActiveWorkspace } = useWorkspaces();
@@ -144,6 +153,7 @@ function AIPage() {
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [isGreetingShown, setIsGreetingShown] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [testModalMessage, setTestModalMessage] = useState('');
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
@@ -236,8 +246,9 @@ function AIPage() {
       isInitialMount.current = false;
     } else {
       saveSettings();
+      localStorage.setItem('developmentMode', JSON.stringify(developmentMode));
     }
-  }, [saveSettings]);
+  }, [saveSettings, developmentMode]);
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -572,7 +583,27 @@ function AIPage() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          const errorMessage = { text: `Error: ${errorData.error}`, sender: 'ai', type: 'error' };
+          let errorMessageText = 'An unknown error occurred.';
+          if (errorData.error) {
+            if (typeof errorData.error === 'object' && errorData.error.message) {
+              const errorCode = errorData.error.code || response.status;
+              try {
+                // The backend might send a stringified JSON as the message
+                const innerError = JSON.parse(errorData.error.message);
+                if (innerError.error && innerError.error.message) {
+                  errorMessageText = `AI API Error: ${errorData.error.status} \n ${innerError.error.message} (Code ${innerError.error.code || errorCode})`;
+                } else {
+                  errorMessageText = `AI API Error: ${errorData.error.status} \n ${errorData.error.message} (Code ${errorCode})`;
+                }
+              } catch (e) {
+                // If parsing fails, it's just a regular string message
+                errorMessageText = `AI API Error: ${errorData.error.status} \n ${errorData.error.message} (Code ${errorCode})`;
+              }
+            } else {
+              errorMessageText = `Error: ${errorData.error.status} \n ${errorData.error}`;
+            }
+          }
+          const errorMessage = { text: errorMessageText, sender: 'ai', type: 'error' };
           setMessages(prevMessages => [...prevMessages.filter(m => m.id !== 'loading'), errorMessage]);
           return;
         }
@@ -750,6 +781,9 @@ function AIPage() {
 
   const handleModelChange = (model) => {
     setSelectedModel(model);
+    if (model.startsWith('gemma')) {
+      addToast(t('gemmaThinkingWarning', { modelName: getLabelForModel(model, t) }), 'warning');
+    }
   };
 
   const handleViewChange = (viewId) => {
@@ -840,6 +874,7 @@ function AIPage() {
   };
 
   const handleTestModal = useCallback(() => {
+    setTestModalMessage('This is a test modal triggered by /test modal command.');
     setShowModal(true);
   }, []);
 
@@ -883,6 +918,8 @@ function AIPage() {
           language={language}
           activeConversationId={activeConversationId}
           workspaceId={activeWorkspace?.id}
+          user={user}
+          developmentMode={developmentMode}
         />;
     }
   }
@@ -1035,8 +1072,8 @@ function AIPage() {
           )}
         </div>
       </div>
-      <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <p>The conversation history has been shortened to meet the context limit.</p>
+      <Modal show={showModal} onClose={() => setShowModal(false)} theme={theme}>
+        <p>{testModalMessage || t('conversationHistoryShortened')}</p>
       </Modal>
     </div>
   );

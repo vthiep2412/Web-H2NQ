@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "Êtes-vous sûr de vouloir changer votre mot de passe ?",
   "settingsPageAiSettingsDevelopmentModeLabel": "Mode développement",
   "settingsPageAiSettingsDevelopmentModeTooltip": "Activer pour accéder à tous les modèles, y compris ceux en développement.",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "L'image '{{fileName}}' est trop grande pour être sauvegardée automatiquement temporairement. Elle ne sera pas restaurée si vous actualisez.",
+  "imageConversionFailed": "Échec de la conversion de l'image '{{fileName}}' pour la sauvegarde automatique temporaire.",
+  "fileTooLarge": "Le fichier '{{fileName}}' est trop grand. La taille maximale pour votre niveau est de {{maxSize}} Mo.",
+  "fileLostReattach": "Fichier perdu, veuillez le rattacher.",
+  "imageLimitReached": "Vous ne pouvez joindre qu'un maximum de {{limit}} images. '{{fileName}}' n'a pas été ajouté.",
+  "gemmaThinkingWarning": "Le mode de réflexion n'est pas pris en charge pour {{modelName}} et sera temporairement désactivé."
 }

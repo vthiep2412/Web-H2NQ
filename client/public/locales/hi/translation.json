@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "क्या आप वाकई अपना पासवर्ड बदलना चाहते हैं?",
   "settingsPageAiSettingsDevelopmentModeLabel": "डेवलपमेंट मोड",
   "settingsPageAiSettingsDevelopmentModeTooltip": "विकास में शामिल सभी मॉडलों तक पहुंचने के लिए सक्षम करें।",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "छवि '{{fileName}}' अस्थायी रूप से स्वतः सहेजने के लिए बहुत बड़ी है। यदि आप रीफ्रेश करते हैं तो इसे पुनर्स्थापित नहीं किया जाएगा।",
+  "imageConversionFailed": "अस्थायी स्वतः सहेजने के लिए छवि '{{fileName}}' को परिवर्तित करने में विफल रहा।",
+  "fileTooLarge": "फ़ाइल '{{fileName}}' बहुत बड़ी है। आपके टियर के लिए अधिकतम आकार {{maxSize}} MB है।",
+  "fileLostReattach": "फ़ाइल खो गई, कृपया पुनः संलग्न करें।",
+  "imageLimitReached": "आप अधिकतम {{limit}} छवियां ही संलग्न कर सकते हैं। '{{fileName}}' नहीं जोड़ा गया था।",
+  "gemmaThinkingWarning": "सोच मोड {{modelName}} के लिए समर्थित नहीं है और इसे अस्थायी रूप से अक्षम कर दिया जाएगा।"
 }

@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "Bạn có chắc chắn muốn thay đổi mật khẩu của mình không?",
   "settingsPageAiSettingsDevelopmentModeLabel": "Chế độ nhà phát triển",
   "settingsPageAiSettingsDevelopmentModeTooltip": "Bật chế độ phát triển để có quyền truy cập vào tất cả các mô hình, bao gồm cả những mô hình đang trong quá trình phát triển.",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "Hình ảnh '{{fileName}}' quá lớn để tự động lưu tạm thời. Nó sẽ không được khôi phục nếu bạn làm mới.",
+  "imageConversionFailed": "Không thể chuyển đổi hình ảnh '{{fileName}}' để tự động lưu tạm thời.",
+  "fileTooLarge": "Tệp '{{fileName}}' quá lớn. Kích thước tối đa cho cấp của bạn là {{maxSize}} MB.",
+  "fileLostReattach": "Tệp bị mất, vui lòng đính kèm lại.",
+  "imageLimitReached": "Bạn chỉ có thể đính kèm tối đa {{limit}} hình ảnh. '{{fileName}}' không được thêm vào.",
+  "gemmaThinkingWarning": "Chế độ suy nghĩ không được hỗ trợ cho {{modelName}} và sẽ tạm thời bị tắt."
 }

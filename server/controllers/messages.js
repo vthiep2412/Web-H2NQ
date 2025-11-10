@@ -87,7 +87,7 @@ exports.sendMessage = async (req, res) => {
     let fullHistory = [...history];
     let systemPrompt = 'THIS IS SYSTEM INSTRUCTIONS:\n';
     if (language) {
-      systemPrompt += `You MUST respond in ${language}.\n`;
+      systemPrompt += `You MUST respond in the language that the conversation use, but if the conversation is unclear you MUST respond in ${language}.\n`;
     }
     if (memories && memories.length > 0) {
       systemPrompt += `YOU MUST follow these instructions:\n${memories.map(mem => `- ${mem.text}`).join('\n')}`;
@@ -149,6 +149,10 @@ exports.sendMessage = async (req, res) => {
         candidateCount: 1,
         temperature: aiTemperature,
       };
+
+      if (model.startsWith('gemma')) {
+        config.thinkingConfig = undefined; // Disable thinking for Gemma models
+      }
 
       if (!model.startsWith('gemma')) {
         config.tools = [{ googleSearch: {} }];
@@ -335,6 +339,30 @@ IMPORTANT:
     res.json({ text, model, conversation, user, thinkingTime, truncated, thoughts });
   } catch (error) {
     console.error('Error communicating with AI API:', error);
-    res.status(500).json({ error: 'Error communicating with AI' });
+    // Try to parse the error from the AI provider
+    try {
+      // This regex is a bit fragile but aims to find a JSON-like structure in the error message
+      const errorJsonMatch = error.message.match(/{[\s\S]*}/);
+      if (errorJsonMatch) {
+        const errorBody = JSON.parse(errorJsonMatch[0]);
+        const specificError = errorBody.error;
+        return res.status(specificError.code || 500).json({
+          error: {
+            message: specificError.message, // Just pass the raw message
+            status: specificError.status || 'INTERNAL_SERVER_ERROR',
+            code: specificError.code,
+          }
+        });
+      }
+    } catch (e) {
+      // Fall through to generic error if parsing fails
+    }
+    // If parsing fails or no JSON is found, send a generic server error
+    return res.status(500).json({
+      error: {
+        message: 'An internal server error occurred while communicating with the AI.',
+        status: 'INTERNAL_SERVER_ERROR',
+      }
+    });
   }
 };

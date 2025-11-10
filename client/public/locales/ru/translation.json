@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "Вы уверены, что хотите изменить свой пароль?",
   "settingsPageAiSettingsDevelopmentModeLabel": "Режим разработки",
   "settingsPageAiSettingsDevelopmentModeTooltip": "Включите для доступа ко всем моделям, включая те, которые находятся в разработке.",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "Изображение '{{fileName}}' слишком велико для временного автосохранения. Оно не будет восстановлено при обновлении.",
+  "imageConversionFailed": "Не удалось преобразовать изображение '{{fileName}}' для временного автосохранения.",
+  "fileTooLarge": "Файл '{{fileName}}' слишком велик. Максимальный размер для вашего уровня составляет {{maxSize}} МБ.",
+  "fileLostReattach": "Файл утерян, пожалуйста, прикрепите его снова.",
+  "imageLimitReached": "Вы можете прикрепить максимум {{limit}} изображений. '{{fileName}}' не был добавлен.",
+  "gemmaThinkingWarning": "Режим мышления не поддерживается для {{modelName}} и будет временно отключен."
 }

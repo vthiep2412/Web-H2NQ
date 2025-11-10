@@ -84,5 +84,11 @@
   "profilePageConfirmPasswordChangeMessage": "Weet u zeker dat u uw wachtwoord wilt wijzigen?",
   "settingsPageAiSettingsDevelopmentModeLabel": "Ontwikkelingsmodus",
   "settingsPageAiSettingsDevelopmentModeTooltip": "Schakel in om toegang te krijgen tot alle modellen, inclusief die in ontwikkeling.",
-  "gemma312b": "Gemma 3 12B IT"
+  "gemma312b": "Gemma 3 12B IT",
+  "imageTooBigToAutoSave": "Afbeelding '{{fileName}}' is te groot om tijdelijk automatisch op te slaan. Het wordt niet hersteld als u vernieuwt.",
+  "imageConversionFailed": "Kan afbeelding '{{fileName}}' niet converteren voor tijdelijke automatische opslag.",
+  "fileTooLarge": "Bestand '{{fileName}}' is te groot. Maximale grootte voor uw tier is {{maxSize}} MB.",
+  "fileLostReattach": "Bestand verloren, gelieve opnieuw bij te voegen.",
+  "imageLimitReached": "U kunt maximaal {{limit}} afbeeldingen bijvoegen. '{{fileName}}' is niet toegevoegd.",
+  "gemmaThinkingWarning": "Denkmodus wordt niet ondersteund voor {{modelName}} en wordt tijdelijk uitgeschakeld."
 }

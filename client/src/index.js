@@ -8,6 +8,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext'; // Import ToastProvider
+import ToastContainer from './components/ToastContainer'; // Import ToastContainer
 import './i18n'; // Import the i18n configuration
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,9 +17,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Suspense fallback="Loading...">
-          <App />
-        </Suspense>
+        <ToastProvider> {/* Wrap with ToastProvider */}
+          <Suspense fallback="Loading...">
+            <App />
+          </Suspense>
+          <ToastContainer /> {/* Render ToastContainer */}
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>

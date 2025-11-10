@@ -26,7 +26,7 @@ const cleanMarkdown = (text) => {
     .replace(/([^\n])\n([^\n])/g, '$1  \n$2'); // Add line breaks for single newlines
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language }) => {
+const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language, workspaceId, user, developmentMode }) => {
   const { t } = useTranslation();
 
   const detailsRefs = useRef({});
@@ -214,6 +214,9 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
             onNewConversation={onNewConversation}
             onTestModal={onTestModal}
             language={language}
+            workspaceId={workspaceId}
+            user={user}
+            developmentMode={developmentMode}
           />
         </Container>
       </footer>

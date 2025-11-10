@@ -1,0 +1,101 @@
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999; /* High z-index to appear above other content */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  position: relative; /* Needed for absolute positioning of close button */
+  display: flex !important; /* Override any display: none from other stylesheets */
+  align-items: center;
+  padding: 15px;
+  padding-left: 40px; /* Make space for the close button */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #fff;
+  opacity: 0;
+  transform: translateX(100%);
+  animation: slideIn 0.5s forwards, fadeOut 0.5s 3s forwards; /* 4s auto-dismiss + 0.5s fadeOut */
+  min-width: 300px;
+  max-width: 400px;
+  overflow: hidden; /* Hide the timer bar overflow */
+}
+
+.toast-timer-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  animation: shrink 3s linear forwards;
+}
+
+.toast.success {
+  background-color: #28a745; /* Green */
+}
+
+.toast.warning {
+  background-color: #ffc107; /* Yellow */
+  color: #212529; /* Dark text for yellow background */
+}
+
+.toast.error {
+  background-color: #dc3545; /* Red */
+}
+
+.toast-message {
+  flex-grow: 1;
+  font-size: 1rem;
+}
+
+.toast-close-btn {
+  position: absolute; /* Position absolutely within the toast */
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  opacity: 0.8;
+  cursor: pointer;
+  padding: 0; /* Remove default padding */
+}
+
+.toast-close-btn:hover {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes shrink {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

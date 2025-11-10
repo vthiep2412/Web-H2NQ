@@ -894,8 +894,8 @@ h1{
 }
 
 .file-preview-image {
-  /* max-width: 80px; */
-  /* max-height: 80px; */
+  max-width: 100px;
+  max-height: 100px;
   border-radius: 4px;
   margin-bottom: 5px;
 }
