@@ -19,7 +19,7 @@
   color: #fff;
   opacity: 0;
   transform: translateX(100%);
-  animation: slideIn 0.5s forwards, fadeOut 0.5s 3s forwards; /* 4s auto-dismiss + 0.5s fadeOut */
+  animation: slideIn 0.5s forwards, fadeOut 0.5s 3s forwards; /* 3s auto-dismiss + 0.5s fadeOut */
   min-width: 300px;
   max-width: 400px;
   overflow: hidden; /* Hide the timer bar overflow */
@@ -29,9 +29,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 3px;
+  height: 3.5px;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.7);
+  /* background-color: rgba(255, 255, 255, 0.7); */  /* white style */ 
+  background-color: rgba(0, 0, 0, 0.26); /* dark style */
   animation: shrink 3s linear forwards;
 }
 
@@ -45,7 +46,7 @@
 }
 
 .toast.error {
-  background-color: #dc3545; /* Red */
+  background-color: #df0000; /* Red */
 }
 
 .toast-message {
@@ -70,6 +71,7 @@
 .toast-close-btn:hover {
   opacity: 1;
 }
+/* lil code rabbit thought this is a button, but it a "x" button soooo */
 
 @keyframes slideIn {
   from {

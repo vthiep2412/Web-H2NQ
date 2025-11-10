@@ -4,7 +4,11 @@ import { v4 as uuidv4 } from 'uuid'; // For unique IDs
 const ToastContext = createContext();
 
 export const useToast = () => {
-  return useContext(ToastContext);
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
 };
 
 export const ToastProvider = ({ children }) => {

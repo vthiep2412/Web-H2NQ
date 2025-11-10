@@ -88,7 +88,7 @@
   "imageTooBigToAutoSave": "Image '{{fileName}}' is too large to be auto-saved temporarily. It will not be restored if you refresh.",
   "imageConversionFailed": "Failed to convert image '{{fileName}}' for temporary auto-save.",
   "fileTooLarge": "File '{{fileName}}' is too large. Maximum size for your tier is {{maxSize}} MB.",
-  "fileLostReattach": "File lost, please re-attach.",
+  "fileLostReattach": "File was lost, please re-attach it.",
   "imageLimitReached": "You can only attach a maximum of {{limit}} images. '{{fileName}}' was not added.",
   "gemmaThinkingWarning": "Thinking mode is not supported for {{modelName}} and will be temporarily disabled."
 }

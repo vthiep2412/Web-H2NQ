@@ -87,7 +87,7 @@ function AIPage() {
 
   const { t, i18n } = useTranslation();
   const { user, logout, updateUser } = useAuth(); // Get user and logout from AuthContext
-  const { addToast } = useToast(); // Get addToast from useToast  const { addToast } = useToast(); // Get addToast from useToast
+  const { addToast } = useToast(); // Get addToast from useToast 
 
   // UI State
   const [theme, setTheme] = useState(user?.settings?.theme || 'dark');
@@ -151,13 +151,56 @@ function AIPage() {
   const [messages, setMessages] = useState([]);
   const [conversationsByWorkspace, setConversationsByWorkspace] = useState({}); // Changed to object
   const [activeConversationId, setActiveConversationId] = useState(null);
-  const [isGreetingShown, setIsGreetingShown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [testModalMessage, setTestModalMessage] = useState('');
   const messagesEndRef = useRef(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef(null);
   const [shouldFetchConversations, setShouldFetchConversations] = useState(false); // New state
+
+  // Cleanup old local storage on initial load
+  useEffect(() => {
+    const cleanupOldLocalStorage = () => {
+      const oneDay = 24 * 60 * 60 * 1000;
+      const now = Date.now();
+      const activeWorkspaceId = localStorage.getItem('lastActiveWorkspace');
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('chatInput-')) {
+          const workspaceId = key.substring('chatInput-'.length);
+          
+          // Don't clean up the currently active workspace
+          if (workspaceId === activeWorkspaceId) {
+            continue;
+          }
+
+          try {
+            const data = JSON.parse(localStorage.getItem(key));
+            if (data && data.timestamp && (now - data.timestamp > oneDay)) {
+              console.log(`Cleaning up old localStorage for workspace: ${workspaceId}`);
+              // Remove the main chat input entry
+              localStorage.removeItem(key);
+              // Remove associated images
+              if (data.files && Array.isArray(data.files)) {
+                data.files.forEach(file => {
+                  if (file.type && file.type.startsWith('image/')) {
+                    localStorage.removeItem(`chatImage-${workspaceId}-${file.name}`);
+                  }
+                });
+              }
+            }
+          } catch (e) {
+            console.error(`Failed to parse or cleanup localStorage key: ${key}`, e);
+            // If parsing fails, it might be corrupted data, so we could remove it
+            localStorage.removeItem(key);
+          }
+        }
+      }
+    };
+
+    cleanupOldLocalStorage();
+  }, []); // Runs only once on mount
 
   useEffect(() => {
     const savedSelectedModel = localStorage.getItem('selectedModel');
@@ -365,7 +408,6 @@ function AIPage() {
     const randomGreetingKey = greetingKeys[Math.floor(Math.random() * greetingKeys.length)];
     const randomGreeting = t(randomGreetingKey);
     setMessages([{ text: randomGreeting, sender: 'ai', isNew: false }]);
-    setIsGreetingShown(true);
   }, [t]);
 
   const userId = user?._id;
@@ -902,24 +944,16 @@ function AIPage() {
         />;
       case 'chat':
       default:
+        const chatState = { messages, userMessages, timer, activeConversationId };
+        const chatConfig = { selectedModel, language, workspaceId: activeWorkspace?.id, user, developmentMode };
+        const chatActions = { onSubmit: handleSubmit, onLocalChat: handleLocalChat, toggleHistoryNavbar, onNewConversation: handleNewConversation, onTestModal: handleTestModal, onTypingComplete: handleTypingComplete };
+        const uiState = { isNavbarVisible, messagesEndRef };
+
         return <ChatView 
-          messages={messages}
-          onSubmit={handleSubmit}
-          onLocalChat={handleLocalChat}
-          messagesEndRef={messagesEndRef}
-          selectedModel={selectedModel}
-          timer={timer}
-          isNavbarVisible={isNavbarVisible}
-          userMessages={userMessages}
-          toggleHistoryNavbar={toggleHistoryNavbar} // Pass toggle function
-          onNewConversation={handleNewConversation} // Pass new conversation function
-          onTestModal={handleTestModal}
-          onTypingComplete={handleTypingComplete}
-          language={language}
-          activeConversationId={activeConversationId}
-          workspaceId={activeWorkspace?.id}
-          user={user}
-          developmentMode={developmentMode}
+          chatState={chatState}
+          chatConfig={chatConfig}
+          chatActions={chatActions}
+          uiState={uiState}
         />;
     }
   }

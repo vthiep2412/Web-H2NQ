@@ -12,7 +12,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.9.1",
     "@types/jest": "^30.0.0",
-    "axios": "^1.6.2",
+    "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "html-parse-stringify": "^3.0.1",
     "i18next": "^25.6.0",

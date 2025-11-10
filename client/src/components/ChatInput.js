@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { SendFill, Camera, Plus, Paperclip, Trash, FileEarmark, FileEarmarkPdf, FileEarmarkWord, FileEarmarkPpt, FileEarmarkExcel, FileEarmarkZip } from 'react-bootstrap-icons';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -69,7 +69,10 @@ const convertImageToBase64 = (file) => {
 };
 
 
-const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessages, onNewConversation, onTestModal, workspaceId, user, developmentMode }) => {
+const ChatInput = React.memo(({ config, actions }) => {
+  const { userMessages, workspaceId, user, developmentMode } = config;
+  const { onSubmit, onNewConversation, onTestModal } = actions;
+
   const [input, setInput] = useState('');
   const fileInputRef = React.useRef(null);
   const textareaRef = React.useRef(null);
@@ -124,12 +127,16 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
 
     const dataToSave = {
       text,
-      files: fileMetadataToSave
+      files: fileMetadataToSave,
+      timestamp: Date.now(), // Add timestamp
     };
     localStorage.setItem(getLocalStorageKey(), JSON.stringify(dataToSave));
   }, [workspaceId, getLocalStorageKey, getImageLocalStorageKey, addToast, t]);
 
-  const debouncedSaveInput = useCallback(debounce(saveInputToLocalStorage, 1000), [saveInputToLocalStorage]);
+  const debouncedSaveInput = useMemo(
+    () => debounce(saveInputToLocalStorage, 1000),
+    [saveInputToLocalStorage]
+  );
 
   // Load from local storage
   useEffect(() => {
@@ -263,19 +270,32 @@ const ChatInput = React.memo(({ selectedModel, onSubmit, onLocalChat, userMessag
     const message = input.trim();
 
     // Developer /test command
-    if (developmentMode && message.startsWith('/test')) {
-      const command = message.split(' ')[1]; // Get the subcommand
-      if (command === 'modal') {
-        onTestModal();
-      } else if (command === 'toast') {
-        addToast('This is a test toast.', 'success');
-      } else {
-        addToast('Usage: /test [modal|toast]', 'info');
-      }
-      setInput(''); // Clear the input
-      return; // Stop further execution
-    }
-
+          if (developmentMode && message.startsWith('/test')) {
+          const parts = message.split(' ');
+          const command = parts[1]; // Get the subcommand
+          const type = parts[2]; // Get the type for toast
+    
+          if (command === 'modal') {
+            onTestModal();
+          } else if (command === 'toast') {
+            if (type === 'info') {
+              addToast('This is an info test toast.', 'info');
+            } else if (type === 'success') {
+              addToast('This is a success test toast.', 'success');
+            } else if (type === 'warning') {
+              addToast('This is a warning test toast.', 'warning');
+            } else if (type === 'error') {
+              addToast('This is an error test toast.', 'error');
+            }
+            else {
+              addToast('This is a default test toast.', 'success');
+            }
+          } else {
+            addToast('Usage: /test [modal|toast [info|success|warning|error]]', 'info');
+          }
+          setInput(''); // Clear the input
+          return; // Stop further execution
+        }
     if (hasText || selectedFiles.length > 0) { // Only submit if there's actual text or selected files
       onSubmit(message, selectedFiles);
       setInput('');

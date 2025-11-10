@@ -26,7 +26,11 @@ const cleanMarkdown = (text) => {
     .replace(/([^\n])\n([^\n])/g, '$1  \n$2'); // Add line breaks for single newlines
 };
 
-const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit, onLocalChat, timer, isNavbarVisible, userMessages, toggleHistoryNavbar, onNewConversation, onTestModal, onTypingComplete, language, workspaceId, user, developmentMode }) => {
+const ChatView = React.memo(({ chatState, chatConfig, chatActions, uiState }) => {
+  const { messages, timer, userMessages } = chatState;
+  const { selectedModel, language, workspaceId, user, developmentMode } = chatConfig;
+  const { onSubmit, onLocalChat, onNewConversation, onTestModal } = chatActions;
+  const { isNavbarVisible, messagesEndRef } = uiState;
   const { t } = useTranslation();
 
   const detailsRefs = useRef({});
@@ -119,6 +123,9 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
 
   }, [messages]);
 
+  const inputConfig = { selectedModel, language, workspaceId, user, developmentMode, userMessages };
+  const inputActions = { onSubmit, onLocalChat, onNewConversation, onTestModal };
+
   return (
     <>
       <main className="flex-grow-1 chat-main-view">
@@ -207,16 +214,8 @@ const ChatView = React.memo(({ messages, selectedModel, messagesEndRef, onSubmit
       <footer className="p-3 chat-footer">
         <Container>
           <ChatInput
-            selectedModel={selectedModel}
-            onSubmit={onSubmit}
-            onLocalChat={onLocalChat}
-            userMessages={userMessages}
-            onNewConversation={onNewConversation}
-            onTestModal={onTestModal}
-            language={language}
-            workspaceId={workspaceId}
-            user={user}
-            developmentMode={developmentMode}
+            config={inputConfig}
+            actions={inputActions}
           />
         </Container>
       </footer>
