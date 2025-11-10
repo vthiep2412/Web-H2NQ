@@ -11,12 +11,11 @@ const ProtectedRoute = ({ children }) => {
     if (!token) {
         if (isLoggingOut) {
             // If no token and logging out, redirect to /auth
-            console.log("Redirecting to /auth after logout.");
-            // window.location.href = '/auth';
+            console.log("User logged out: redirecting to /auth");
             return <Navigate to="/auth" />;
         } else {
             // If no token and not logging out, redirect to the /troll page (unauthorized access)
-            console.log("Bro? really?");
+            console.log("Bro? really?"); // this is for troll the user if they try to access protected route without being logged in
             return <Navigate to="/troll" />;
         }
     }

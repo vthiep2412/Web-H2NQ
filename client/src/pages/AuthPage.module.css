@@ -322,11 +322,10 @@ button.ghost {
     border-color: #fff;
 }
 
-button.ghost:hover{
+.authBody button.ghost:hover{
     background-color: white;
     color: #007bff;
 }
-
 .mobileToggleLink {
     display: none; /* Hidden by default */
     margin-top: 15px;

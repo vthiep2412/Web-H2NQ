@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         setUser(null);
         localStorage.removeItem('token');
-        // window.location.href = '/auth';
+        setTimeout(() => setIsLoggingOut(false), 0); // Reset flag after logout process
     };
 
     const updateUser = useCallback((newUserData) => {
